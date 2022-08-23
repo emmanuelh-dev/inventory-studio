@@ -6,7 +6,7 @@ import { Dropdown } from 'primereact/dropdown';
 import { AutoComplete } from 'primereact/autocomplete';
 import { InputTextarea } from 'primereact/inputtextarea';
 
-const Item = (props) => {
+const Items = (props) => {
     const [item, setItem] = useState();
     const [inventory, setInvenotory] = useState();
 
@@ -43,4 +43,4 @@ const Item = (props) => {
         </div>
     );
 }
-export default Item;
+export default Items;
