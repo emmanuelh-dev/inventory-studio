@@ -2,10 +2,16 @@ import React, { useState } from 'react';
 
 //Prime Components
 import { Chip } from 'primereact/chip';
+import { Toast } from 'primereact/toast';
 import { Panel } from 'primereact/panel';
+import { Button } from 'primereact/button';
+import { Menubar } from 'primereact/menubar';
 import { Dropdown } from 'primereact/dropdown';
-import { AutoComplete } from 'primereact/autocomplete';
+import { InputText } from 'primereact/inputtext';
 import { InputTextarea } from 'primereact/inputtextarea';
+
+//Custom Components
+import { Search } from '@components/search';
 
 export const Item = (props) => {
     const {
@@ -14,46 +20,45 @@ export const Item = (props) => {
         fields,
         options,
         suggestions,
-        filterSuggestions,
-        autocompleteChange,
-        autocompleteSelect,
-        autocompleteBlur,
+        searchVisible,
+        showSearch,
+        hideSearch,
+        selectOption,
+        nextPage,
+        notification,
         usedIcon,
         usedLabel,
     } = {
         ...props,
     };
 
+    const toolbar = () => {
+        return <Menubar model={options.toolbar} />;
+    };
+
     return (
-        <Panel header="Articulos">
+        <Panel headerTemplate={toolbar}>
             <div className="">
                 <div className="p-fluid formgrid grid">
                     <div className="field col-4">
-                        <label>Nombre del Articulos</label>
-                        <AutoComplete
-                            value={item[fields.ITEM_NAME]}
-                            suggestions={suggestions}
-                            field={fields.ITEM_NAME}
-                            onChange={(event) => {
-                                autocompleteChange(fields.ITEM_NAME, event);
-                            }}
-                            completeMethod={(event) => {
-                                filterSuggestions(fields.ITEM_NAME, event);
-                            }}
-                            onSelect={autocompleteSelect}
-                            onBlur={(event) => {
-                                autocompleteBlur(fields.ITEM_NAME, event);
-                            }}
-                            dropdown
-                        />
+                        <label>Nombre del Articulo</label>
+                        <div className="p-inputgroup">
+                            <InputText
+                                value={item[fields.ITEM_NAME]}
+                                onChange={(event) => {
+                                    updateField(fields.ITEM_NAME, event);
+                                }}
+                            />
+                            <Button icon="pi pi-search" onClick={showSearch} />
+                        </div>
                     </div>
                     <div className="field col-4">
                         <label>Metodo de valuacion</label>
                         <Dropdown
-                            value={item[fields.INVENTORY_METHOD]}
+                            value={item[fields.VALUATION_TYPE]}
                             options={options.valuation}
                             onChange={(event) => {
-                                updateField(fields.INVENTORY_METHOD, event);
+                                updateField(fields.VALUATION_TYPE, event);
                             }}
                         />
                     </div>
@@ -81,6 +86,15 @@ export const Item = (props) => {
                     </div>
                 </div>
             </div>
+            <Toast ref={notification} />
+            <Search
+                visible={searchVisible}
+                onHide={hideSearch}
+                fields={options.searchFields}
+                data={suggestions}
+                selectOption={selectOption}
+                nextPage={nextPage}
+            />
         </Panel>
     );
 };
