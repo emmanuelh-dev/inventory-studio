@@ -19,12 +19,11 @@ export const Item = (props) => {
         updateField,
         fields,
         options,
-        suggestions,
+        endpoint,
         searchVisible,
         showSearch,
         hideSearch,
         selectOption,
-        nextPage,
         notification,
         usedIcon,
         usedLabel,
@@ -91,9 +90,8 @@ export const Item = (props) => {
                 visible={searchVisible}
                 onHide={hideSearch}
                 fields={options.searchFields}
-                data={suggestions}
                 selectOption={selectOption}
-                nextPage={nextPage}
+                endpoint={endpoint}
             />
         </Panel>
     );

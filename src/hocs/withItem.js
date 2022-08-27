@@ -1,17 +1,14 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect } from 'react';
 import { itemState, itemFields } from '@constants';
 import { valuation, toolbar, itemSearchFields } from '@constants/options';
 
 //hooks
-import { useGet } from '@hooks/useGet';
 import { useSearch } from '@hooks/useSearch';
 import { useNew, useSave } from '@hooks/useToolbar';
 import { useItem, useItemStatus } from '@hooks/useItem';
 import { useNotification } from '@hooks/useNotification';
 
 export const withItem = (WrappedComponent) => (props) => {
-    const [suggestions, setSuggestions] = useState([]);
-
     const endpoint = {
         search: process.env.NEXT_PUBLIC_ITEMS_SEARCH,
         suggestions: process.env.NEXT_PUBLIC_ITEMS_SUGGESTIONS,
@@ -20,19 +17,7 @@ export const withItem = (WrappedComponent) => (props) => {
     };
 
     const { item, updateItemField, updateItem } = useItem(itemState);
-    const { search, showSearch, hideSearch, selectOption, nextPage } = useSearch(
-        endpoint,
-        setSuggestions,
-        updateItem
-    );
-    // const {
-    //     suggestions,
-    //     updateSuggestions,
-    //     filterSuggestions,
-    //     autocompleteChange,
-    //     autocompleteSelect,
-    //     autocompleteBlur,
-    // } = useAutocomplete(updateItemField, updateItem, itemState, endpoint);
+    const { search, showSearch, hideSearch, selectOption } = useSearch(updateItem);
 
     const { usedIcon, usedLabel, updateItemStatus } = useItemStatus(item, itemFields.USED);
     const { onNew } = useNew(updateItem, itemState);
@@ -51,12 +36,9 @@ export const withItem = (WrappedComponent) => (props) => {
         searchFields: itemSearchFields,
     };
 
-    // useEffect(() => {
-    //     useGet(endpoint.suggestions).then((data) => {
-    //         updateSuggestions(data);
-    //     });
-    //     updateItemStatus();
-    // }, []);
+    useEffect(() => {
+        updateItemStatus();
+    }, [item]);
 
     return (
         <WrappedComponent
@@ -68,11 +50,10 @@ export const withItem = (WrappedComponent) => (props) => {
             usedLabel={usedLabel}
             notification={notification}
             searchVisible={search}
-            suggestions={suggestions}
             showSearch={showSearch}
             hideSearch={hideSearch}
             selectOption={selectOption}
-            nextPage={nextPage}
+            endpoint={endpoint}
         />
     );
 };
