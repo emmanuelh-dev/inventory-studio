@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useGet } from '@hooks/useGet';
 import { Dialog } from 'primereact/dialog';
 import { Column } from 'primereact/column';
 import { Button } from 'primereact/button';
@@ -6,8 +7,30 @@ import { DataTable } from 'primereact/datatable';
 
 export const Search = (props) => {
     const [row, setRow] = useState();
-    const { visible, onHide, data, fields, selectOption } = { ...props };
-    const accept = () => {
+    const [data, setData] = useState([]);
+    const [first, setFirst] = useState(0);
+    const [loading, setLoading] = useState(true);
+    const { visible, onHide, fields, selectOption, endpoint } = { ...props };
+
+    useEffect(() => {
+        if (visible) {
+            useGet(`${endpoint.suggestions}?page=0&size=10`).then((data) => {
+                setFirst(0);
+                setData(data);
+                setLoading(false);
+            });
+        }
+    }, [visible]);
+
+    const onPage = (event) => {
+        useGet(`${endpoint.suggestions}?page=${event.page}&size=10`).then((data) => {
+            setData(data);
+            setFirst(event.first);
+            setLoading(false);
+        });
+    };
+
+    const onYes = () => {
         selectOption(row);
         onHide();
     };
@@ -17,11 +40,11 @@ export const Search = (props) => {
             header="Buscador"
             visible={visible}
             style={{ width: '50vw' }}
-            footer={footer(accept, onHide)}
+            footer={footer(onYes, onHide)}
             onHide={onHide}
         >
             <DataTable
-                value={data}
+                value={data.content}
                 selectionMode="single"
                 selection={row}
                 onSelectionChange={(event) => {
@@ -29,6 +52,13 @@ export const Search = (props) => {
                 }}
                 dataKey="id"
                 responsiveLayout="scroll"
+                first={first}
+                onPage={onPage}
+                rows={data.size}
+                totalRecords={data.totalElements}
+                loading={loading}
+                paginator
+                lazy
             >
                 {fields.map((element) => {
                     return <Column key="id" field={element.field} header={element.header} />;
@@ -38,11 +68,11 @@ export const Search = (props) => {
     );
 };
 
-const footer = (accept, cancel) => {
+const footer = (onYes, onCancel) => {
     return (
         <div>
-            <Button label="Aceptar" icon="pi pi-check" onClick={accept} />
-            <Button label="Cancelar" icon="pi pi-times" onClick={cancel} />
+            <Button label="Aceptar" icon="pi pi-check" onClick={onYes} />
+            <Button label="Cancelar" icon="pi pi-times" onClick={onCancel} />
         </div>
     );
 };
