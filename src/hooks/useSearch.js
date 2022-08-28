@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useGet } from '@hooks/useGet';
 
-export const useSearch = (updateState) => {
+export const useSearch = (updateState, updateCopy) => {
     const [search, setSearch] = useState(false);
 
     const showSearch = () => {
@@ -14,6 +14,7 @@ export const useSearch = (updateState) => {
 
     const selectOption = (option) => {
         updateState(option);
+        updateCopy(option);
     };
 
     return { search, showSearch, hideSearch, selectOption };
