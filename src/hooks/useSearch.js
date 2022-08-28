@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { useGet } from '@hooks/useGet';
 
 export const useSearch = (updateState, updateCopy) => {
     const [search, setSearch] = useState(false);
