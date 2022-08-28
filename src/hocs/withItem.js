@@ -3,6 +3,7 @@ import { itemState, itemFields } from '@constants';
 import { valuation, toolbar, itemSearchFields } from '@constants/options';
 
 //hooks
+import { useCopy } from '@hooks/useCopy';
 import { useSearch } from '@hooks/useSearch';
 import { useNew, useSave } from '@hooks/useToolbar';
 import { useItem, useItemStatus } from '@hooks/useItem';
@@ -17,18 +18,21 @@ export const withItem = (WrappedComponent) => (props) => {
     };
 
     const { item, updateItemField, updateItem } = useItem(itemState);
-    const { search, showSearch, hideSearch, selectOption } = useSearch(updateItem);
+    const { buttonState, updateCopy, updateSaveButton } = useCopy(itemState, item);
 
-    const { usedIcon, usedLabel, updateItemStatus } = useItemStatus(item, itemFields.USED);
-    const { onNew } = useNew(updateItem, itemState);
+    const { onNew } = useNew(updateItem, updateCopy, itemState);
     const { notification, showNotification } = useNotification();
     const { onSave } = useSave(itemFields.ID, endpoint, showNotification);
+    const { usedIcon, usedLabel, updateItemStatus } = useItemStatus(item, itemFields.USED);
+    const { search, showSearch, hideSearch, selectOption } = useSearch(updateItem, updateCopy);
 
     const _toolbar = [...toolbar];
     _toolbar[0].command = onNew;
     _toolbar[1].command = () => {
-        onSave(item, updateItem);
+        onSave(item, updateItem, updateCopy);
     };
+    _toolbar[1].disabled = buttonState;
+    _toolbar[2].disabled = item[itemFields.USED] || !item[itemFields.ID];
 
     const options = {
         valuation: valuation,
@@ -38,6 +42,7 @@ export const withItem = (WrappedComponent) => (props) => {
 
     useEffect(() => {
         updateItemStatus();
+        updateSaveButton();
     }, [item]);
 
     return (
