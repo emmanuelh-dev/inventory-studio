@@ -6,7 +6,7 @@ import { valuation, toolbar, itemSearchFields } from '@constants/options';
 import { useCopy } from '@hooks/useCopy';
 import { useSearch } from '@hooks/useSearch';
 import { useNew, useSave } from '@hooks/useToolbar';
-import { useItem, useItemStatus } from '@hooks/useItem';
+import { useFormState, useStateStatus } from '@hooks/useFormState';
 import { useNotification } from '@hooks/useNotification';
 
 export const withItem = (WrappedComponent) => (props) => {
@@ -17,22 +17,22 @@ export const withItem = (WrappedComponent) => (props) => {
         update: process.env.NEXT_PUBLIC_ITEMS_SAVE,
     };
 
-    const { item, updateItemField, updateItem } = useItem(itemState);
-    const { buttonState, updateCopy, updateSaveButton } = useCopy(itemState, item);
+    const { state, updateField, updateState } = useFormState(itemState);
+    const { buttonState, updateCopy, updateSaveButton } = useCopy(itemState, state);
 
-    const { onNew } = useNew(updateItem, updateCopy, itemState);
+    const { onNew } = useNew(updateState, updateCopy, itemState);
     const { notification, showNotification } = useNotification();
     const { onSave } = useSave(itemFields.ID, endpoint, showNotification);
-    const { usedIcon, usedLabel, updateItemStatus } = useItemStatus(item, itemFields.USED);
-    const { search, showSearch, hideSearch, selectOption } = useSearch(updateItem, updateCopy);
+    const { usedIcon, usedLabel, updateStateStatus } = useStateStatus(state, itemFields.USED);
+    const { search, showSearch, hideSearch, selectOption } = useSearch(updateState, updateCopy);
 
     const _toolbar = [...toolbar];
     _toolbar[0].command = onNew;
     _toolbar[1].command = () => {
-        onSave(item, updateItem, updateCopy);
+        onSave(state, updateState, updateCopy);
     };
     _toolbar[1].disabled = buttonState;
-    _toolbar[2].disabled = item[itemFields.USED] || !item[itemFields.ID];
+    _toolbar[2].disabled = state[itemFields.USED] || !state[itemFields.ID];
 
     const options = {
         valuation: valuation,
@@ -41,14 +41,14 @@ export const withItem = (WrappedComponent) => (props) => {
     };
 
     useEffect(() => {
-        updateItemStatus();
+        updateStateStatus();
         updateSaveButton();
-    }, [item]);
+    }, [state]);
 
     return (
         <WrappedComponent
-            item={item}
-            updateField={updateItemField}
+            item={state}
+            updateField={updateField}
             fields={itemFields}
             options={options}
             usedIcon={usedIcon}
