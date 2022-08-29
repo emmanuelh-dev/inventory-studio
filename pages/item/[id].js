@@ -1,14 +1,15 @@
 import { useState } from 'react';
 import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
-
 //hooks
 import { useGet } from '@hooks/useGet';
-
+//components
 import { ProgressSpinner } from 'primereact/progressspinner';
-
+//custom components
 import { Item } from '@components/item';
+//hocs
 import { withItem } from '@hocs/withItem';
+
 const ItemForm = withItem(Item);
 export default () => {
     const [item, setItem] = useState(null);
