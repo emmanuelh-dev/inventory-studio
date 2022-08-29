@@ -1,5 +1,9 @@
 import React, { useEffect, useState } from 'react';
+
+//hooks
 import { useGet } from '@hooks/useGet';
+
+//components
 import { Dialog } from 'primereact/dialog';
 import { Column } from 'primereact/column';
 import { Button } from 'primereact/button';
@@ -61,6 +65,9 @@ export const Search = (props) => {
                 lazy
             >
                 {fields.map((element) => {
+                    if (element.template !== undefined) {
+                        return <Column key="id" body={element.template} header={element.header} />;
+                    }
                     return <Column key="id" field={element.field} header={element.header} />;
                 })}
             </DataTable>
