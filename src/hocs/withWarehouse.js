@@ -16,9 +16,11 @@ export const withWarehouse = (WrappedComponent) => (props) => {
         save: process.env.NEXT_PUBLIC_WAREHOUSES_SAVE,
         update: process.env.NEXT_PUBLIC_WAREHOUSES_SAVE,
     };
-
-    const { state, updateField, updateState } = useFormState(warehouseState);
-    const { buttonState, updateCopy, updateSaveButton } = useCopy(warehouseState, state);
+    let { initialState } = { ...props };
+    initialState =
+        initialState == undefined || initialState == null ? warehouseState : initialState;
+    const { state, updateField, updateState } = useFormState(initialState);
+    const { buttonState, updateCopy, updateSaveButton } = useCopy(initialState, state);
 
     const { onNew } = useNew(updateState, updateCopy, warehouseState);
     const { notification, showNotification } = useNotification();

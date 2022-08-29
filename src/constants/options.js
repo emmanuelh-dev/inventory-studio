@@ -51,3 +51,7 @@ export const warehouseSearchFields = [
         header: 'Almacen',
     },
 ];
+
+export const warehouseFilters = {
+    warehouseName: { value: '', matchMode: FilterMatchMode.CONTAINS },
+};
