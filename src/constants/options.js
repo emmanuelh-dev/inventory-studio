@@ -1,5 +1,5 @@
 import { FilterMatchMode } from 'primereact/api';
-import { ValuationType } from '@components/templates';
+import { ValuationType, UsedChip } from '@components/templates';
 
 export const valuation = [{ label: 'Promedio Ponderado', value: 'AVERAGE' }];
 
@@ -49,6 +49,12 @@ export const warehouseSearchFields = [
     {
         field: 'warehouseName',
         header: 'Almacen',
+        filter: true,
+    },
+    {
+        field: 'used',
+        header: 'Estado',
+        template: (row) => <UsedChip value={row['used']} />,
     },
 ];
 
