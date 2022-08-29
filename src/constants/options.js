@@ -34,3 +34,10 @@ export const itemSearchFields = [
         header: 'Metodo de Valuacion',
     },
 ];
+
+export const warehouseSearchFields = [
+    {
+        field: 'warehouseName',
+        header: 'Almacen',
+    },
+];

@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
-import { itemState, itemFields } from '@constants';
-import { valuation, toolbar, itemSearchFields } from '@constants/options';
+import { warehouseState, warehouseFields } from '@constants';
+import { toolbar, warehouseSearchFields } from '@constants/options';
 
 //hooks
 import { useCopy } from '@hooks/useCopy';
@@ -9,21 +9,21 @@ import { useNew, useSave } from '@hooks/useToolbar';
 import { useNotification } from '@hooks/useNotification';
 import { useFormState, useStateStatus } from '@hooks/useFormState';
 
-export const withItem = (WrappedComponent) => (props) => {
+export const withWarehouse = (WrappedComponent) => (props) => {
     const endpoint = {
         search: process.env.NEXT_PUBLIC_ITEMS_SEARCH,
-        suggestions: process.env.NEXT_PUBLIC_ITEMS_SUGGESTIONS,
-        save: process.env.NEXT_PUBLIC_ITEMS_SAVE,
-        update: process.env.NEXT_PUBLIC_ITEMS_SAVE,
+        suggestions: process.env.NEXT_PUBLIC_WAREHOUSES_SUGGESTIONS,
+        save: process.env.NEXT_PUBLIC_WAREHOUSES_SAVE,
+        update: process.env.NEXT_PUBLIC_WAREHOUSES_SAVE,
     };
 
-    const { state, updateField, updateState } = useFormState(itemState);
-    const { buttonState, updateCopy, updateSaveButton } = useCopy(itemState, state);
+    const { state, updateField, updateState } = useFormState(warehouseState);
+    const { buttonState, updateCopy, updateSaveButton } = useCopy(warehouseState, state);
 
-    const { onNew } = useNew(updateState, updateCopy, itemState);
+    const { onNew } = useNew(updateState, updateCopy, warehouseState);
     const { notification, showNotification } = useNotification();
-    const { onSave } = useSave(itemFields.ID, endpoint, showNotification);
-    const { usedIcon, usedLabel, updateStateStatus } = useStateStatus(state, itemFields.USED);
+    const { onSave } = useSave(warehouseFields.ID, endpoint, showNotification);
+    const { usedIcon, usedLabel, updateStateStatus } = useStateStatus(state, warehouseFields.USED);
     const { search, showSearch, hideSearch, selectOption } = useSearch(updateState, updateCopy);
 
     const _toolbar = [...toolbar];
@@ -32,12 +32,11 @@ export const withItem = (WrappedComponent) => (props) => {
         onSave(state, updateState, updateCopy);
     };
     _toolbar[1].disabled = buttonState;
-    _toolbar[2].disabled = state[itemFields.USED] || !state[itemFields.ID];
+    _toolbar[2].disabled = state[warehouseFields.USED] || !state[warehouseFields.ID];
 
     const options = {
-        valuation: valuation,
         toolbar: _toolbar,
-        searchFields: itemSearchFields,
+        searchFields: warehouseSearchFields,
     };
 
     useEffect(() => {
@@ -47,9 +46,9 @@ export const withItem = (WrappedComponent) => (props) => {
 
     return (
         <WrappedComponent
-            item={state}
+            warehouse={state}
             updateField={updateField}
-            fields={itemFields}
+            fields={warehouseFields}
             options={options}
             usedIcon={usedIcon}
             usedLabel={usedLabel}
