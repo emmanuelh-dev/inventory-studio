@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 
 //hooks
@@ -12,6 +13,8 @@ export const List = (props) => {
     const [data, setData] = useState([]);
     const [first, setFirst] = useState(0);
     const [loading, setLoading] = useState(true);
+
+    const router = useRouter();
     const { fields, endpoint, filters } = { ...props };
 
     useEffect(() => {
@@ -44,6 +47,25 @@ export const List = (props) => {
                 setLoading(false);
             });
         }
+    };
+
+    const actionTemplate = (row) => {
+        return (
+            <React.Fragment>
+                <Button
+                    icon="pi pi-pencil"
+                    className="p-button-rounded p-button-success mr-2"
+                    onClick={() => {
+                        router.push(`${endpoint.redirect}/${row.id}`);
+                    }}
+                />
+                <Button
+                    icon="pi pi-trash"
+                    className="p-button-rounded p-button-warning"
+                    onClick={() => {}}
+                />
+            </React.Fragment>
+        );
     };
 
     return (
@@ -86,22 +108,5 @@ export const List = (props) => {
             })}
             <Column body={actionTemplate} />
         </DataTable>
-    );
-};
-
-const actionTemplate = (row) => {
-    return (
-        <React.Fragment>
-            <Button
-                icon="pi pi-pencil"
-                className="p-button-rounded p-button-success mr-2"
-                onClick={() => {}}
-            />
-            <Button
-                icon="pi pi-trash"
-                className="p-button-rounded p-button-warning"
-                onClick={() => {}}
-            />
-        </React.Fragment>
     );
 };
