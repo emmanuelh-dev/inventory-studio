@@ -1,3 +1,6 @@
+import { FilterMatchMode } from 'primereact/api';
+import { ValuationType } from '@components/templates';
+
 export const valuation = [{ label: 'Promedio Ponderado', value: 'AVERAGE' }];
 
 export const toolbar = [
@@ -24,16 +27,23 @@ export const itemSearchFields = [
     {
         field: 'itemName',
         header: 'Articulo',
+        filter: true,
     },
     {
         field: 'description',
-        header: 'Description',
+        header: 'Descripcion',
+        filter: false,
     },
     {
         field: 'valuationType',
         header: 'Metodo de Valuacion',
+        template: (row) => <ValuationType value={row['valuationType']} />,
     },
 ];
+
+export const itemFilters = {
+    itemName: { value: '', matchMode: FilterMatchMode.CONTAINS },
+};
 
 export const warehouseSearchFields = [
     {
