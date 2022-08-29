@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+
 import { itemState, itemFields } from '@constants';
 import { valuation, toolbar, itemSearchFields } from '@constants/options';
 
@@ -17,8 +18,10 @@ export const withItem = (WrappedComponent) => (props) => {
         update: process.env.NEXT_PUBLIC_ITEMS_SAVE,
     };
 
-    const { state, updateField, updateState } = useFormState(itemState);
-    const { buttonState, updateCopy, updateSaveButton } = useCopy(itemState, state);
+    let { initialState } = { ...props };
+    initialState = initialState == undefined || initialState == null ? itemState : initialState;
+    const { state, updateField, updateState } = useFormState(initialState);
+    const { buttonState, updateCopy, updateSaveButton } = useCopy(initialState, state);
 
     const { onNew } = useNew(updateState, updateCopy, itemState);
     const { notification, showNotification } = useNotification();
