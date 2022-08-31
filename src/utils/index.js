@@ -16,3 +16,22 @@ export const isEmpty = (object) => {
 export const findObjectByProp = (array, property, value) => {
     return array != undefined ? array.find((element) => element[property] === value) : {};
 };
+
+/**
+ * It returns url with rest params
+ * @param {object} params
+ * @returns url rest params
+ */
+export const buildUrl = (baseUrl, params) => {
+    if (Object.keys(params).length === 0) {
+        return baseUrl;
+    }
+
+    const keys = Object.keys(params);
+
+    const query = keys.reduce((previous, key) => {
+        return `/${key}/${params[key]}`;
+    }, '');
+
+    return `${baseUrl}${query}`;
+};
