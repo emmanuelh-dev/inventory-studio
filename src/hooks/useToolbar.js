@@ -1,6 +1,7 @@
-import { isEmpty } from '@utils';
+import { useState } from 'react';
 import { usePut } from '@hooks/usePut';
 import { usePost } from '@hooks/usePost';
+import { isEmpty, buildUrl } from '@utils';
 
 export const useNew = (updateState, updateCopy, initialState) => {
     const onNew = () => {
@@ -12,15 +13,21 @@ export const useNew = (updateState, updateCopy, initialState) => {
 };
 
 export const useSave = (field, endpoint, showNotification) => {
+    const [params, setParams] = useState({});
+
+    const updateParams = (_params) => {
+        setParams(_params);
+    };
+
     const onSave = (state, updateState, updateCopy) => {
         if (isEmpty(state[field])) {
-            usePost(endpoint.save, { ...state }).then((data) => {
+            usePost(buildUrl(endpoint.save, params), { ...state }).then((data) => {
                 updateState(data);
                 updateCopy(data);
                 showNotification('success');
             });
         } else {
-            usePut(`${endpoint.update}/${state[field]}`, { ...state }).then((data) => {
+            usePut(buildUrl(endpoint.update, params), { ...state }).then((data) => {
                 updateState(data);
                 updateCopy(data);
                 showNotification('success');
@@ -28,5 +35,5 @@ export const useSave = (field, endpoint, showNotification) => {
         }
     };
 
-    return { onSave };
+    return { onSave, updateParams };
 };
