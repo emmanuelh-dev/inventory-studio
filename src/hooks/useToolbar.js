@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { usePut } from '@hooks/usePut';
 import { usePost } from '@hooks/usePost';
-import { isEmpty, buildUrl } from '@utils';
+import { isEmpty, buildUrl, dateToString } from '@utils';
 
 export const useNew = (updateState, updateCopy, initialState) => {
     const onNew = () => {
@@ -21,13 +21,13 @@ export const useSave = (field, endpoint, showNotification) => {
 
     const onSave = (state, updateState, updateCopy) => {
         if (isEmpty(state[field])) {
-            usePost(buildUrl(endpoint.save, params), { ...state }).then((data) => {
+            usePost(buildUrl(endpoint.save, params), dateToString({ ...state })).then((data) => {
                 updateState(data);
                 updateCopy(data);
                 showNotification('success');
             });
         } else {
-            usePut(buildUrl(endpoint.update, params), { ...state }).then((data) => {
+            usePut(buildUrl(endpoint.update, params), dateToString({ ...state })).then((data) => {
                 updateState(data);
                 updateCopy(data);
                 showNotification('success');
