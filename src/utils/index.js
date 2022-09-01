@@ -36,16 +36,16 @@ export const buildUrl = (baseUrl, params) => {
     return `${baseUrl}${query}`;
 };
 
-export const dateToString = (state) => {
-    const keys = Object.keys(state);
+export const dateToString = (data) => {
+    const keys = Object.keys(data);
 
     const dateKeys = keys.reduce((previous, key) => {
-        if (state[key] instanceof Date) previous.push(key);
+        if (data[key] instanceof Date) previous.push(key);
         return previous;
     }, []);
 
     if (dateKeys == null || dateKeys == undefined || dateKeys.length === 0) {
-        return state;
+        return data;
     }
 
     const convert = (value) => {
@@ -61,12 +61,58 @@ export const dateToString = (state) => {
     };
 
     const dates = dateKeys.reduce((previous, key) => {
-        const value = convert(state[key]);
+        const value = convert(data[key]);
         previous[key] = value;
         return previous;
     }, {});
 
-    const _state = { ...state, ...dates };
+    const _data = { ...data, ...dates };
 
-    return _state;
+    return _data;
+};
+
+export const stringToDate = (data) => {
+    const keys = Object.keys(data);
+
+    const dateKeys = keys.reduce((previous, key) => {
+        if (key.includes('date') || key.includes('Date')) previous.push(key);
+        return previous;
+    }, []);
+
+    if (dateKeys == null || dateKeys == undefined || dateKeys.length === 0) {
+        return data;
+    }
+
+    const convert = (value) => {
+        // 01-09-2022 01:57:07.400
+        const chunks = value.split(' ');
+        const date = chunks[0].split('-');
+        const day = date[0];
+        const month = date[1];
+        const year = date[2];
+        const time = chunks[1].split(':');
+        const hour = time[0];
+        const minute = time[1];
+        const seconds = time[2].slice(0, 2);
+        const milliseconds = time[2].slice(2);
+        const _value = new Date();
+        _value.setDate(day);
+        _value.setMonth(month - 1);
+        _value.setFullYear(year);
+        _value.setHours(hour);
+        _value.setMinutes(minute);
+        _value.setSeconds(seconds);
+        _value.setMilliseconds(milliseconds);
+        return _value;
+    };
+
+    const dates = dateKeys.reduce((previous, key) => {
+        const value = convert(data[key]);
+        previous[key] = value;
+        return previous;
+    }, {});
+
+    const _data = { ...data, ...dates };
+
+    return _data;
 };
