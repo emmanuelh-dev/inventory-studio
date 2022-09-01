@@ -2,6 +2,10 @@ import { FilterMatchMode } from 'primereact/api';
 import { ValuationType, UsedChip } from '@components/templates';
 
 export const valuation = [{ label: 'Promedio Ponderado', value: 'AVERAGE' }];
+export const receptionTypes = [
+    { label: 'Ingreso', value: 'INPUT' },
+    { label: 'Devolucion por venta', value: 'SALE_RETURN' },
+];
 
 export const toolbar = [
     {
@@ -60,4 +64,8 @@ export const warehouseSearchFields = [
 
 export const warehouseFilters = {
     warehouseName: { value: '', matchMode: FilterMatchMode.CONTAINS },
+};
+
+export const dropdownLabelOptions = {
+    warehouse: 'warehouseName',
 };
