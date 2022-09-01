@@ -35,3 +35,38 @@ export const buildUrl = (baseUrl, params) => {
 
     return `${baseUrl}${query}`;
 };
+
+export const dateToString = (state) => {
+    const keys = Object.keys(state);
+
+    const dateKeys = keys.reduce((previous, key) => {
+        if (state[key] instanceof Date) previous.push(key);
+        return previous;
+    }, []);
+
+    if (dateKeys == null || dateKeys == undefined || dateKeys.length === 0) {
+        return state;
+    }
+
+    const convert = (value) => {
+        const day = `${value.getDate()}`.padStart(2, '0');
+        const month = `${value.getMonth() + 1}`.padStart(2, '0');
+        const date = `${day}-${month}-${value.getFullYear()}`;
+        const hour = `${value.getHours()}`.padStart(2, '0');
+        const minutes = `${value.getMinutes()}`.padStart(2, '0');
+        const seconds = `${value.getSeconds()}`.padStart(2, '0');
+        const milliseconds = `${value.getMilliseconds()}`.padStart(3, '0');
+        const time = `${hour}:${minutes}:${seconds}.${milliseconds}`;
+        return `${date} ${time}`;
+    };
+
+    const dates = dateKeys.reduce((previous, key) => {
+        const value = convert(state[key]);
+        previous[key] = value;
+        return previous;
+    }, {});
+
+    const _state = { ...state, ...dates };
+
+    return _state;
+};
