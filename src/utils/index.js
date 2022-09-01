@@ -84,7 +84,6 @@ export const stringToDate = (data) => {
     }
 
     const convert = (value) => {
-        // 01-09-2022 01:57:07.400
         const chunks = value.split(' ');
         const date = chunks[0].split('-');
         const day = date[0];
