@@ -95,15 +95,15 @@ export const stringToDate = (data) => {
         const minute = time[1];
         const seconds = time[2].slice(0, 2);
         const milliseconds = time[2].slice(2);
-        const _value = new Date();
-        _value.setDate(day);
-        _value.setMonth(month - 1);
-        _value.setFullYear(year);
-        _value.setHours(hour);
-        _value.setMinutes(minute);
-        _value.setSeconds(seconds);
-        _value.setMilliseconds(milliseconds);
-        return _value;
+        const _date = new Date();
+        _date.setDate(day);
+        _date.setMonth(month - 1);
+        _date.setFullYear(year);
+        _date.setHours(hour);
+        _date.setMinutes(minute);
+        _date.setSeconds(seconds);
+        _date.setMilliseconds(milliseconds);
+        return _date;
     };
 
     const dates = dateKeys.reduce((previous, key) => {
