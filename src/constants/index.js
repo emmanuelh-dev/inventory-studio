@@ -48,10 +48,10 @@ export const warehouseFields = {
 };
 
 export const receptionState = {
-    id: '',
+    id: null,
     type: 'INPUT',
     date: new Date(),
-    status: 'Open',
+    status: 'OPEN',
     warehouse: {},
     description: '',
     totalQuantity: 0,
@@ -73,4 +73,15 @@ export const receptionFields = {
     DESCRIPTION,
     TOTAL_AMOUNT,
     TOTAL_QUANTITY,
+};
+
+export const detailState = {
+    id: null,
+    lineNumber: 0,
+    item: {},
+    description: '',
+    quantity: 0,
+    unitPrice: 0,
+    totalPrice: 0,
+    deleted: false,
 };
