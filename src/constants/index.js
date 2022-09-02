@@ -1,13 +1,18 @@
 const ID = 'id';
 const TYPE = 'type';
 const DATE = 'date';
+const ITEM = 'item';
 const USED = 'used';
 const STATUS = 'status';
 const COUNTER = 'counter';
 const DETAILS = 'details';
 const DELETED = 'deleted';
+const QUANTITY = 'quantity';
 const ITEM_NAME = 'itemName';
 const WAREHOUSE = 'warehouse';
+const UNIT_PRICE = 'unitPrice';
+const LINE_NUMBER = 'lineNumber';
+const TOTAL_PRICE = 'totalPrice';
 const DESCRIPTION = 'description';
 const TOTAL_AMOUNT = 'totalAmount';
 const ITEM_SUMMARY = 'itemSummary';
@@ -64,13 +69,18 @@ export const receptionState = {
 export const receptionFields = {
     ID,
     TYPE,
+    ITEM,
     DATE,
     STATUS,
     COUNTER,
     DETAILS,
     DELETED,
+    QUANTITY,
     WAREHOUSE,
+    UNIT_PRICE,
     DESCRIPTION,
+    TOTAL_PRICE,
+    LINE_NUMBER,
     TOTAL_AMOUNT,
     TOTAL_QUANTITY,
 };
