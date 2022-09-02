@@ -27,6 +27,19 @@ export const toolbar = [
     },
 ];
 
+export const detailsToolbar = [
+    {
+        label: 'Agregar',
+        icon: 'pi pi-fw pi-plus',
+        command: null,
+    },
+    {
+        label: 'Eliminar',
+        icon: 'pi pi-fw pi-trash',
+        command: null,
+    },
+];
+
 export const itemSearchFields = [
     {
         field: 'itemName',
