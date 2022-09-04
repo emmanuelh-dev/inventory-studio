@@ -5,6 +5,13 @@
 export const isEmpty = (object) => {
     return !object || object === undefined || Object.keys(object).length === 0;
 };
+/**
+ * @param {object} object
+ * Validate if a object is empty
+ */
+export const isArrayEmpty = (array) => {
+    return array == null || array === undefined || array.length === 0;
+};
 
 /**
  * Encuentra y devuelve un objeto de un arreglo, buscando por
