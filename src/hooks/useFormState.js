@@ -1,6 +1,8 @@
 import { useState } from 'react';
+import { isEmpty } from '@utils';
 
-export const useFormState = (initialState) => {
+export const useFormState = (initialState, defaultInitialState) => {
+    initialState = isEmpty(initialState) ? defaultInitialState : initialState;
     const [state, setState] = useState(initialState);
 
     const updateField = (field, event) => {
