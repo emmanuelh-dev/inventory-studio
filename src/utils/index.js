@@ -35,9 +35,8 @@ export const buildUrl = (baseUrl, params) => {
     }
 
     const keys = Object.keys(params);
-
     const query = keys.reduce((previous, key) => {
-        return `/${key}/${params[key]}`;
+        return (previous += `/${key}/${params[key]}`);
     }, '');
 
     return `${baseUrl}${query}`;
