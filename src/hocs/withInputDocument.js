@@ -13,6 +13,7 @@ export const withInputDocument = (WrappedComponent) => (props) => {
     const fields = { ...receptionFields };
     const endpoint = {
         save: process.env.NEXT_PUBLIC_RECEPTIONS_SAVE,
+        update: process.env.NEXT_PUBLIC_RECEPTIONS_SAVE,
         details: process.env.NEXT_PUBLIC_RECEPTIONS_DETAILS,
         warehouses: process.env.NEXT_PUBLIC_WAREHOUSES_OPTIONS,
     };
@@ -69,26 +70,13 @@ const useDocumentToolbar = (fields, endpoint, document, details, updateDocument,
     const { notification, showNotification } = useNotification();
     const { buttonState, updateCopy, updateSaveButton } = useCopy({ ...receptionState }, document);
     const { onNew } = useNew(updateDocument, updateCopy, { ...receptionState });
-    const { onSave, updateParams } = useSaveWithDetails(
-        fields.ID,
-        updateDetails,
-        endpoint,
-        showNotification
-    );
+    const { onSave } = useSaveWithDetails(fields, updateDetails, endpoint, showNotification);
 
     const documentToolbar = [...toolbar];
     documentToolbar[0].command = onNew;
     documentToolbar[1].command = () => {
         onSave(document, updateDocument, updateCopy);
     };
-
-    useEffect(() => {
-        if (!document[fields.ID]) {
-            updateParams({ type: document[fields.TYPE] });
-        } else {
-            updateParams({ type: document[fields.TYPE], id: document[fields.ID] });
-        }
-    }, [document[fields.ID], document[fields.TYPE]]);
 
     return { documentToolbar, notification };
 };
