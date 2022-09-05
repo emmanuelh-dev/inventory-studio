@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 //constants
 import { receptionState, receptionFields, detailState } from '@constants';
-import { receptionTypes, dropdownLabelOptions, toolbar } from '@constants/options';
+import { receptionTypes, dropdownLabelOptions, toolbar, detailsToolbar } from '@constants/options';
 //hooks
 import { useCopy } from '@hooks/useCopy';
 import { useFormState } from '../hooks/useFormState';
@@ -40,10 +40,19 @@ export const withInputDocument = (WrappedComponent) => (props) => {
         updateDetails
     );
 
+    const { detailToolbar } = useDetailToolbar(
+        fields,
+        document,
+        details,
+        updateDocument,
+        updateDetails
+    );
+
     //static options
     const options = {
         documentTypes: receptionTypes,
         documentToolbar,
+        detailToolbar,
     };
     //data options
     const { dropdownOptions } = useFetchDropdownOptions(endpoint);
@@ -88,4 +97,23 @@ const useFetchDropdownOptions = (endpoint) => {
     );
 
     return { dropdownOptions };
+};
+
+const useDetailToolbar = (fields, document, details, updateDocument, updateDetails) => {
+    const detailToolbar = [...detailsToolbar];
+
+    const onAdd = () => {
+        const _document = { ...document };
+        _document[fields.COUNTER] = _document[fields.COUNTER] + 1;
+        const _details = { ...details };
+        const _initialState = { ...detailState };
+        _initialState[fields.LINE_NUMBER] = _document[fields.COUNTER];
+        _details.data.push(_initialState);
+        updateDetails(_details);
+        updateDocument(_document);
+    };
+
+    detailToolbar[0].command = onAdd;
+
+    return { detailToolbar };
 };
