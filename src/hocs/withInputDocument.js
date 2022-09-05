@@ -28,7 +28,7 @@ export const withInputDocument = (WrappedComponent) => (props) => {
         state: details,
         updateField: updateDetailField,
         updateState: updateDetails,
-    } = useFormState({}, { data: [] });
+    } = useFormState({}, { content: [] });
 
     //actions
     const { documentToolbar, notification } = useDocumentToolbar(
@@ -108,7 +108,7 @@ const useDetailToolbar = (fields, document, details, updateDocument, updateDetai
         const _details = { ...details };
         const _initialState = { ...detailState };
         _initialState[fields.LINE_NUMBER] = _document[fields.COUNTER];
-        _details.data.push(_initialState);
+        _details.content.push(_initialState);
         updateDetails(_details);
         updateDocument(_document);
     };
