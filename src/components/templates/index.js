@@ -3,6 +3,7 @@ import { valuation } from '@constants/options';
 
 //components
 import { Chip } from 'primereact/chip';
+import { InputText } from 'primereact/inputtext';
 
 export const ValuationType = (props) => {
     const { value } = { ...props };
@@ -19,4 +20,9 @@ export const UsedChip = (props) => {
         icon = 'pi pi-lock-open';
     }
     return <Chip label={label} icon={icon} className="mr-2 mb-2 custom-chip" />;
+};
+
+export const InputTextEditor = (props) => {
+    const { row, field, updateField } = { ...props };
+    return <InputText value={row[field]} onChange={(event) => updateField(row, field, event)} />;
 };
