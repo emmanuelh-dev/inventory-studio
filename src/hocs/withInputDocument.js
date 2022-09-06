@@ -1,7 +1,13 @@
 import React, { useEffect } from 'react';
 //constants
 import { receptionState, receptionFields, detailState } from '@constants';
-import { receptionTypes, dropdownLabelOptions, toolbar, detailsToolbar } from '@constants/options';
+import {
+    toolbar,
+    receptionTypes,
+    detailsToolbar,
+    detailTableFields,
+    dropdownLabelOptions,
+} from '@constants/options';
 //hooks
 import { useCopy } from '@hooks/useCopy';
 import { useFormState } from '../hooks/useFormState';
@@ -51,8 +57,9 @@ export const withInputDocument = (WrappedComponent) => (props) => {
     //static options
     const options = {
         documentTypes: receptionTypes,
-        documentToolbar,
         detailToolbar,
+        documentToolbar,
+        detailTableFields,
     };
     //data options
     const { dropdownOptions } = useFetchDropdownOptions(endpoint);
@@ -64,6 +71,7 @@ export const withInputDocument = (WrappedComponent) => (props) => {
             fields={fields}
             options={options}
             endpoint={endpoint}
+            updateDetails={updateDetails}
             updateDocumentField={updateDocumentField}
             dropdownOptions={dropdownOptions}
             // controlQuantity={controlQuantity}
