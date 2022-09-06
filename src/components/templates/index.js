@@ -4,6 +4,7 @@ import { valuation } from '@constants/options';
 //components
 import { Chip } from 'primereact/chip';
 import { InputText } from 'primereact/inputtext';
+import { InputNumber } from 'primereact/inputnumber';
 
 export const ValuationType = (props) => {
     const { value } = { ...props };
@@ -25,4 +26,17 @@ export const UsedChip = (props) => {
 export const InputTextEditor = (props) => {
     const { row, field, updateField } = { ...props };
     return <InputText value={row[field]} onChange={(event) => updateField(row, field, event)} />;
+};
+
+export const InputAmountEditor = (props) => {
+    const { row, field, updateField } = { ...props };
+    return (
+        <InputNumber
+            value={row[field]}
+            onChange={(event) => updateField(row, field, event)}
+            mode="currency"
+            currency="USD"
+            locale="en-US"
+        />
+    );
 };
