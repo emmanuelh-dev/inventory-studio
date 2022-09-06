@@ -40,3 +40,14 @@ export const InputAmountEditor = (props) => {
         />
     );
 };
+
+export const InputQuantityEditor = (props) => {
+    const { row, field, updateField } = { ...props };
+    return <InputNumber value={row[field]} onChange={(event) => updateField(row, field, event)} />;
+};
+
+export const amountBody = (row, field) => {
+    const options = { style: 'currency', currency: 'USD' };
+    const value = new Intl.NumberFormat('en-US', options).format(row[field]);
+    return value;
+};
