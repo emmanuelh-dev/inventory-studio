@@ -121,3 +121,10 @@ export const stringToDate = (data) => {
 
     return _data;
 };
+
+export const getValue = (event) => {
+    if (event.target == undefined) {
+        return event.value;
+    }
+    return event.target.value;
+};
