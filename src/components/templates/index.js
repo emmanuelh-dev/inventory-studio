@@ -51,3 +51,8 @@ export const amountBody = (row, field) => {
     const value = new Intl.NumberFormat('en-US', options).format(row[field]);
     return value;
 };
+
+export const quantityBody = (row, field) => {
+    const value = new Intl.NumberFormat('en-US').format(row[field]);
+    return value;
+};
