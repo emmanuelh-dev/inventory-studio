@@ -2,6 +2,7 @@ import { FilterMatchMode } from 'primereact/api';
 import {
     UsedChip,
     amountBody,
+    quantityBody,
     ValuationType,
     InputTextEditor,
     InputAmountEditor,
@@ -63,6 +64,9 @@ export const detailTableFields = [
             const { field, rowData } = { ...options };
             return <InputQuantityEditor row={rowData} field={field} updateField={updateField} />;
         },
+        body: (row, field) => {
+            return quantityBody(row, field);
+        },
     },
     {
         field: 'unitPrice',
@@ -75,7 +79,13 @@ export const detailTableFields = [
             return amountBody(row, field);
         },
     },
-    { field: 'totalPrice', header: 'Precio Total' },
+    {
+        field: 'totalPrice',
+        header: 'Precio Total',
+        body: (row, field) => {
+            return amountBody(row, field);
+        },
+    },
 ];
 
 export const itemSearchFields = [
