@@ -4,10 +4,12 @@ import {
     amountBody,
     quantityBody,
     ValuationType,
+    objectTemplate,
     InputTextEditor,
     InputAmountEditor,
     InputQuantityEditor,
 } from '@components/templates';
+import { ItemDropdown } from '@components/itemdropdown';
 
 export const valuation = [{ label: 'Promedio Ponderado', value: 'AVERAGE' }];
 export const receptionTypes = [
@@ -49,6 +51,17 @@ export const detailsToolbar = [
 ];
 
 export const detailTableFields = [
+    {
+        field: 'item',
+        header: 'Articulos',
+        editor: (options, updateField) => {
+            const { field, rowData } = { ...options };
+            return <ItemDropdown row={rowData} field={field} updateField={updateField} />;
+        },
+        body: (row, field) => {
+            return objectTemplate(row, field);
+        },
+    },
     {
         field: 'description',
         header: 'Descripcion',
