@@ -6,8 +6,6 @@ import { Dropdown } from 'primereact/dropdown';
 
 export const ItemDropdown = (props) => {
     const [options, setOptions] = useState([]);
-    const [loading, setLoading] = useState(true);
-
     const { row, field, updateField } = { ...props };
     const endpoint = {
         suggestions: process.env.NEXT_PUBLIC_ITEMS_OPTIONS,
@@ -16,7 +14,6 @@ export const ItemDropdown = (props) => {
     useEffect(() => {
         useGet(endpoint.suggestions).then((data) => {
             setOptions(data);
-            setLoading(false);
         });
     }, []);
 
