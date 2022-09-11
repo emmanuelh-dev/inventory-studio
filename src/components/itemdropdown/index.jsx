@@ -22,11 +22,12 @@ export const ItemDropdown = (props) => {
 
     return (
         <Dropdown
+            filter
             options={options}
             value={row[field]}
             optionLabel="itemName"
-            onChange={(event) => updateField(row, field, event)}
             placeholder="Seleccionar Articulos"
+            onChange={(event) => updateField(row, field, event)}
         />
     );
 };
