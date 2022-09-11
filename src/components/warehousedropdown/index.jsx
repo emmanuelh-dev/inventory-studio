@@ -6,7 +6,7 @@ import { Dropdown } from 'primereact/dropdown';
 
 export const WarehouseDropdown = (props) => {
     const [options, setOptions] = useState([]);
-    const { row, field, updateField } = { ...props };
+    const { state, field, updateField } = { ...props };
     const endpoint = {
         suggestions: process.env.NEXT_PUBLIC_WAREHOUSES_OPTIONS,
     };
@@ -21,10 +21,10 @@ export const WarehouseDropdown = (props) => {
         <Dropdown
             filter
             options={options}
-            value={row[field]}
+            value={state[field]}
             optionLabel="warehouseName"
             placeholder="Seleccionar Almacen"
-            onChange={(event) => updateField(row, field, event)}
+            onChange={(event) => updateField(field, event)}
         />
     );
 };

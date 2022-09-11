@@ -10,6 +10,7 @@ import { InputNumber } from 'primereact/inputnumber';
 import { InputTextarea } from 'primereact/inputtextarea';
 //custom components
 import { Details } from '@components/details';
+import { WarehouseDropdown } from '@components/warehousedropdown';
 
 export const Reception = (props) => {
     const {
@@ -87,13 +88,10 @@ export const Reception = (props) => {
                 </div> */}
                 <div className="field col-4">
                     <label>Almacen</label>
-                    <Dropdown
-                        value={document[fields.WAREHOUSE]}
-                        options={dropdownOptions}
-                        onChange={(event) => {
-                            updateDocumentField(fields.WAREHOUSE, event);
-                        }}
-                        filter
+                    <WarehouseDropdown
+                        row={document}
+                        field={fields.WAREHOUSE}
+                        updateField={updateDocumentField}
                     />
                 </div>
 
