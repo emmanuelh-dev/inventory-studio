@@ -128,3 +128,9 @@ export const getValue = (event) => {
     }
     return event.target.value;
 };
+
+export const findKey = (object, keyName) => {
+    const keys = Object.keys(object);
+
+    return keys.find((element) => element.includes(keyName));
+};
