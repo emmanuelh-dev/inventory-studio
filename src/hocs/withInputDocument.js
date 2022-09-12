@@ -61,8 +61,6 @@ export const withInputDocument = (WrappedComponent) => (props) => {
         documentToolbar,
         detailTableFields,
     };
-    //data options
-    const { dropdownOptions } = useFetchDropdownOptions(endpoint);
 
     return (
         <WrappedComponent
@@ -73,7 +71,6 @@ export const withInputDocument = (WrappedComponent) => (props) => {
             endpoint={endpoint}
             updateDetails={updateDetails}
             updateDocumentField={updateDocumentField}
-            dropdownOptions={dropdownOptions}
             // controlQuantity={controlQuantity}
             // updateControlQuantity={updateControlQuantity}
             // controlAmount={controlAmount}
@@ -92,19 +89,10 @@ const useDocumentToolbar = (fields, endpoint, document, details, updateDocument,
     const documentToolbar = [...toolbar];
     documentToolbar[0].command = onNew;
     documentToolbar[1].command = () => {
-        onSave(document, updateDocument, updateCopy);
+        onSave(document, details, updateDocument, updateCopy);
     };
 
     return { documentToolbar, notification };
-};
-
-const useFetchDropdownOptions = (endpoint) => {
-    const { dropdownOptions } = useDropdownOptions(
-        endpoint.warehouses,
-        dropdownLabelOptions.warehouse
-    );
-
-    return { dropdownOptions };
 };
 
 const useDetailToolbar = (fields, document, details, updateDocument, updateDetails) => {
@@ -116,7 +104,7 @@ const useDetailToolbar = (fields, document, details, updateDocument, updateDetai
         const _details = { ...details };
         const _initialState = { ...detailState };
         _initialState[fields.LINE_NUMBER] = _document[fields.COUNTER];
-        _details.content.push(_initialState);
+        _details.content.unshift(_initialState);
         updateDetails(_details);
         updateDocument(_document);
     };
