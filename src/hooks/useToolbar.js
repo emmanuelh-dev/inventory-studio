@@ -44,30 +44,32 @@ export const useSave = (field, endpoint, showNotification) => {
 export const useSaveWithDetails = (fields, updateDetails, endpoint, showNotification) => {
     let params = {};
 
-    const onSave = (state, updateState, updateCopy) => {
-        params = {
-            type: state[fields.TYPE],
-        };
-
-        if (isEmpty(state[fields.ID])) {
-            usePost(buildUrl(endpoint.save, params), dateToString({ ...state })).then((data) => {
+    const onSave = (document, details, updateDocument, updateCopy) => {
+        document[fields.DETAILS] = details.content;
+        if (isEmpty(document[fields.ID])) {
+            params = {
+                type: document[fields.TYPE],
+            };
+            usePost(buildUrl(endpoint.save, params), dateToString({ ...document })).then((data) => {
                 fetchDetails(data, updateDetails);
-                updateState(stringToDate(data));
+                updateDocument(stringToDate(data));
                 updateCopy(stringToDate(data));
                 showNotification('success');
             });
         } else {
             params = {
-                type: state[fields.TYPE],
-                id: state[fields.ID],
+                type: document[fields.TYPE],
+                id: document[fields.ID],
             };
 
-            usePut(buildUrl(endpoint.update, params), dateToString({ ...state })).then((data) => {
-                fetchDetails(data, updateDetails);
-                updateState(stringToDate(data));
-                updateCopy(stringToDate(data));
-                showNotification('success');
-            });
+            usePut(buildUrl(endpoint.update, params), dateToString({ ...document })).then(
+                (data) => {
+                    fetchDetails(data, updateDetails);
+                    updateDocument(stringToDate(data));
+                    updateCopy(stringToDate(data));
+                    showNotification('success');
+                }
+            );
         }
     };
 
