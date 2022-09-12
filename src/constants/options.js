@@ -1,15 +1,17 @@
 import { FilterMatchMode } from 'primereact/api';
 import {
     UsedChip,
-    amountBody,
-    quantityBody,
     ValuationType,
     objectTemplate,
-    InputTextEditor,
-    InputAmountEditor,
-    InputQuantityEditor,
+    amountTemplate,
+    quantityTemplate,
 } from '@components/templates';
+
+//custom compontents
 import { ItemDropdown } from '@components/itemdropdown';
+import { InputTextEditor } from '@components/inputtexteditor';
+import { InputAmountEditor } from '@components/inputamounteditor';
+import { InputQuantityEditor } from '@components/inputquantityeditor';
 
 export const valuation = [{ label: 'Promedio Ponderado', value: 'AVERAGE' }];
 export const receptionTypes = [
@@ -78,7 +80,7 @@ export const detailTableFields = [
             return <InputQuantityEditor row={rowData} field={field} updateField={updateField} />;
         },
         body: (row, field) => {
-            return quantityBody(row, field);
+            return quantityTemplate(row, field);
         },
     },
     {
@@ -89,14 +91,14 @@ export const detailTableFields = [
             return <InputAmountEditor row={rowData} field={field} updateField={updateField} />;
         },
         body: (row, field) => {
-            return amountBody(row, field);
+            return amountTemplate(row, field);
         },
     },
     {
         field: 'totalPrice',
         header: 'Precio Total',
         body: (row, field) => {
-            return amountBody(row, field);
+            return amountTemplate(row, field);
         },
     },
 ];
