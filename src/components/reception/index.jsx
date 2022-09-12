@@ -22,7 +22,6 @@ export const Reception = (props) => {
         notification,
         updateDetails,
         // controlAmount,
-        dropdownOptions,
         // controlQuantity,
         // updateControlAmount,
         // updateControlQuantity,
@@ -89,7 +88,7 @@ export const Reception = (props) => {
                 <div className="field col-4">
                     <label>Almacen</label>
                     <WarehouseDropdown
-                        row={document}
+                        state={document}
                         field={fields.WAREHOUSE}
                         updateField={updateDocumentField}
                     />
@@ -112,13 +111,13 @@ export const Reception = (props) => {
                 <div className="field col-12">
                     <label>Descripcion</label>
                     <InputTextarea
+                        rows={10}
+                        cols={30}
+                        autoResize
                         value={document[fields.DESCRIPTION]}
                         onChange={(event) => {
                             updateDocumentField(fields.DESCRIPTION, event);
                         }}
-                        rows={10}
-                        cols={30}
-                        autoResize
                     />
                 </div>
             </div>
