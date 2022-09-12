@@ -1,10 +1,8 @@
-import { findObjectByProp } from '@utils';
+import { findObjectByProp, findKey } from '@utils';
 import { valuation } from '@constants/options';
 
 //components
 import { Chip } from 'primereact/chip';
-import { InputText } from 'primereact/inputtext';
-import { InputNumber } from 'primereact/inputnumber';
 
 export const ValuationType = (props) => {
     const { value } = { ...props };
@@ -23,36 +21,19 @@ export const UsedChip = (props) => {
     return <Chip label={label} icon={icon} className="mr-2 mb-2 custom-chip" />;
 };
 
-export const InputTextEditor = (props) => {
-    const { row, field, updateField } = { ...props };
-    return <InputText value={row[field]} onChange={(event) => updateField(row, field, event)} />;
-};
-
-export const InputAmountEditor = (props) => {
-    const { row, field, updateField } = { ...props };
-    return (
-        <InputNumber
-            value={row[field]}
-            onChange={(event) => updateField(row, field, event)}
-            mode="currency"
-            currency="USD"
-            locale="en-US"
-        />
-    );
-};
-
-export const InputQuantityEditor = (props) => {
-    const { row, field, updateField } = { ...props };
-    return <InputNumber value={row[field]} onChange={(event) => updateField(row, field, event)} />;
-};
-
-export const amountBody = (row, field) => {
+export const amountTemplate = (row, field) => {
     const options = { style: 'currency', currency: 'USD' };
     const value = new Intl.NumberFormat('en-US', options).format(row[field]);
     return value;
 };
 
-export const quantityBody = (row, field) => {
+export const quantityTemplate = (row, field) => {
     const value = new Intl.NumberFormat('en-US').format(row[field]);
     return value;
+};
+
+export const objectTemplate = (row, field) => {
+    const key = findKey(row[field], 'Name');
+
+    return row[field][key];
 };
