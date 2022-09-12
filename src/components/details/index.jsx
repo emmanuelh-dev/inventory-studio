@@ -2,8 +2,7 @@ import { useState, useEffect } from 'react';
 //hooks
 import { useGet } from '@hooks/useGet';
 //constants
-import { detailState } from '@constants';
-
+import { getValue } from '@utils';
 import { Panel } from 'primereact/panel';
 import { Column } from 'primereact/column';
 import { Menubar } from 'primereact/menubar';
@@ -16,9 +15,18 @@ export const Details = (props) => {
         ...props,
     };
 
-    const updateField = (element, field, value) => {
-        element[field] = value.target.value;
+    const updateField = (element, field, event) => {
+        element[field] = getValue(event);
+        element = updateTotal(element, field);
         updateContent(element);
+    };
+
+    const updateTotal = (element, field) => {
+        if (field == fields.UNIT_PRICE || field == fields.QUANTITY) {
+            element[fields.TOTAL_PRICE] = element[fields.UNIT_PRICE] * element[fields.QUANTITY];
+            return element;
+        }
+        return element;
     };
 
     const updateContent = (element) => {
@@ -77,30 +85,51 @@ export const Details = (props) => {
                 // lazy
                 // paginator
             >
-                {/* <Column
-                    key="lineNumber"
-                    field="lineNumber"
-                    header="Line number"
-                    editor={() => {}}
-                ></Column> */}
                 {columns.map((element) => {
-                    if (element.editor !== undefined) {
-                        return (
-                            <Column
-                                key="lineNumber"
-                                field={element.field}
-                                editor={(options) => {
-                                    return element.editor(options, updateField);
-                                }}
-                                header={element.header}
-                            />
-                        );
-                    }
-                    return (
-                        <Column key="lineNumber" field={element.field} header={element.header} />
-                    );
+                    return cell(element, updateField, 'lineNumber');
                 })}
             </DataTable>
         </Panel>
     );
+};
+
+const cell = (column, updateField, key) => {
+    if (column.editor !== undefined) {
+        return (
+            <Column
+                key={key}
+                field={column.field}
+                editor={(options) => {
+                    return column.editor(options, updateField);
+                }}
+                header={column.header}
+                body={(row) => {
+                    if (column.body !== undefined) {
+                        return column.body(row, column.field);
+                    } else {
+                        if (typeof row[column.field] == 'object') {
+                            return '';
+                        }
+
+                        return row[column.field];
+                    }
+                }}
+            />
+        );
+    } else {
+        return (
+            <Column
+                key={key}
+                field={column.field}
+                header={column.header}
+                body={(row) => {
+                    if (column.body !== undefined) {
+                        return column.body(row, column.field);
+                    } else {
+                        return row[column.field];
+                    }
+                }}
+            />
+        );
+    }
 };
