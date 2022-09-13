@@ -16,17 +16,17 @@ import { Search } from '@components/search';
 export const Item = (props) => {
     const {
         item,
-        updateField,
         fields,
         options,
         endpoint,
-        searchVisible,
-        showSearch,
-        hideSearch,
-        selectOption,
-        notification,
         usedIcon,
         usedLabel,
+        showSearch,
+        hideSearch,
+        updateField,
+        selectOption,
+        notification,
+        searchVisible,
     } = {
         ...props,
     };
