@@ -9,11 +9,13 @@ import { InputText } from 'primereact/inputtext';
 import { InputNumber } from 'primereact/inputnumber';
 import { InputTextarea } from 'primereact/inputtextarea';
 //custom components
+import { Search } from '@components/search';
 import { Details } from '@components/details';
 import { WarehouseDropdown } from '@components/warehousedropdown';
 
 export const Reception = (props) => {
     const {
+        search,
         fields,
         options,
         details,
@@ -28,6 +30,7 @@ export const Reception = (props) => {
         updateDocumentField,
     } = { ...props };
 
+    const { search: searchState, showSearch, hideSearch, selectOption } = { ...search };
     const toolbar = () => {
         return <Menubar model={options.documentToolbar} />;
     };
@@ -39,7 +42,7 @@ export const Reception = (props) => {
                     <label>Folio</label>
                     <div className="p-inputgroup">
                         <InputText value={document[fields.ID] || ''} readOnly />
-                        {/* <Button icon="pi pi-search" onClick={showSearch} /> */}
+                        <Button icon="pi pi-search" onClick={showSearch} />
                     </div>
                 </div>
                 <div className="field col-4">
@@ -128,6 +131,13 @@ export const Reception = (props) => {
                 updateDetails={updateDetails}
                 columns={options.detailTableFields}
                 detailToolbar={options.detailToolbar}
+            />
+            <Search
+                visible={searchState}
+                onHide={hideSearch}
+                fields={options.searchFields}
+                selectOption={selectOption}
+                endpoint={endpoint}
             />
             <Toast ref={notification} />
         </Panel>
