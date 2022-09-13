@@ -145,3 +145,34 @@ export const warehouseFilters = {
 export const dropdownLabelOptions = {
     warehouse: 'warehouseName',
 };
+
+export const documentSearchFields = [
+    {
+        field: 'id',
+        header: 'Folio',
+        filter: true,
+    },
+    {
+        field: 'date',
+        header: 'Fecha',
+        filter: true,
+    },
+    {
+        field: 'status',
+        header: 'Estado',
+        filter: true,
+    },
+    {
+        field: 'warehouse',
+        header: 'Almacen',
+        filter: true,
+    },
+    {
+        field: 'totalQuantity',
+        header: 'Cantidad total',
+    },
+    {
+        field: 'totalAmount',
+        header: 'Monto total',
+    },
+];
