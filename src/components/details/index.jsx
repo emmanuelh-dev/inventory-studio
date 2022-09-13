@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { useGet } from '@hooks/useGet';
 //constants
 import { getValue } from '@utils';
+//components
 import { Panel } from 'primereact/panel';
 import { Column } from 'primereact/column';
 import { Menubar } from 'primereact/menubar';
