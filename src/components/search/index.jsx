@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-
 //hooks
 import { useGet } from '@hooks/useGet';
 
