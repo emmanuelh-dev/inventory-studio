@@ -1,4 +1,4 @@
 import { Reception } from '@components/reception';
-import { withInputDocument } from '@hocs/withInputDocument';
+import { withReception } from '@hocs/withReception';
 
-export default withInputDocument(Reception);
+export default withReception;
