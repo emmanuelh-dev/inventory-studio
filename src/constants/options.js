@@ -52,7 +52,7 @@ export const detailsToolbar = [
     },
 ];
 
-export const detailTableFields = [
+export const detailColumns = [
     {
         field: 'item',
         header: 'Articulos',
