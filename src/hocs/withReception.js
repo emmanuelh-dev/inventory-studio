@@ -2,8 +2,14 @@ import React, { useEffect } from 'react';
 //utils
 import { isEmpty, buildUrl, dateToString, stringToDate } from '@utils';
 //constants
-import { receptionState, receptionFields } from '@constants';
-import { toolbar, receptionTypes, detailColumns, documentSearchFields } from '@constants/options';
+import { receptionState, receptionFields, detailState } from '@constants';
+import {
+    toolbar,
+    detailColumns,
+    detailsToolbar,
+    receptionTypes,
+    documentSearchFields,
+} from '@constants/options';
 //components
 
 import { Toast } from 'primereact/toast';
@@ -48,6 +54,11 @@ export const withReception = (props) => {
     const { notification, showNotification } = useNotification();
     const { search, showSearch, hideSearch, selectOption } = useSearch(updateDocument);
 
+    const onNewDocument = () => {
+        onNew();
+        updateDetails({ content: [] });
+    };
+
     const onSaveDocument = () => {
         document[fields.DETAILS] = details.content;
         if (isEmpty(document[fields.ID])) {
@@ -72,6 +83,17 @@ export const withReception = (props) => {
         });
     };
 
+    const onAddDetail = () => {
+        const _document = { ...document };
+        _document[fields.COUNTER] = _document[fields.COUNTER] + 1;
+        const _details = { ...details };
+        const _initialState = { ...detailState };
+        _initialState[fields.LINE_NUMBER] = _document[fields.COUNTER];
+        _details.content.unshift(_initialState);
+        updateDetails(_details);
+        updateDocument(_document);
+    };
+
     //props
     const receptionProps = {
         fields,
@@ -88,15 +110,15 @@ export const withReception = (props) => {
         data: details,
         updateDetails,
         columns: detailColumns,
+        detailToolbar: createDetailToolbar(onAddDetail, null),
     };
 
     const searchProps = {
-        fields: documentSearchFields,
         endpoint,
         selectOption,
         visible: search,
-        detailToolbar: [],
         onHide: hideSearch,
+        fields: documentSearchFields,
     };
 
     //hooks
@@ -106,13 +128,13 @@ export const withReception = (props) => {
         }`;
     }, [document[fields.TYPE]]);
 
-    const toolbar = () => {
-        const documentToolbar = createToolbar(onNew, onSaveDocument, null, null);
-        return <Menubar model={documentToolbar} />;
+    const documentToolbar = () => {
+        const _documentToolbar = createDocumentToolbar(onNewDocument, onSaveDocument, null, null);
+        return <Menubar model={_documentToolbar} />;
     };
 
     return (
-        <Panel header={toolbar}>
+        <Panel header={documentToolbar}>
             <ReceptionForm {...receptionProps} />
             <Details {...detailProps} />
             <Search {...searchProps} />
@@ -121,10 +143,16 @@ export const withReception = (props) => {
     );
 };
 
-const createToolbar = (onNew, onSave, onDelete, actions) => {
+const createDocumentToolbar = (onNew, onSave, onDelete, actions) => {
     const documentToolbar = [...toolbar];
     documentToolbar[0].command = onNew;
     documentToolbar[1].command = onSave;
 
     return documentToolbar;
+};
+
+const createDetailToolbar = (onAdd, onRemove) => {
+    const _detailsToolbar = [...detailsToolbar];
+    _detailsToolbar[0].command = onAdd;
+    return _detailsToolbar;
 };
