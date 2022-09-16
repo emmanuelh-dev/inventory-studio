@@ -12,7 +12,7 @@ import { DataTable } from 'primereact/datatable';
 export const Details = (props) => {
     const [first, setFirst] = useState(0);
     const [loading, setLoading] = useState(false);
-    const { document, endpoint, fields, columns, data, detailToolbar, updateDetails } = {
+    const { fields, columns, data, detailToolbar, updateDocumentField } = {
         ...props,
     };
 
@@ -31,19 +31,16 @@ export const Details = (props) => {
     };
 
     const updateContent = (element) => {
-        const _data = { ...data };
+        const _data = [...data];
 
-        const _details = [..._data.content];
-
-        const index = _details.findIndex((detail) => {
+        const index = _data.findIndex((detail) => {
             return detail[fields.LINE_NUMBER] == element[fields.LINE_NUMBER];
         });
 
         if (index > -1) {
-            _details[index] = element;
+            _data[index] = element;
 
-            _data.content = _details;
-            updateDetails(_data);
+            updateDocumentField(fields.DETAILS, { target: { value: _data } });
         }
     };
 
@@ -78,7 +75,7 @@ export const Details = (props) => {
     return (
         <Panel header={toolbar}>
             <DataTable
-                value={data.content}
+                value={data}
                 selectionMode="single"
                 // loading={loading}
                 editMode="cell"
