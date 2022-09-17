@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 //utils
-import { isEmpty, buildUrl, dateToString, stringToDate } from '@utils';
+import { isEmpty, dateToString, stringToDate } from '@utils';
 //constants
 import { receptionState, receptionFields, detailState } from '@constants';
 import {
@@ -28,16 +28,16 @@ import { useCopy } from '@hooks/useCopy';
 import { useSearch } from '@hooks/useSearch';
 import { useFormState } from '@hooks/useFormState';
 import { useNotification } from '@hooks/useNotification';
+import { ZIndexUtils } from 'primereact/utils';
 
 export const withReception = (props) => {
     //states
     const {
         state: document,
-        updateField: updateDocumentField,
         updateState: updateDocument,
+        updateField: updateDocumentField,
     } = useFormState({}, { ...receptionState });
 
-    const { state: details, updateState: updateDetails } = useFormState({}, { content: [] });
     const { buttonState, updateCopy, updateSaveButton } = useCopy({ ...receptionState }, document);
     const { onNew } = useNew(updateDocument, updateCopy, { ...receptionState });
 
@@ -52,45 +52,29 @@ export const withReception = (props) => {
 
     //actions
     const { notification, showNotification } = useNotification();
-    const { search, showSearch, hideSearch, selectOption } = useSearch(updateDocument);
-
-    const onNewDocument = () => {
-        onNew();
-        updateDetails({ content: [] });
-    };
+    const { search, showSearch, hideSearch, selectOption } = useSearch(updateDocument, updateCopy);
 
     const onSaveDocument = () => {
-        document[fields.DETAILS] = details.content;
         if (isEmpty(document[fields.ID])) {
             usePost(`${endpoint.save}${document[fields.TYPE]}`, dateToString({ ...document })).then(
                 (data) => {
-                    fetchDetails(data);
-                    updateDocument(stringToDate(data));
-                    updateCopy(stringToDate(data));
+                    const _document = stringToDate(data);
+                    updateDocument(_document);
+                    updateCopy(_document);
                     showNotification('success');
                 }
             );
         }
     };
 
-    const fetchDetails = (_document, page = null) => {
-        const params = {
-            type: _document[fields.TYPE],
-            id: _document[fields.ID],
-        };
-        useGet(`${buildUrl(endpoint.details, params)}?page=${page || 0}&size=10`).then((data) => {
-            updateDetails(data);
-        });
-    };
-
     const onAddDetail = () => {
         const _document = { ...document };
         _document[fields.COUNTER] = _document[fields.COUNTER] + 1;
-        const _details = { ...details };
+        const _details = [...document[fields.DETAILS]];
         const _initialState = { ...detailState };
         _initialState[fields.LINE_NUMBER] = _document[fields.COUNTER];
-        _details.content.unshift(_initialState);
-        updateDetails(_details);
+        _details.unshift(_initialState);
+        _document[fields.DETAILS] = _details;
         updateDocument(_document);
     };
 
@@ -104,11 +88,10 @@ export const withReception = (props) => {
             documentTypes: receptionTypes,
         },
     };
-
     const detailProps = {
         fields,
-        data: details,
-        updateDetails,
+        data: document[fields.DETAILS],
+        updateDocumentField,
         columns: detailColumns,
         detailToolbar: createDetailToolbar(onAddDetail, null),
     };
@@ -123,13 +106,11 @@ export const withReception = (props) => {
 
     //hooks
     useEffect(() => {
-        endpoint.suggestions = `${process.env.NEXT_PUBLIC_RECEPTIONS_SUGGESTIONS}${
-            document[fields.TYPE]
-        }`;
+        endpoint.suggestions = `${endpoint.suggestions}${document[fields.TYPE]}`;
     }, [document[fields.TYPE]]);
 
     const documentToolbar = () => {
-        const _documentToolbar = createDocumentToolbar(onNewDocument, onSaveDocument, null, null);
+        const _documentToolbar = createDocumentToolbar(onNew, onSaveDocument, null, null);
         return <Menubar model={_documentToolbar} />;
     };
 
