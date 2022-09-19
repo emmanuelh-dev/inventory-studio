@@ -56,7 +56,7 @@ export const withReception = (props) => {
 
     const onSaveDocument = () => {
         if (isEmpty(document[fields.ID])) {
-            usePost(`${endpoint.save}${document[fields.TYPE]}`, dateToString({ ...document })).then(
+            usePost(`${endpoint.save}${document[fields.TYPE]}`, dateToString(document)).then(
                 (data) => {
                     const _document = stringToDate(data);
                     updateDocument(_document);
