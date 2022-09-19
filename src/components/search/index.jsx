@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react';
+//utils
+import { stringToDate } from '@utils';
 //hooks
 import { useGet } from '@hooks/useGet';
 
@@ -34,7 +36,7 @@ export const Search = (props) => {
     };
 
     const onYes = () => {
-        selectOption(row);
+        selectOption(stringToDate(row));
         onHide();
     };
 
