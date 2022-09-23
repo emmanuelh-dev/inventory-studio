@@ -53,32 +53,36 @@ export const withReception = (props) => {
 
     //actions
     useSumarizeField(document, updateDocument, fields);
+    const { notification, showNotification } = useNotification();
+    const { search, showSearch, hideSearch, selectOption } = useSearch(updateDocument, updateCopy);
 
     const {
         controlField: controlQuantityField,
         validate: validateControlQuantityField,
         updateControlField: updateControlQuantityField,
-    } = useControlField(document[fields.TOTAL_QUANTITY], 0);
+    } = useControlField(document[fields.TOTAL_QUANTITY], showNotification, 0);
 
     const {
         controlField: controlAmountField,
         validate: validateControlAmountField,
         updateControlField: updateControlAmountField,
-    } = useControlField(document[fields.TOTAL_AMOUNT], 0);
-
-    const { notification, showNotification } = useNotification();
-    const { search, showSearch, hideSearch, selectOption } = useSearch(updateDocument, updateCopy);
+    } = useControlField(document[fields.TOTAL_AMOUNT], showNotification, 0);
 
     const onSaveDocument = () => {
-        if (isEmpty(document[fields.ID])) {
-            usePost(`${endpoint.save}${document[fields.TYPE]}`, dateToString(document)).then(
-                (data) => {
-                    const _document = stringToDate(data);
-                    updateDocument(_document);
-                    updateCopy(_document);
-                    showNotification('success');
-                }
-            );
+        const validateQuantityField = validateControlQuantityField('Control Cantidad Total');
+        const validateAmountField = validateControlAmountField('Control Monto Total');
+
+        if (validateQuantityField & validateAmountField) {
+            if (isEmpty(document[fields.ID])) {
+                usePost(`${endpoint.save}${document[fields.TYPE]}`, dateToString(document)).then(
+                    (data) => {
+                        const _document = stringToDate(data);
+                        updateDocument(_document);
+                        updateCopy(_document);
+                        showNotification('success');
+                    }
+                );
+            }
         }
     };
 
