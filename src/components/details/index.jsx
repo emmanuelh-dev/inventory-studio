@@ -12,6 +12,7 @@ import { DataTable } from 'primereact/datatable';
 export const Details = (props) => {
     const [first, setFirst] = useState(0);
     const [loading, setLoading] = useState(false);
+    const [selection, setSelection] = useState([]);
     const { fields, columns, data, detailToolbar, updateDocumentField } = {
         ...props,
     };
@@ -44,8 +45,9 @@ export const Details = (props) => {
         }
     };
 
-    const toolbar = () => {
-        return <Menubar model={detailToolbar} />;
+    const selectionChange = (event) => {
+        console.log('event->', event);
+        setSelection(event.value);
     };
 
     const onPage = (event) => {
@@ -60,29 +62,24 @@ export const Details = (props) => {
         // });
     };
 
-    // useEffect(() => {
-    //     useGet(
-    //         `${endpoint.details}/type/${document[fields.TYPE]}/id/${
-    //             document[fields.ID]
-    //         }?page=0&size=10`
-    //     ).then((data) => {
-    //         setData(data);
-    //         setFirst(0);
-    //         setLoading(false);
-    //     });
-    // }, []);
+    const toolbar = () => {
+        return <Menubar model={detailToolbar} />;
+    };
 
     return (
         <Panel header={toolbar}>
             <DataTable
                 value={data}
-                selectionMode="single"
-                // loading={loading}
                 editMode="cell"
+                selection={selection}
+                selectionMode="checkbox"
+                onSelectionChange={selectionChange}
+                // loading={loading}
                 // onPage={onPage}
                 // lazy
                 // paginator
             >
+                <Column selectionMode="multiple" className="col-2" />
                 {columns.map((element) => {
                     return cell(element, updateField, 'lineNumber');
                 })}
@@ -96,6 +93,7 @@ const cell = (column, updateField, key) => {
         return (
             <Column
                 key={key}
+                className="col-2"
                 field={column.field}
                 editor={(options) => {
                     return column.editor(options, updateField);
