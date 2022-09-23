@@ -3,8 +3,13 @@ import { useRef } from 'react';
 export const useNotification = () => {
     const notification = useRef(null);
 
-    const showNotification = (type) => {
-        notification.current.show(types[type]);
+    const showNotification = (type, message) => {
+        const param = types[type];
+        if (message) {
+            param[detail] = message;
+        }
+
+        notification.current.show(param);
     };
 
     return { notification, showNotification };
