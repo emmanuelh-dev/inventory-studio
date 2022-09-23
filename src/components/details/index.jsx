@@ -71,6 +71,7 @@ export const Details = (props) => {
             <DataTable
                 value={data}
                 editMode="cell"
+                dataKey="lineNumber"
                 selection={selection}
                 selectionMode="checkbox"
                 onSelectionChange={selectionChange}
@@ -95,20 +96,12 @@ const cell = (column, updateField, key) => {
                 key={key}
                 className="col-2"
                 field={column.field}
+                header={column.header}
                 editor={(options) => {
                     return column.editor(options, updateField);
                 }}
-                header={column.header}
                 body={(row) => {
-                    if (column.body !== undefined) {
-                        return column.body(row, column.field);
-                    } else {
-                        if (typeof row[column.field] == 'object') {
-                            return '';
-                        }
-
-                        return row[column.field];
-                    }
+                    return column.body(row, column.field);
                 }}
             />
         );
@@ -116,14 +109,11 @@ const cell = (column, updateField, key) => {
         return (
             <Column
                 key={key}
+                className="col-2"
                 field={column.field}
                 header={column.header}
                 body={(row) => {
-                    if (column.body !== undefined) {
-                        return column.body(row, column.field);
-                    } else {
-                        return row[column.field];
-                    }
+                    return column.body(row, column.field);
                 }}
             />
         );
