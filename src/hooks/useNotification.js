@@ -6,7 +6,7 @@ export const useNotification = () => {
     const showNotification = (type, message) => {
         const param = types[type];
         if (message) {
-            param[detail] = message;
+            param.detail = message;
         }
 
         notification.current.show(param);
