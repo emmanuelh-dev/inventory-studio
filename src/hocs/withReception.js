@@ -28,6 +28,7 @@ import { useCopy } from '@hooks/useCopy';
 import { useSearch } from '@hooks/useSearch';
 import { useFormState } from '@hooks/useFormState';
 import { useNotification } from '@hooks/useNotification';
+import { useSumarizeField } from '@hooks/useSumarizeField';
 
 export const withReception = (props) => {
     //states
@@ -50,6 +51,8 @@ export const withReception = (props) => {
     };
 
     //actions
+    useSumarizeField(document, updateDocument, fields);
+
     const { notification, showNotification } = useNotification();
     const { search, showSearch, hideSearch, selectOption } = useSearch(updateDocument, updateCopy);
 
