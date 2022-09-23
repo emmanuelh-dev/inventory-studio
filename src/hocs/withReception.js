@@ -59,14 +59,22 @@ export const withReception = (props) => {
     const {
         controlField: controlQuantityField,
         validate: validateControlQuantityField,
+        cleanControlField: cleanControlQuantityField,
         updateControlField: updateControlQuantityField,
     } = useControlField(document[fields.TOTAL_QUANTITY], showNotification, 0);
 
     const {
         controlField: controlAmountField,
         validate: validateControlAmountField,
+        cleanControlField: cleanControlAmountField,
         updateControlField: updateControlAmountField,
     } = useControlField(document[fields.TOTAL_AMOUNT], showNotification, 0);
+
+    const onNewDocument = () => {
+        onNew();
+        cleanControlAmountField();
+        cleanControlQuantityField();
+    };
 
     const onSaveDocument = () => {
         const validateQuantityField = validateControlQuantityField('Control Cantidad Total');
@@ -133,7 +141,7 @@ export const withReception = (props) => {
     }, [document[fields.TYPE]]);
 
     const documentToolbar = () => {
-        const _documentToolbar = createDocumentToolbar(onNew, onSaveDocument, null, null);
+        const _documentToolbar = createDocumentToolbar(onNewDocument, onSaveDocument, null, null);
         return <Menubar model={_documentToolbar} />;
     };
 
