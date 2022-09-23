@@ -28,6 +28,7 @@ import { useCopy } from '@hooks/useCopy';
 import { useSearch } from '@hooks/useSearch';
 import { useFormState } from '@hooks/useFormState';
 import { useNotification } from '@hooks/useNotification';
+import { useControlField } from '@hooks/useControlField';
 import { useSumarizeField } from '@hooks/useSumarizeField';
 
 export const withReception = (props) => {
@@ -52,6 +53,18 @@ export const withReception = (props) => {
 
     //actions
     useSumarizeField(document, updateDocument, fields);
+
+    const {
+        controlField: controlQuantityField,
+        validate: validateControlQuantityField,
+        updateControlField: updateControlQuantityField,
+    } = useControlField(document[fields.TOTAL_QUANTITY], 0);
+
+    const {
+        controlField: controlAmountField,
+        validate: validateControlAmountField,
+        updateControlField: updateControlAmountField,
+    } = useControlField(document[fields.TOTAL_AMOUNT], 0);
 
     const { notification, showNotification } = useNotification();
     const { search, showSearch, hideSearch, selectOption } = useSearch(updateDocument, updateCopy);
@@ -85,7 +98,11 @@ export const withReception = (props) => {
         fields,
         document,
         showSearch,
+        controlAmountField,
         updateDocumentField,
+        controlQuantityField,
+        updateControlAmountField,
+        updateControlQuantityField,
         options: {
             documentTypes: receptionTypes,
         },
