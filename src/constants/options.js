@@ -71,6 +71,9 @@ export const detailColumns = [
             const { field, rowData } = { ...options };
             return <InputTextEditor row={rowData} field={field} updateField={updateField} />;
         },
+        body: (row, field) => {
+            return row[field];
+        },
     },
     {
         field: 'quantity',
