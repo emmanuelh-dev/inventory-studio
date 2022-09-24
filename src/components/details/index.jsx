@@ -1,6 +1,3 @@
-import { useState, useEffect } from 'react';
-//hooks
-import { useGet } from '@hooks/useGet';
 //constants
 import { getValue } from '@utils';
 //components
@@ -11,8 +8,6 @@ import { DataTable } from 'primereact/datatable';
 import { FilterMatchMode } from 'primereact/api';
 
 export const Details = (props) => {
-    const [first, setFirst] = useState(0);
-    const [loading, setLoading] = useState(false);
     const {
         data,
         fields,
@@ -61,18 +56,6 @@ export const Details = (props) => {
         updateSelection(event.value);
     };
 
-    const onPage = (event) => {
-        // useGet(
-        //     `${endpoint.details}/type/${document[fields.TYPE]}/id/${document[fields.ID]}?page=${
-        //         event.page
-        //     }&size=10`
-        // ).then((data) => {
-        //     setData(data);
-        //     setFirst(event.first);
-        //     setLoading(false);
-        // });
-    };
-
     const toolbar = () => {
         return <Menubar model={detailToolbar} />;
     };
@@ -80,6 +63,8 @@ export const Details = (props) => {
     return (
         <Panel header={toolbar}>
             <DataTable
+                rows={10}
+                paginator
                 value={data}
                 editMode="cell"
                 filters={filters}
@@ -87,10 +72,6 @@ export const Details = (props) => {
                 selection={selection}
                 selectionMode="checkbox"
                 onSelectionChange={selectionChange}
-                // loading={loading}
-                // onPage={onPage}
-                // lazy
-                // paginator
             >
                 <Column selectionMode="multiple" className="col-1" />
                 {columns.map((element) => {
