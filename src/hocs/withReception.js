@@ -39,6 +39,8 @@ export const withReception = (props) => {
         updateField: updateDocumentField,
     } = useFormState({}, { ...receptionState });
 
+    const { state: selection, updateState: updateSelection } = useFormState([], []);
+
     const { buttonState, updateCopy, updateSaveButton } = useCopy({ ...receptionState }, document);
     const { onNew } = useNew(updateDocument, updateCopy, { ...receptionState });
 
@@ -72,6 +74,7 @@ export const withReception = (props) => {
 
     const onNewDocument = () => {
         onNew();
+        updateSelection([]);
         cleanControlAmountField();
         cleanControlQuantityField();
     };
@@ -105,6 +108,25 @@ export const withReception = (props) => {
         updateDocument(_document);
     };
 
+    const onRemoveDetail = () => {
+        const _document = { ...document };
+        const _details = [...document[fields.DETAILS]];
+        const __details = _details.map((element) => {
+            const deleted = selection.find(
+                (removed) => removed[fields.LINE_NUMBER] === element[fields.LINE_NUMBER]
+            );
+
+            if (deleted !== undefined) {
+                element[fields.DELETED] = true;
+            }
+
+            return element;
+        });
+
+        _document[fields.DETAILS] = __details;
+        updateDocument(_document);
+    };
+
     //props
     const receptionProps = {
         fields,
@@ -121,10 +143,12 @@ export const withReception = (props) => {
     };
     const detailProps = {
         fields,
-        data: document[fields.DETAILS],
+        selection,
+        updateSelection,
         updateDocumentField,
         columns: detailColumns,
-        detailToolbar: createDetailToolbar(onAddDetail, null),
+        data: document[fields.DETAILS],
+        detailToolbar: createDetailToolbar(onAddDetail, onRemoveDetail),
     };
 
     const searchProps = {
@@ -149,7 +173,7 @@ export const withReception = (props) => {
         <Panel header={documentToolbar}>
             <ReceptionForm {...receptionProps} />
             <Details {...detailProps} />
-            <Search {...searchProps} />
+            {search ? <Search {...searchProps} /> : <></>}
             <Toast ref={notification} />
         </Panel>
     );
@@ -166,5 +190,6 @@ const createDocumentToolbar = (onNew, onSave, onDelete, actions) => {
 const createDetailToolbar = (onAdd, onRemove) => {
     const _detailsToolbar = [...detailsToolbar];
     _detailsToolbar[0].command = onAdd;
+    _detailsToolbar[1].command = onRemove;
     return _detailsToolbar;
 };
