@@ -111,17 +111,22 @@ export const withReception = (props) => {
     const onRemoveDetail = () => {
         const _document = { ...document };
         const _details = [...document[fields.DETAILS]];
-        const __details = _details.map((element) => {
-            const deleted = selection.find(
-                (removed) => removed[fields.LINE_NUMBER] === element[fields.LINE_NUMBER]
-            );
 
-            if (deleted !== undefined) {
+        const __details = _details.reduce((accumulator, element) => {
+            const removed = selection.find((value) => {
+                return value[fields.LINE_NUMBER] === element[fields.LINE_NUMBER];
+            });
+
+            if (removed == undefined) {
+                accumulator.unshift(element);
+            } else if (removed !== undefined && removed[fields.ID]) {
                 element[fields.DELETED] = true;
+
+                accumulator.unshift(element);
             }
 
-            return element;
-        });
+            return accumulator;
+        }, []);
 
         _document[fields.DETAILS] = __details;
         updateDocument(_document);
