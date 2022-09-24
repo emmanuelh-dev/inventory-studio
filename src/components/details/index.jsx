@@ -92,7 +92,7 @@ export const Details = (props) => {
                 // lazy
                 // paginator
             >
-                <Column selectionMode="multiple" className="col-2" />
+                <Column selectionMode="multiple" className="col-1" />
                 {columns.map((element) => {
                     return cell(element, updateField, 'lineNumber');
                 })}
