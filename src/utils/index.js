@@ -78,6 +78,7 @@ export const dateToString = (data) => {
 };
 
 export const stringToDate = (data) => {
+    if (data == null || data == undefined) return;
     const keys = Object.keys(data);
 
     const dateKeys = keys.reduce((previous, key) => {
