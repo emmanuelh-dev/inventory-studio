@@ -36,7 +36,10 @@ export const Search = (props) => {
     };
 
     const onYes = () => {
-        selectOption(stringToDate(row));
+        if (row != undefined) {
+            selectOption(stringToDate(row));
+        }
+
         onHide();
     };
 
