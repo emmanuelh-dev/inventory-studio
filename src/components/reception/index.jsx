@@ -1,3 +1,4 @@
+import React from 'react';
 import { Chip } from 'primereact/chip';
 import { Toast } from 'primereact/toast';
 import { Panel } from 'primereact/panel';
@@ -13,30 +14,21 @@ import { Search } from '@components/search';
 import { Details } from '@components/details';
 import { WarehouseDropdown } from '@components/warehousedropdown';
 
-export const Reception = (props) => {
+export const ReceptionForm = (props) => {
     const {
-        search,
         fields,
         options,
-        details,
         document,
-        endpoint,
-        notification,
-        updateDetails,
-        // controlAmount,
-        // controlQuantity,
-        // updateControlAmount,
-        // updateControlQuantity,
+        showSearch,
+        controlAmountField,
         updateDocumentField,
+        controlQuantityField,
+        updateControlAmountField,
+        updateControlQuantityField,
     } = { ...props };
 
-    const { search: searchState, showSearch, hideSearch, selectOption } = { ...search };
-    const toolbar = () => {
-        return <Menubar model={options.documentToolbar} />;
-    };
-
     return (
-        <Panel header={toolbar}>
+        <React.Fragment>
             <div className="p-fluid formgrid grid">
                 <div className="field col-4">
                     <label>Folio</label>
@@ -74,20 +66,23 @@ export const Reception = (props) => {
                         showSeconds
                     />
                 </div>
-                {/* <div className="field col-4">
+                <div className="field col-4">
                     <label>Control Monto Total</label>
                     <InputNumber
-                        value={controlAmount}
-                        onValueChange={updateControlAmount}
+                        value={controlAmountField}
+                        onValueChange={updateControlAmountField}
                         mode="currency"
                         currency="USD"
                         locale="en-US"
                     />
-                </div> */}
-                {/* <div className="field col-4">
+                </div>
+                <div className="field col-4">
                     <label>Control Cantidad Total</label>
-                    <InputNumber value={controlQuantity} onValueChange={updateControlQuantity} />
-                </div> */}
+                    <InputNumber
+                        value={controlQuantityField}
+                        onValueChange={updateControlQuantityField}
+                    />
+                </div>
                 <div className="field col-4">
                     <label>Almacen</label>
                     <WarehouseDropdown
@@ -124,22 +119,6 @@ export const Reception = (props) => {
                     />
                 </div>
             </div>
-            <Details
-                data={details}
-                fields={fields}
-                endpoint={endpoint}
-                updateDetails={updateDetails}
-                columns={options.detailTableFields}
-                detailToolbar={options.detailToolbar}
-            />
-            <Search
-                visible={searchState}
-                onHide={hideSearch}
-                fields={options.searchFields}
-                selectOption={selectOption}
-                endpoint={endpoint}
-            />
-            <Toast ref={notification} />
-        </Panel>
+        </React.Fragment>
     );
 };
