@@ -8,13 +8,25 @@ import { Panel } from 'primereact/panel';
 import { Column } from 'primereact/column';
 import { Menubar } from 'primereact/menubar';
 import { DataTable } from 'primereact/datatable';
+import { FilterMatchMode } from 'primereact/api';
 
 export const Details = (props) => {
     const [first, setFirst] = useState(0);
     const [loading, setLoading] = useState(false);
-    const [selection, setSelection] = useState([]);
-    const { fields, columns, data, detailToolbar, updateDocumentField } = {
+    const {
+        data,
+        fields,
+        columns,
+        selection,
+        updateSelection,
+        detailToolbar,
+        updateDocumentField,
+    } = {
         ...props,
+    };
+
+    const filters = {
+        deleted: { value: false, matchMode: FilterMatchMode.EQUALS },
     };
 
     const updateField = (element, field, event) => {
@@ -46,8 +58,7 @@ export const Details = (props) => {
     };
 
     const selectionChange = (event) => {
-        console.log('event->', event);
-        setSelection(event.value);
+        updateSelection(event.value);
     };
 
     const onPage = (event) => {
@@ -71,6 +82,7 @@ export const Details = (props) => {
             <DataTable
                 value={data}
                 editMode="cell"
+                filters={filters}
                 dataKey="lineNumber"
                 selection={selection}
                 selectionMode="checkbox"
