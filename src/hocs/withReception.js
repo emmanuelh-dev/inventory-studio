@@ -79,7 +79,7 @@ export const withReception = (props) => {
         cleanControlQuantityField();
     };
 
-    const save = () => {
+    const onSave = () => {
         const onSaveDocument = () => {
             const validation = saveValidations();
 
@@ -218,7 +218,7 @@ export const withReception = (props) => {
     const documentToolbar = () => {
         const _documentToolbar = createDocumentToolbar(
             onNewDocument,
-            save(),
+            onSave(),
             onCancelDocument,
             null,
             null
