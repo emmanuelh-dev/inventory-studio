@@ -3,13 +3,12 @@ export const useControlField = (fieldValue, showNotification, initialValue) => {
     const [controlField, setcontrolField] = useState(initialValue);
 
     const validate = (fieldName) => {
-        if (controlField !== fieldValue) {
+        const validation = controlField !== fieldValue;
+        if (validation) {
             const message = `El campo de control ${fieldName} no concide con su campo totalizado`;
             showNotification('error', message);
-            return false;
         }
-
-        return true;
+        return !validation;
     };
 
     const updateControlField = (event) => {
