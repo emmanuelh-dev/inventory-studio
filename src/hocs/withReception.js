@@ -80,10 +80,9 @@ export const withReception = (props) => {
     };
 
     const onSaveDocument = () => {
-        const validateQuantityField = validateControlQuantityField('Control Cantidad Total');
-        const validateAmountField = validateControlAmountField('Control Monto Total');
+        const validation = saveValidations();
 
-        if (validateQuantityField & validateAmountField) {
+        if (validation) {
             if (isEmpty(document[fields.ID])) {
                 usePost(`${endpoint.save}${document[fields.TYPE]}`, dateToString(document)).then(
                     (data) => {
@@ -164,6 +163,29 @@ export const withReception = (props) => {
         fields: documentSearchFields,
     };
 
+    //validations
+    const saveValidations = () => {
+        const validateAmountField = validateControlAmountField('Control Monto Total');
+        const validateQuantityField = validateControlQuantityField('Control Cantidad Total');
+        const validateWarehouseField = validateField(
+            document[fields.WAREHOUSE],
+            'Almacen',
+            showNotification
+        );
+        const validateDescriptionField = validateField(
+            document[fields.DESCRIPTION],
+            'Descripcion',
+            showNotification
+        );
+
+        return (
+            validateAmountField &&
+            validateQuantityField &&
+            validateWarehouseField &&
+            validateDescriptionField
+        );
+    };
+
     //hooks
     useEffect(() => {
         endpoint.suggestions = `${endpoint.suggestions}${document[fields.TYPE]}`;
@@ -197,4 +219,14 @@ const createDetailToolbar = (onAdd, onRemove) => {
     _detailsToolbar[0].command = onAdd;
     _detailsToolbar[1].command = onRemove;
     return _detailsToolbar;
+};
+
+const validateField = (value, fieldName, showNotification) => {
+    const validate = isEmpty(value) || !value;
+    if (validate) {
+        const message = `El campo ${fieldName} esta vacio`;
+        showNotification('error', message);
+    }
+
+    return !validate;
 };
