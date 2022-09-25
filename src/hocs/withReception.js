@@ -79,21 +79,29 @@ export const withReception = (props) => {
         cleanControlQuantityField();
     };
 
-    const onSaveDocument = () => {
-        const validation = saveValidations();
+    const save = () => {
+        const onSaveDocument = () => {
+            const validation = saveValidations();
 
-        if (validation) {
-            if (isEmpty(document[fields.ID])) {
-                usePost(`${endpoint.save}${document[fields.TYPE]}`, dateToString(document)).then(
-                    (data) => {
+            if (validation) {
+                if (isEmpty(document[fields.ID])) {
+                    usePost(
+                        `${endpoint.save}${document[fields.TYPE]}`,
+                        dateToString(document)
+                    ).then((data) => {
                         const _document = stringToDate(data);
                         updateDocument(_document);
                         updateCopy(_document);
                         showNotification('success');
-                    }
-                );
+                    });
+                }
             }
-        }
+        };
+
+        return {
+            state: buttonState,
+            command: onSaveDocument,
+        };
     };
 
     const onCancelDocument = () => {
@@ -203,10 +211,14 @@ export const withReception = (props) => {
         endpoint.suggestions = `${endpoint.suggestions}${document[fields.TYPE]}`;
     }, [document[fields.TYPE]]);
 
+    useEffect(() => {
+        updateSaveButton();
+    }, [document]);
+
     const documentToolbar = () => {
         const _documentToolbar = createDocumentToolbar(
             onNewDocument,
-            onSaveDocument,
+            save(),
             onCancelDocument,
             null,
             null
@@ -227,7 +239,8 @@ export const withReception = (props) => {
 const createDocumentToolbar = (onNew, onSave, onCancel, onDelete, actions) => {
     const documentToolbar = [...toolbar];
     documentToolbar[0].command = onNew;
-    documentToolbar[1].command = onSave;
+    documentToolbar[1].command = onSave.command;
+    documentToolbar[1].disabled = onSave.state;
     documentToolbar[2].command = onCancel;
 
     return documentToolbar;
