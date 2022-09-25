@@ -1,5 +1,6 @@
 export const useNew = (updateState, updateCopy, initialState) => {
-    const onNew = () => {
+    const onNew = (_initialState) => {
+        initialState = _initialState || initialState;
         updateState(initialState);
         updateCopy(initialState);
     };
