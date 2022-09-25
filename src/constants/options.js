@@ -23,7 +23,6 @@ export const toolbar = [
     {
         label: 'Nuevo',
         icon: 'pi pi-fw pi-plus',
-        command: null,
     },
     {
         label: 'Guardar',
