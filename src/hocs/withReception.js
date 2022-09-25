@@ -96,6 +96,18 @@ export const withReception = (props) => {
         }
     };
 
+    const onCancelDocument = () => {
+        if (!isEmpty(document[fields.ID])) {
+            useGet(`${endpoint.suggestions}/id/${document[fields.ID]}`).then((data) => {
+                const _document = stringToDate(data);
+                updateDocument(_document);
+                updateCopy(_document);
+            });
+        } else {
+            onNewDocument();
+        }
+    };
+
     const onAddDetail = () => {
         const _document = { ...document };
         _document[fields.COUNTER] = _document[fields.COUNTER] + 1;
@@ -192,7 +204,13 @@ export const withReception = (props) => {
     }, [document[fields.TYPE]]);
 
     const documentToolbar = () => {
-        const _documentToolbar = createDocumentToolbar(onNewDocument, onSaveDocument, null, null);
+        const _documentToolbar = createDocumentToolbar(
+            onNewDocument,
+            onSaveDocument,
+            onCancelDocument,
+            null,
+            null
+        );
         return <Menubar model={_documentToolbar} />;
     };
 
@@ -206,10 +224,11 @@ export const withReception = (props) => {
     );
 };
 
-const createDocumentToolbar = (onNew, onSave, onDelete, actions) => {
+const createDocumentToolbar = (onNew, onSave, onCancel, onDelete, actions) => {
     const documentToolbar = [...toolbar];
     documentToolbar[0].command = onNew;
     documentToolbar[1].command = onSave;
+    documentToolbar[2].command = onCancel;
 
     return documentToolbar;
 };
