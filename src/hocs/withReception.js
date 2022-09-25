@@ -18,7 +18,7 @@ import { Menubar } from 'primereact/menubar';
 //custom components
 import { Search } from '@components/search';
 import { Details } from '@components/details';
-import { ReceptionForm } from '@components/reception';
+import { ReceptionForm } from '@components/receptionform';
 //hooks
 
 import { useNew } from '@hooks/useNew';
@@ -73,7 +73,9 @@ export const withReception = (props) => {
     } = useControlField(document[fields.TOTAL_AMOUNT], showNotification, 0);
 
     const onNewDocument = () => {
-        onNew();
+        const _initialState = { ...receptionState };
+        _initialState[fields.TYPE] = document[fields.TYPE];
+        onNew(_initialState);
         updateSelection([]);
         cleanControlAmountField();
         cleanControlQuantityField();
@@ -209,6 +211,7 @@ export const withReception = (props) => {
     //hooks
     useEffect(() => {
         endpoint.suggestions = `${endpoint.suggestions}${document[fields.TYPE]}`;
+        onNewDocument();
     }, [document[fields.TYPE]]);
 
     useEffect(() => {
