@@ -30,6 +30,10 @@ export const toolbar = [
         icon: 'pi pi-fw pi-save',
     },
     {
+        label: 'Cancelar',
+        icon: 'pi pi-fw pi-times',
+    },
+    {
         label: 'Eliminar',
         icon: 'pi pi-fw pi-trash',
     },
@@ -42,12 +46,12 @@ export const toolbar = [
 export const detailsToolbar = [
     {
         label: 'Agregar',
-        icon: 'pi pi-fw pi-plus',
+        icon: 'pi pi-fw pi-plus-circle',
         command: null,
     },
     {
         label: 'Eliminar',
-        icon: 'pi pi-fw pi-trash',
+        icon: 'pi pi-fw pi-minus-circle',
         command: null,
     },
 ];
