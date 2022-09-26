@@ -1,7 +1,5 @@
 import React from 'react';
 import { Chip } from 'primereact/chip';
-import { Toast } from 'primereact/toast';
-import { Panel } from 'primereact/panel';
 import { Button } from 'primereact/button';
 import { Menubar } from 'primereact/menubar';
 import { Calendar } from 'primereact/calendar';
@@ -10,8 +8,6 @@ import { InputText } from 'primereact/inputtext';
 import { InputNumber } from 'primereact/inputnumber';
 import { InputTextarea } from 'primereact/inputtextarea';
 //custom components
-import { Search } from '@components/search';
-import { Details } from '@components/details';
 import { WarehouseDropdown } from '@components/warehousedropdown';
 
 export const ReceptionForm = (props) => {
