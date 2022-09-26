@@ -16,8 +16,8 @@ export const useSumarizeField = (state, updateState, fields) => {
         }, 0);
 
         const _state = { ...state };
-        _state[fields.TOTAL_QUANTITY] = totalQuantity;
         _state[fields.TOTAL_AMOUNT] = totalAmount;
+        _state[fields.TOTAL_QUANTITY] = totalQuantity;
         updateState(_state);
     }, [state[fields.DETAILS]]);
 };
