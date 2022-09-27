@@ -116,16 +116,23 @@ export const withReception = (props) => {
         };
     };
 
-    const onCancelDocument = () => {
-        if (!isEmpty(document[fields.ID])) {
-            useGet(`${endpoint.suggestions}/id/${document[fields.ID]}`).then((data) => {
-                const _document = stringToDate(data);
-                updateDocument(_document);
-                updateCopy(_document);
-            });
-        } else {
-            onNewDocument();
-        }
+    const onCancel = () => {
+        const onCancelDocument = () => {
+            if (!isEmpty(document[fields.ID])) {
+                useGet(`${endpoint.suggestions}/id/${document[fields.ID]}`).then((data) => {
+                    const _document = stringToDate(data);
+                    updateDocument(_document);
+                    updateCopy(_document);
+                });
+            } else {
+                onNewDocument();
+            }
+        };
+
+        return {
+            state: buttonState,
+            command: onCancelDocument,
+        };
     };
 
     const onAddDetail = () => {
@@ -139,28 +146,35 @@ export const withReception = (props) => {
         updateDocument(_document);
     };
 
-    const onRemoveDetail = () => {
-        const _document = { ...document };
-        const _details = [...document[fields.DETAILS]];
+    const onRemove = () => {
+        const onRemoveDetail = () => {
+            const _document = { ...document };
+            const _details = [...document[fields.DETAILS]];
 
-        const __details = _details.reduce((accumulator, element) => {
-            const removed = selection.find((value) => {
-                return value[fields.LINE_NUMBER] === element[fields.LINE_NUMBER];
-            });
+            const __details = _details.reduce((accumulator, element) => {
+                const removed = selection.find((value) => {
+                    return value[fields.LINE_NUMBER] === element[fields.LINE_NUMBER];
+                });
 
-            if (removed == undefined) {
-                accumulator.unshift(element);
-            } else if (removed !== undefined && removed[fields.ID]) {
-                element[fields.DELETED] = true;
+                if (removed == undefined) {
+                    accumulator.unshift(element);
+                } else if (removed !== undefined && removed[fields.ID]) {
+                    element[fields.DELETED] = true;
 
-                accumulator.unshift(element);
-            }
+                    accumulator.unshift(element);
+                }
 
-            return accumulator;
-        }, []);
+                return accumulator;
+            }, []);
 
-        _document[fields.DETAILS] = __details;
-        updateDocument(_document);
+            _document[fields.DETAILS] = __details;
+            updateDocument(_document);
+        };
+
+        return {
+            state: isEmpty(document[fields.DETAILS]),
+            command: onRemoveDetail,
+        };
     };
 
     //props
@@ -184,7 +198,7 @@ export const withReception = (props) => {
         updateDocumentField,
         columns: detailColumns,
         data: document[fields.DETAILS],
-        detailToolbar: createDetailToolbar(onAddDetail, onRemoveDetail),
+        detailToolbar: createDetailToolbar(onAddDetail, onRemove()),
     };
 
     const searchProps = {
@@ -232,7 +246,7 @@ export const withReception = (props) => {
         const _documentToolbar = createDocumentToolbar(
             onNewDocument,
             onSave(),
-            onCancelDocument,
+            onCancel(),
             null,
             null
         );
@@ -254,7 +268,8 @@ const createDocumentToolbar = (onNew, onSave, onCancel, onDelete, actions) => {
     documentToolbar[0].command = onNew;
     documentToolbar[1].command = onSave.command;
     documentToolbar[1].disabled = onSave.state;
-    documentToolbar[2].command = onCancel;
+    documentToolbar[2].command = onCancel.command;
+    documentToolbar[2].disabled = onCancel.state;
 
     return documentToolbar;
 };
@@ -262,7 +277,8 @@ const createDocumentToolbar = (onNew, onSave, onCancel, onDelete, actions) => {
 const createDetailToolbar = (onAdd, onRemove) => {
     const _detailsToolbar = [...detailsToolbar];
     _detailsToolbar[0].command = onAdd;
-    _detailsToolbar[1].command = onRemove;
+    _detailsToolbar[1].command = onRemove.command;
+    _detailsToolbar[1].disabled = onRemove.state;
     return _detailsToolbar;
 };
 
