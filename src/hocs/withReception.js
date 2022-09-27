@@ -104,7 +104,8 @@ export const withReception = (props) => {
                         const _document = stringToDate(data);
                         updateDocument(_document);
                         updateCopy(_document);
-                        showNotification('success');
+                        const message = `El registro fue actualizado con exito`;
+                        showNotification('success', message);
                     });
                 }
             }
@@ -132,6 +133,13 @@ export const withReception = (props) => {
         return {
             state: buttonState,
             command: onCancelDocument,
+        };
+    };
+
+    const onDelete = () => {
+        return {
+            state: isEmpty(document[fields.ID]) || document[fields.STATUS] !== 'RELEASED',
+            command: () => {},
         };
     };
 
@@ -247,7 +255,7 @@ export const withReception = (props) => {
             onNewDocument,
             onSave(),
             onCancel(),
-            null,
+            onDelete(),
             null
         );
         return <Menubar model={_documentToolbar} />;
@@ -270,6 +278,8 @@ const createDocumentToolbar = (onNew, onSave, onCancel, onDelete, actions) => {
     documentToolbar[1].disabled = onSave.state;
     documentToolbar[2].command = onCancel.command;
     documentToolbar[2].disabled = onCancel.state;
+    documentToolbar[3].command = onCancel.command;
+    documentToolbar[3].disabled = onCancel.state;
 
     return documentToolbar;
 };
