@@ -185,6 +185,29 @@ export const withReception = (props) => {
         };
     };
 
+    //validations
+    const saveValidations = () => {
+        const validateAmountField = validateControlAmountField('Control Monto Total');
+        const validateQuantityField = validateControlQuantityField('Control Cantidad Total');
+        const validateWarehouseField = validateField(
+            document[fields.WAREHOUSE],
+            'Almacen',
+            showNotification
+        );
+        const validateDescriptionField = validateField(
+            document[fields.DESCRIPTION],
+            'Descripcion',
+            showNotification
+        );
+
+        return (
+            validateAmountField &&
+            validateQuantityField &&
+            validateWarehouseField &&
+            validateDescriptionField
+        );
+    };
+
     //props
     const receptionProps = {
         fields,
@@ -217,29 +240,6 @@ export const withReception = (props) => {
         fields: documentSearchFields,
     };
 
-    //validations
-    const saveValidations = () => {
-        const validateAmountField = validateControlAmountField('Control Monto Total');
-        const validateQuantityField = validateControlQuantityField('Control Cantidad Total');
-        const validateWarehouseField = validateField(
-            document[fields.WAREHOUSE],
-            'Almacen',
-            showNotification
-        );
-        const validateDescriptionField = validateField(
-            document[fields.DESCRIPTION],
-            'Descripcion',
-            showNotification
-        );
-
-        return (
-            validateAmountField &&
-            validateQuantityField &&
-            validateWarehouseField &&
-            validateDescriptionField
-        );
-    };
-
     //hooks
     useEffect(() => {
         endpoint.suggestions = `${endpoint.suggestions}${document[fields.TYPE]}`;
@@ -249,6 +249,11 @@ export const withReception = (props) => {
     useEffect(() => {
         updateSaveButton();
     }, [document]);
+
+    useEffect(() => {
+        cleanControlAmountField();
+        cleanControlQuantityField();
+    }, [document[fields.ID]]);
 
     const documentToolbar = () => {
         const _documentToolbar = createDocumentToolbar(
