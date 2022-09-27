@@ -23,6 +23,7 @@ import { ReceptionForm } from '@components/receptionform';
 
 import { useNew } from '@hooks/useNew';
 import { useGet } from '@hooks/useGet';
+import { usePut } from '@hooks/usePut';
 import { usePost } from '@hooks/usePost';
 import { useCopy } from '@hooks/useCopy';
 import { useSearch } from '@hooks/useSearch';
@@ -49,7 +50,6 @@ export const withReception = (props) => {
     const endpoint = {
         save: process.env.NEXT_PUBLIC_RECEPTIONS_SAVE,
         update: process.env.NEXT_PUBLIC_RECEPTIONS_SAVE,
-        details: process.env.NEXT_PUBLIC_RECEPTIONS_DETAILS,
         suggestions: `${process.env.NEXT_PUBLIC_RECEPTIONS_SUGGESTIONS}${document[fields.TYPE]}`,
     };
 
@@ -89,6 +89,16 @@ export const withReception = (props) => {
                 if (isEmpty(document[fields.ID])) {
                     usePost(
                         `${endpoint.save}${document[fields.TYPE]}`,
+                        dateToString(document)
+                    ).then((data) => {
+                        const _document = stringToDate(data);
+                        updateDocument(_document);
+                        updateCopy(_document);
+                        showNotification('success');
+                    });
+                } else {
+                    usePut(
+                        `${endpoint.save}${document[fields.TYPE]}/id/${document[fields.ID]}`,
                         dateToString(document)
                     ).then((data) => {
                         const _document = stringToDate(data);
