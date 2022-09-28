@@ -175,6 +175,10 @@ export const withReception = (props) => {
                 return accumulator;
             }, []);
 
+            __details.sort((first, second) => {
+                return second[fields.LINE_NUMBER] - first[fields.LINE_NUMBER];
+            });
+
             _document[fields.DETAILS] = __details;
             updateDocument(_document);
         };
