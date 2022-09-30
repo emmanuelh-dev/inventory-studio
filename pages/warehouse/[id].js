@@ -1,14 +1,14 @@
-import { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+
 import { useRouter } from 'next/router';
-import React, { useEffect } from 'react';
+//hocs
+import { withWarehouse } from '@hocs/withWarehouse';
 //hooks
 import { useGet } from '@hooks/useGet';
 //components
 import { ProgressSpinner } from 'primereact/progressspinner';
 //custom components
 import { Warehouse } from '@components/warehouse';
-//hocs
-import { withWarehouse } from '@hocs/withWarehouse';
 
 const WarehouseForm = withWarehouse(Warehouse);
 export default () => {
