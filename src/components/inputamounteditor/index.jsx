@@ -5,7 +5,7 @@ export const InputAmountEditor = (props) => {
     return (
         <InputNumber
             value={row[field]}
-            onChange={(event) => updateField(row, field, event)}
+            onChange={(event) => updateField(field, event)}
             mode="currency"
             currency="USD"
             locale="en-US"
