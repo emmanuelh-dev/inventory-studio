@@ -7,12 +7,6 @@ import {
     quantityTemplate,
 } from '@components/templates';
 
-//custom compontents
-import { ItemDropdown } from '@components/itemdropdown';
-import { InputTextEditor } from '@components/inputtexteditor';
-import { InputAmountEditor } from '@components/inputamounteditor';
-import { InputQuantityEditor } from '@components/inputquantityeditor';
-
 export const valuation = [{ label: 'Promedio Ponderado', value: 'AVERAGE' }];
 export const receptionTypes = [
     { label: 'Ingreso', value: 'INPUT' },
