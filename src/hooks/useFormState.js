@@ -1,12 +1,12 @@
 import { useState } from 'react';
-import { isEmpty } from '@utils';
+import { isEmpty, getValue } from '@utils';
 
 export const useFormState = (initialState, defaultInitialState) => {
     initialState = isEmpty(initialState) ? defaultInitialState : initialState;
     const [state, setState] = useState(initialState);
 
     const updateField = (field, event) => {
-        let value = event.target.value;
+        let value = getValue(event);
         const _state = { ...state };
         _state[field] = value;
         updateState(_state);
