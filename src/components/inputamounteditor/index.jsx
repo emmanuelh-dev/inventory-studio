@@ -1,7 +1,7 @@
 import { InputNumber } from 'primereact/inputnumber';
 
 export const InputAmountEditor = (props) => {
-    const { row, field, updateField } = { ...props };
+    const { row, field, updateField, disable } = { ...props };
     return (
         <InputNumber
             value={row[field]}
@@ -9,6 +9,7 @@ export const InputAmountEditor = (props) => {
             mode="currency"
             currency="USD"
             locale="en-US"
+            disabled={disable}
         />
     );
 };
