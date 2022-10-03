@@ -1,3 +1,6 @@
+import { useEffect } from 'react';
+
+import { Button } from 'primereact/button';
 import { Dialog } from 'primereact/dialog';
 //custom compontents
 import { ItemDropdown } from '@components/itemdropdown';
@@ -7,11 +10,18 @@ import { InputQuantityEditor } from '@components/inputquantityeditor';
 
 export const DetailDialog = (props) => {
     const { visible, hideDialog, rowData, fields, updateField } = { ...props };
-    // const footer = () => {
-    //     return <Footer onYes={() => {}} onCancel={hideDialog} />;
-    // };
+
+    const footer = () => {
+        return <Footer onYes={() => {}} onCancel={hideDialog} />;
+    };
+
+    useEffect(() => {
+        const total = rowData[fields.QUANTITY] * rowData[fields.UNIT_PRICE];
+        updateField(fields.TOTAL_PRICE, { target: { value: total } });
+    }, [rowData[fields.QUANTITY], rowData[fields.UNIT_PRICE]]);
+
     return (
-        <Dialog style={{ width: '40vw' }} visible={visible} onHide={hideDialog}>
+        <Dialog style={{ width: '40vw' }} visible={visible} onHide={hideDialog} footer={footer()}>
             <div className="p-fluid formgrid grid">
                 <div className="field col-12">
                     <label>Articulo</label>
