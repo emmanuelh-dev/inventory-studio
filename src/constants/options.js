@@ -59,10 +59,6 @@ export const detailColumns = [
     {
         field: 'item',
         header: 'Articulos',
-        editor: (options, updateField) => {
-            const { field, rowData } = { ...options };
-            return <ItemDropdown row={rowData} field={field} updateField={updateField} />;
-        },
         body: (row, field) => {
             return objectTemplate(row, field);
         },
@@ -70,10 +66,6 @@ export const detailColumns = [
     {
         field: 'description',
         header: 'Descripcion',
-        editor: (options, updateField) => {
-            const { field, rowData } = { ...options };
-            return <InputTextEditor row={rowData} field={field} updateField={updateField} />;
-        },
         body: (row, field) => {
             return row[field];
         },
@@ -81,10 +73,6 @@ export const detailColumns = [
     {
         field: 'quantity',
         header: 'Cantidad',
-        editor: (options, updateField) => {
-            const { field, rowData } = { ...options };
-            return <InputQuantityEditor row={rowData} field={field} updateField={updateField} />;
-        },
         body: (row, field) => {
             return quantityTemplate(row, field);
         },
@@ -92,10 +80,6 @@ export const detailColumns = [
     {
         field: 'unitPrice',
         header: 'Precio Unitario',
-        editor: (options, updateField) => {
-            const { field, rowData } = { ...options };
-            return <InputAmountEditor row={rowData} field={field} updateField={updateField} />;
-        },
         body: (row, field) => {
             return amountTemplate(row, field);
         },
