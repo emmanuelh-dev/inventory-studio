@@ -22,11 +22,11 @@ export const DetailDialog = (props) => {
 
     return (
         <Dialog
-            header="Agregar Articulos"
-            style={{ width: '40vw' }}
+            footer={footer()}
             visible={visible}
             onHide={hideDialog}
-            footer={footer()}
+            style={{ width: '40vw' }}
+            header="Agregar Articulos"
         >
             <div className="p-fluid formgrid grid">
                 <div className="field col-12">
