@@ -9,10 +9,10 @@ import { InputAmountEditor } from '@components/inputamounteditor';
 import { InputQuantityEditor } from '@components/inputquantityeditor';
 
 export const DetailDialog = (props) => {
-    const { visible, hideDialog, rowData, fields, updateField } = { ...props };
+    const { visible, hideDialog, rowData, addDetail, fields, updateField } = { ...props };
 
     const footer = () => {
-        return <Footer onYes={() => {}} onCancel={hideDialog} />;
+        return <Footer onYes={addDetail} onCancel={hideDialog} />;
     };
 
     useEffect(() => {
@@ -21,7 +21,13 @@ export const DetailDialog = (props) => {
     }, [rowData[fields.QUANTITY], rowData[fields.UNIT_PRICE]]);
 
     return (
-        <Dialog style={{ width: '40vw' }} visible={visible} onHide={hideDialog} footer={footer()}>
+        <Dialog
+            header="Agregar Articulos"
+            style={{ width: '40vw' }}
+            visible={visible}
+            onHide={hideDialog}
+            footer={footer()}
+        >
             <div className="p-fluid formgrid grid">
                 <div className="field col-12">
                     <label>Articulo</label>
