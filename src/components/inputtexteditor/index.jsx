@@ -1,6 +1,8 @@
-import { InputText } from 'primereact/inputtext';
+import { InputTextarea } from 'primereact/inputtextarea';
 
 export const InputTextEditor = (props) => {
     const { row, field, updateField } = { ...props };
-    return <InputText value={row[field]} onChange={(event) => updateField(row, field, event)} />;
+    return (
+        <InputTextarea value={row[field]} onChange={(event) => updateField(row, field, event)} />
+    );
 };
