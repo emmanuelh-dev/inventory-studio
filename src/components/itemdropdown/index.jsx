@@ -24,7 +24,7 @@ export const ItemDropdown = (props) => {
             value={row[field]}
             optionLabel="itemName"
             placeholder="Seleccionar Articulos"
-            onChange={(event) => updateField(row, field, event)}
+            onChange={(event) => updateField(field, event)}
         />
     );
 };
