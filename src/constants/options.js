@@ -40,12 +40,10 @@ export const detailsToolbar = [
     {
         label: 'Agregar',
         icon: 'pi pi-fw pi-plus-circle',
-        command: null,
     },
     {
         label: 'Eliminar',
         icon: 'pi pi-fw pi-minus-circle',
-        command: null,
     },
 ];
 
