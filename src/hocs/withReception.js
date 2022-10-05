@@ -143,50 +143,64 @@ export const withReception = (props) => {
         };
     };
 
-    const onAddDetail = () => {
+    const updateDetails = (detail) => {
+        const _detail = { ...detail };
         const _document = { ...document };
-        _document[fields.COUNTER] = _document[fields.COUNTER] + 1;
         const _details = [...document[fields.DETAILS]];
-        const _initialState = { ...detailState };
-        _initialState[fields.LINE_NUMBER] = _document[fields.COUNTER];
-        _details.unshift(_initialState);
-        _document[fields.DETAILS] = _details;
+        const index = _details.findIndex((element) => {
+            return element[fields.LINE_NUMBER] == _detail[fields.LINE_NUMBER];
+        });
+
+        if (index > -1) {
+            _details[index] = _detail;
+            _document[fields.DETAILS] = _details;
+        } else {
+            _document = addDetail(_document, _details, _detail);
+        }
+        console.log('---->', _document);
         updateDocument(_document);
     };
 
-    const onRemove = () => {
-        const onRemoveDetail = () => {
-            const _document = { ...document };
-            const _details = [...document[fields.DETAILS]];
+    const addDetail = (_document, _details, _detail) => {
+        _document[fields.COUNTER] = _document[fields.COUNTER] + 1;
+        const _initialState = { ...detailState };
+        _initialState[fields.ITEM] = _detail[fields.ITEM];
+        _initialState[fields.QUANTITY] = _detail[fields.QUANTITY];
+        _initialState[fields.UNIT_PRICE] = _detail[fields.UNIT_PRICE];
+        _initialState[fields.LINE_NUMBER] = _document[fields.COUNTER];
+        _initialState[fields.TOTAL_PRICE] = _detail[fields.TOTAL_PRICE];
+        _initialState[fields.DESCRIPTION] = _detail[fields.DESCRIPTION];
+        _details.unshift(_initialState);
+        _document[fields.DETAILS] = _details;
+        return _document;
+    };
 
-            const __details = _details.reduce((accumulator, element) => {
-                const removed = selection.find((value) => {
-                    return value[fields.LINE_NUMBER] === element[fields.LINE_NUMBER];
-                });
+    const removeDetail = () => {
+        const _document = { ...document };
+        const _details = [...document[fields.DETAILS]];
 
-                if (removed == undefined) {
-                    accumulator.unshift(element);
-                } else if (removed !== undefined && removed[fields.ID]) {
-                    element[fields.DELETED] = true;
-
-                    accumulator.unshift(element);
-                }
-
-                return accumulator;
-            }, []);
-
-            __details.sort((first, second) => {
-                return second[fields.LINE_NUMBER] - first[fields.LINE_NUMBER];
+        const __details = _details.reduce((accumulator, element) => {
+            const removed = selection.find((value) => {
+                return value[fields.LINE_NUMBER] === element[fields.LINE_NUMBER];
             });
 
-            _document[fields.DETAILS] = __details;
-            updateDocument(_document);
-        };
+            if (removed == undefined) {
+                accumulator.unshift(element);
+            } else if (removed !== undefined && removed[fields.ID]) {
+                element[fields.DELETED] = true;
 
-        return {
-            state: isEmpty(document[fields.DETAILS]),
-            command: onRemoveDetail,
-        };
+                accumulator.unshift(element);
+            }
+
+            return accumulator;
+        }, []);
+
+        __details.sort((first, second) => {
+            return second[fields.LINE_NUMBER] - first[fields.LINE_NUMBER];
+        });
+
+        _document[fields.DETAILS] = __details;
+        updateDocument(_document);
     };
 
     //validations
@@ -229,11 +243,11 @@ export const withReception = (props) => {
     const detailProps = {
         fields,
         selection,
+        removeDetail,
+        updateDetails,
         updateSelection,
-        updateDocumentField,
         columns: detailColumns,
         data: document[fields.DETAILS],
-        detailToolbar: createDetailToolbar(onAddDetail, onRemove()),
     };
 
     const searchProps = {
@@ -291,14 +305,6 @@ const createDocumentToolbar = (onNew, onSave, onCancel, onDelete, actions) => {
     documentToolbar[3].disabled = onCancel.state;
 
     return documentToolbar;
-};
-
-const createDetailToolbar = (onAdd, onRemove) => {
-    const _detailsToolbar = [...detailsToolbar];
-    _detailsToolbar[0].command = onAdd;
-    _detailsToolbar[1].command = onRemove.command;
-    _detailsToolbar[1].disabled = onRemove.state;
-    return _detailsToolbar;
 };
 
 const validateField = (value, fieldName, showNotification) => {
