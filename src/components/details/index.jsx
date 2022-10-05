@@ -41,7 +41,6 @@ export const Details = (props) => {
     };
 
     const toolbar = () => {
-        console.log('---->', isArrayEmpty(data));
         const onRemoveDetail = {
             command: removeDetail,
             state: isArrayEmpty(data),
