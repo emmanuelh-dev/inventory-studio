@@ -157,7 +157,6 @@ export const withReception = (props) => {
         } else {
             _document = addDetail(_document, _details, _detail);
         }
-        console.log('---->', _document);
         updateDocument(_document);
     };
 
