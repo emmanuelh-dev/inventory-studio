@@ -22,6 +22,13 @@ export const ReceptionForm = (props) => {
         updateControlQuantityField,
     } = { ...props };
 
+    const statusLabel = () => {
+        if (document[fields.STATUS] == 'RELEASED') {
+            return 'Liberado';
+        }
+        return 'Abierto';
+    };
+
     return (
         <React.Fragment>
             <div className="p-fluid formgrid grid">
@@ -45,7 +52,7 @@ export const ReceptionForm = (props) => {
                 <div className="field col-4">
                     <label>Estado</label>
                     <div className="flex justify-content-center flex-wrap">
-                        <Chip label="Abierto" className="mr-2 mb-2 " />
+                        <Chip label={statusLabel()} className="mr-2 mb-2 " />
                     </div>
                 </div>
                 <div className="field col-4">
