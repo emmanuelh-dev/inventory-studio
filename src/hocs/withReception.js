@@ -3,15 +3,8 @@ import React, { useEffect } from 'react';
 import { isEmpty, dateToString, stringToDate } from '@utils';
 //constants
 import { receptionState, receptionFields, detailState } from '@constants';
-import {
-    toolbar,
-    detailColumns,
-    detailsToolbar,
-    receptionTypes,
-    documentSearchFields,
-} from '@constants/options';
+import { toolbar, detailColumns, receptionTypes, documentSearchFields } from '@constants/options';
 //components
-
 import { Toast } from 'primereact/toast';
 import { Panel } from 'primereact/panel';
 import { Menubar } from 'primereact/menubar';
@@ -20,7 +13,6 @@ import { Search } from '@components/search';
 import { Details } from '@components/details';
 import { ReceptionForm } from '@components/receptionform';
 //hooks
-
 import { useNew } from '@hooks/useNew';
 import { useGet } from '@hooks/useGet';
 import { usePut } from '@hooks/usePut';
@@ -141,6 +133,30 @@ export const withReception = (props) => {
             state: isEmpty(document[fields.ID]) || document[fields.STATUS] !== 'RELEASED',
             command: () => {},
         };
+    };
+
+    const onRelease = () => {
+        if (!isEmpty(document[fields.ID])) {
+            usePut(
+                `${endpoint.save}${document[fields.TYPE]}/id/${document[fields.ID]}/release`,
+                dateToString(document)
+            ).then((data) => {
+                const _document = stringToDate(data);
+                updateDocument(_document);
+                updateCopy(_document);
+                const message = `El registro fue liberado con exito`;
+                showNotification('success', message);
+            });
+        }
+    };
+
+    const actions = () => {
+        const release = {
+            label: 'Liberar',
+            command: onRelease,
+        };
+
+        return [release];
     };
 
     const updateDetails = (detail) => {
@@ -279,7 +295,7 @@ export const withReception = (props) => {
             onSave(),
             onCancel(),
             onDelete(),
-            null
+            actions()
         );
         return <Menubar model={_documentToolbar} />;
     };
@@ -303,6 +319,7 @@ const createDocumentToolbar = (onNew, onSave, onCancel, onDelete, actions) => {
     documentToolbar[2].disabled = onCancel.state;
     documentToolbar[3].command = onCancel.command;
     documentToolbar[3].disabled = onCancel.state;
+    documentToolbar[4].items = actions;
 
     return documentToolbar;
 };
