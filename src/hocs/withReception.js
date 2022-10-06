@@ -239,6 +239,7 @@ export const withReception = (props) => {
             documentTypes: receptionTypes,
         },
     };
+
     const detailProps = {
         fields,
         selection,
