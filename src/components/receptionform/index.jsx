@@ -90,6 +90,7 @@ export const ReceptionForm = (props) => {
                     <WarehouseDropdown
                         state={document}
                         field={fields.WAREHOUSE}
+                        trigger={document[fields.ID]}
                         updateField={updateDocumentField}
                     />
                 </div>
