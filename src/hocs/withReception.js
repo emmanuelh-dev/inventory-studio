@@ -154,6 +154,7 @@ export const withReception = (props) => {
         const release = {
             label: 'Liberar',
             command: onRelease,
+            disabled: document[fields.STATUS] == 'RELEASED' || isEmpty(document[fields.ID]),
         };
 
         return [release];
