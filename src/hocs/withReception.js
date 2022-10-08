@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 //utils
 import { isEmpty, dateToString, stringToDate } from '@utils';
 //constants
@@ -25,6 +25,7 @@ import { useControlField } from '@hooks/useControlField';
 import { useSumarizeField } from '@hooks/useSumarizeField';
 
 export const withReception = (props) => {
+    const [released, setReleased] = useState(false);
     //states
     const {
         state: document,
@@ -246,6 +247,7 @@ export const withReception = (props) => {
     const receptionProps = {
         fields,
         document,
+        released,
         showSearch,
         controlAmountField,
         updateDocumentField,
@@ -259,6 +261,7 @@ export const withReception = (props) => {
 
     const detailProps = {
         fields,
+        released,
         selection,
         removeDetail,
         updateDetails,
@@ -289,6 +292,10 @@ export const withReception = (props) => {
         cleanControlAmountField();
         cleanControlQuantityField();
     }, [document[fields.ID]]);
+
+    useEffect(() => {
+        setReleased(document[fields.STATUS] == 'RELEASED');
+    }, [document[fields.STATUS]]);
 
     const documentToolbar = () => {
         const _documentToolbar = createDocumentToolbar(

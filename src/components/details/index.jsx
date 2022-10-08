@@ -22,7 +22,16 @@ export const Details = (props) => {
         updateField: updateDetailField,
     } = useFormState({}, { ...detailState });
 
-    const { data, fields, columns, removeDetail, selection, updateDetails, updateSelection } = {
+    const {
+        data,
+        fields,
+        columns,
+        released,
+        selection,
+        removeDetail,
+        updateDetails,
+        updateSelection,
+    } = {
         ...props,
     };
 
@@ -43,9 +52,15 @@ export const Details = (props) => {
     const toolbar = () => {
         const onRemoveDetail = {
             command: removeDetail,
-            state: isArrayEmpty(data),
+            state: isArrayEmpty(data) || released,
         };
-        const detailToolbar = createDetailToolbar(showDialog, onRemoveDetail);
+
+        const onAddDetail = {
+            command: showDialog,
+            state: released,
+        };
+
+        const detailToolbar = createDetailToolbar(onAddDetail, onRemoveDetail);
         return <Menubar model={detailToolbar} />;
     };
 
@@ -60,6 +75,7 @@ export const Details = (props) => {
                 icon="pi pi-pencil"
                 onClick={editDetail}
                 className="p-button-rounded p-button-success mr-2"
+                disabled={released}
             />
         );
     };
@@ -106,7 +122,8 @@ export const Details = (props) => {
 
 const createDetailToolbar = (onAdd, onRemove) => {
     const _detailsToolbar = [...detailsToolbar];
-    _detailsToolbar[0].command = onAdd;
+    _detailsToolbar[0].command = onAdd.command;
+    _detailsToolbar[0].disabled = onAdd.state;
     _detailsToolbar[1].command = onRemove.command;
     _detailsToolbar[1].disabled = onRemove.state;
     return _detailsToolbar;

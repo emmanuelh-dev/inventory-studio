@@ -14,6 +14,7 @@ export const ReceptionForm = (props) => {
         fields,
         options,
         document,
+        released,
         showSearch,
         controlAmountField,
         updateDocumentField,
@@ -23,7 +24,7 @@ export const ReceptionForm = (props) => {
     } = { ...props };
 
     const statusLabel = () => {
-        if (document[fields.STATUS] == 'RELEASED') {
+        if (released) {
             return 'Liberado';
         }
         return 'Abierto';
@@ -66,6 +67,7 @@ export const ReceptionForm = (props) => {
                         hourFormat="12"
                         showTime
                         showSeconds
+                        disabled={released}
                     />
                 </div>
                 <div className="field col-4">
@@ -76,6 +78,7 @@ export const ReceptionForm = (props) => {
                         mode="currency"
                         currency="USD"
                         locale="en-US"
+                        disabled={released}
                     />
                 </div>
                 <div className="field col-4">
@@ -83,6 +86,7 @@ export const ReceptionForm = (props) => {
                     <InputNumber
                         value={controlQuantityField}
                         onValueChange={updateControlQuantityField}
+                        disabled={released}
                     />
                 </div>
                 <div className="field col-4">
@@ -92,6 +96,7 @@ export const ReceptionForm = (props) => {
                         field={fields.WAREHOUSE}
                         trigger={document[fields.STATUS]}
                         updateField={updateDocumentField}
+                        disabled={released}
                     />
                 </div>
 
@@ -119,6 +124,7 @@ export const ReceptionForm = (props) => {
                         onChange={(event) => {
                             updateDocumentField(fields.DESCRIPTION, event);
                         }}
+                        disabled={released}
                     />
                 </div>
             </div>
