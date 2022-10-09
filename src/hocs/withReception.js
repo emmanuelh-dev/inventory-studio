@@ -18,6 +18,7 @@ import { useGet } from '@hooks/useGet';
 import { usePut } from '@hooks/usePut';
 import { usePost } from '@hooks/usePost';
 import { useCopy } from '@hooks/useCopy';
+import { useDelete } from '@hooks/useDelete';
 import { useSearch } from '@hooks/useSearch';
 import { useFormState } from '@hooks/useFormState';
 import { useNotification } from '@hooks/useNotification';
@@ -130,9 +131,19 @@ export const withReception = (props) => {
     };
 
     const onDelete = () => {
+        const onDeleteDocument = () => {
+            useDelete(`${endpoint.save}${document[fields.TYPE]}/id/${document[fields.ID]}`).then(
+                () => {
+                    onNewDocument();
+                    const message = `El registro fue eliminado con exito`;
+                    showNotification('success', message);
+                }
+            );
+        };
+
         return {
-            state: isEmpty(document[fields.ID]) || document[fields.STATUS] !== 'RELEASED',
-            command: () => {},
+            state: isEmpty(document[fields.ID]) || document[fields.STATUS] == 'RELEASED',
+            command: onDeleteDocument,
         };
     };
 
@@ -325,8 +336,8 @@ const createDocumentToolbar = (onNew, onSave, onCancel, onDelete, actions) => {
     documentToolbar[1].disabled = onSave.state;
     documentToolbar[2].command = onCancel.command;
     documentToolbar[2].disabled = onCancel.state;
-    documentToolbar[3].command = onCancel.command;
-    documentToolbar[3].disabled = onCancel.state;
+    documentToolbar[3].command = onDelete.command;
+    documentToolbar[3].disabled = onDelete.state;
     documentToolbar[4].items = actions;
 
     return documentToolbar;
