@@ -128,6 +128,10 @@ export const dropdownLabelOptions = {
     warehouse: 'warehouseName',
 };
 
+export const documentFilters = {
+    id: { value: '', matchMode: FilterMatchMode.CONTAINS },
+};
+
 export const documentSearchFields = [
     {
         field: 'id',
