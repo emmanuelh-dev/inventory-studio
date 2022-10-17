@@ -27,13 +27,13 @@ import { useSumarizeField } from '@hooks/useSumarizeField';
 
 export const withReception = (props) => {
     const [released, setReleased] = useState(false);
+    const { initialState } = { ...props };
     //states
     const {
         state: document,
         updateState: updateDocument,
         updateField: updateDocumentField,
-    } = useFormState({}, { ...receptionState });
-
+    } = useFormState({ ...initialState }, { ...receptionState });
     const { state: selection, updateState: updateSelection } = useFormState([], []);
 
     const { buttonState, updateCopy, updateSaveButton } = useCopy({ ...receptionState }, document);
@@ -292,7 +292,9 @@ export const withReception = (props) => {
     //hooks
     useEffect(() => {
         endpoint.suggestions = `${endpoint.suggestions}${document[fields.TYPE]}`;
-        onNewDocument();
+        if (isEmpty(initialState) || initialState[fields.TYPE] !== document[fields.TYPE]) {
+            onNewDocument();
+        }
     }, [document[fields.TYPE]]);
 
     useEffect(() => {
