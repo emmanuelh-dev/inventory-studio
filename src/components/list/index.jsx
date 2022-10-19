@@ -32,6 +32,7 @@ export const List = (props) => {
             setLoading(false);
         });
     };
+
     const onFilter = (event) => {
         const filterValue = Object.values(event.filters)[0].value;
         if (filterValue) {
