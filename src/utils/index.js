@@ -135,3 +135,18 @@ export const findKey = (object, keyName) => {
 
     return keys.find((element) => element.includes(keyName));
 };
+
+export const replaceParams = (baseUrl, params) => {
+    if (Object.keys(params).length === 0) {
+        return baseUrl;
+    }
+
+    const keys = Object.keys(params);
+
+    const url = keys.reduce((previous, key) => {
+        previous = previous.replace(`{${key}}`, params[key]);
+        return previous;
+    }, baseUrl);
+
+    return url;
+};
