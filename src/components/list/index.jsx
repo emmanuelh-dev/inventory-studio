@@ -1,5 +1,6 @@
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
+import { replaceParams, transformFilter } from '@utils';
 
 //hooks
 import { useGet } from '@hooks/useGet';
@@ -34,9 +35,10 @@ export const List = (props) => {
     };
 
     const onFilter = (event) => {
-        const filterValue = Object.values(event.filters)[0].value;
-        if (filterValue) {
-            useGet(`${endpoint.search}/${filterValue}?page=0&size=10`).then((data) => {
+        const filter = transformFilter(event.filters);
+        if (filter) {
+            const url = replaceParams(endpoint.search, filter);
+            useGet(url).then((data) => {
                 setFirst(0);
                 setData(data);
                 setLoading(false);
@@ -71,25 +73,25 @@ export const List = (props) => {
 
     return (
         <DataTable
-            value={data.content}
-            selectionMode="single"
-            selection={row}
-            onSelectionChange={(event) => {
-                setRow(event.value);
-            }}
-            dataKey="id"
-            filterDisplay="row"
-            filters={filters}
-            responsiveLayout="scroll"
-            first={first}
-            onPage={onPage}
-            rows={data.size}
-            totalRecords={data.totalElements}
-            onFilter={onFilter}
-            loading={loading}
             lazy
             paginator
             stripedRows
+            dataKey="id"
+            first={first}
+            selection={row}
+            onPage={onPage}
+            rows={data.size}
+            loading={loading}
+            filters={filters}
+            onFilter={onFilter}
+            filterDisplay="row"
+            value={data.content}
+            selectionMode="single"
+            responsiveLayout="scroll"
+            totalRecords={data.totalElements}
+            onSelectionChange={(event) => {
+                setRow(event.value);
+            }}
         >
             {fields.map((element) => {
                 if (element.template !== undefined) {
