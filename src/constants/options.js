@@ -130,6 +130,8 @@ export const dropdownLabelOptions = {
 
 export const documentFilters = {
     id: { value: '', matchMode: FilterMatchMode.CONTAINS },
+    date: { value: '', matchMode: FilterMatchMode.CONTAINS },
+    status: { value: '', matchMode: FilterMatchMode.CONTAINS },
 };
 
 export const documentSearchFields = [
