@@ -150,3 +150,19 @@ export const replaceParams = (baseUrl, params) => {
 
     return url;
 };
+
+export const transformFilter = (filter) => {
+    const keys = Object.keys(filter);
+
+    const elements = keys.reduce((previous, key) => {
+        const value = filter[key].value;
+
+        if (value) {
+            previous[key] = filter[key].value;
+        }
+
+        return previous;
+    }, {});
+
+    return elements;
+};
