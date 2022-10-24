@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
-import { replaceParams, transformFilter } from '@utils';
+import { isEmpty, replaceParams, transformFilter } from '@utils';
 
 //hooks
 import { useGet } from '@hooks/useGet';
@@ -27,16 +27,18 @@ export const List = (props) => {
     }, []);
 
     const onPage = (event) => {
-        useGet(`${endpoint.suggestions}?page=${event.page}&size=10`).then((data) => {
-            setData(data);
-            setFirst(event.first);
-            setLoading(false);
-        });
+        if (event.first !== first) {
+            useGet(`${endpoint.suggestions}?page=${event.page}&size=10`).then((data) => {
+                setData(data);
+                setFirst(event.first);
+                setLoading(false);
+            });
+        }
     };
 
     const onFilter = (event) => {
         const filter = transformFilter(event.filters);
-        if (filter) {
+        if (!isEmpty(filter)) {
             const url = replaceParams(endpoint.search, filter);
             useGet(url).then((data) => {
                 setFirst(0);
@@ -79,7 +81,6 @@ export const List = (props) => {
             dataKey="id"
             first={first}
             selection={row}
-            onPage={onPage}
             rows={data.size}
             loading={loading}
             filters={filters}
@@ -92,6 +93,7 @@ export const List = (props) => {
             onSelectionChange={(event) => {
                 setRow(event.value);
             }}
+            onPage={onPage}
         >
             {fields.map((element) => {
                 if (element.template !== undefined) {
