@@ -27,8 +27,8 @@ import { useSumarizeField } from '@hooks/useSumarizeField';
 
 export const withDispatch = (props) => {
     const [released, setReleased] = useState(false);
-    let { initialState } = { ...props };
 
+    let { initialState } = { ...props };
     initialState = initialState == undefined || initialState == null ? dispatchState : initialState;
     //states
     const {
