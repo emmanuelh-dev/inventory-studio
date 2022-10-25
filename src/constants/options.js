@@ -13,6 +13,11 @@ export const receptionTypes = [
     { label: 'Devolucion por venta', value: 'SALE_RETURN' },
 ];
 
+export const dispatchTypes = [
+    { label: 'Salida', value: 'OUTPUT' },
+    { label: 'Devolucion por compra', value: 'PURCHASE_RETURN' },
+];
+
 export const toolbar = [
     {
         label: 'Nuevo',
