@@ -27,7 +27,9 @@ import { useSumarizeField } from '@hooks/useSumarizeField';
 
 export const withReception = (props) => {
     const [released, setReleased] = useState(false);
-    const { initialState } = { ...props };
+    let { initialState } = { ...props };
+    initialState =
+        initialState == undefined || initialState == null ? receptionState : initialState;
     //states
     const {
         state: document,
@@ -36,7 +38,7 @@ export const withReception = (props) => {
     } = useFormState({ ...initialState }, { ...receptionState });
     const { state: selection, updateState: updateSelection } = useFormState([], []);
 
-    const { buttonState, updateCopy, updateSaveButton } = useCopy({ ...receptionState }, document);
+    const { buttonState, updateCopy, updateSaveButton } = useCopy({ ...initialState }, document);
     const { onNew } = useNew(updateDocument, updateCopy, { ...receptionState });
 
     //constants
