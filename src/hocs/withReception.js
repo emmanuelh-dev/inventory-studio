@@ -28,6 +28,7 @@ import { useSumarizeField } from '@hooks/useSumarizeField';
 export const withReception = (props) => {
     const [released, setReleased] = useState(false);
     let { initialState } = { ...props };
+
     initialState =
         initialState == undefined || initialState == null ? receptionState : initialState;
     //states
