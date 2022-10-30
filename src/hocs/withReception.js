@@ -84,26 +84,31 @@ export const withReception = (props) => {
 
             if (validation) {
                 if (isEmpty(document[fields.ID])) {
-                    usePost(
-                        `${endpoint.save}${document[fields.TYPE]}`,
-                        dateToString(document)
-                    ).then((data) => {
-                        const _document = stringToDate(data);
-                        updateDocument(_document);
-                        updateCopy(_document);
-                        showNotification('success');
-                    });
+                    usePost(`${endpoint.save}${document[fields.TYPE]}`, dateToString(document))
+                        .then((data) => {
+                            const _document = stringToDate(data);
+                            updateDocument(_document);
+                            updateCopy(_document);
+                            showNotification('success');
+                        })
+                        .catch((error) => {
+                            showNotification('error', error.message);
+                        });
                 } else {
                     usePut(
                         `${endpoint.save}${document[fields.TYPE]}/id/${document[fields.ID]}`,
                         dateToString(document)
-                    ).then((data) => {
-                        const _document = stringToDate(data);
-                        updateDocument(_document);
-                        updateCopy(_document);
-                        const message = `El registro fue actualizado con exito`;
-                        showNotification('success', message);
-                    });
+                    )
+                        .then((data) => {
+                            const _document = stringToDate(data);
+                            updateDocument(_document);
+                            updateCopy(_document);
+                            const message = `El registro fue actualizado con exito`;
+                            showNotification('success', message);
+                        })
+                        .catch((error) => {
+                            showNotification('error', error.message);
+                        });
                 }
             }
         };
@@ -135,13 +140,15 @@ export const withReception = (props) => {
 
     const onDelete = () => {
         const onDeleteDocument = () => {
-            useDelete(`${endpoint.save}${document[fields.TYPE]}/id/${document[fields.ID]}`).then(
-                () => {
+            useDelete(`${endpoint.save}${document[fields.TYPE]}/id/${document[fields.ID]}`)
+                .then(() => {
                     onNewDocument();
                     const message = `El registro fue eliminado con exito`;
                     showNotification('success', message);
-                }
-            );
+                })
+                .catch((error) => {
+                    showNotification('error', error.message);
+                });
         };
 
         return {
@@ -155,13 +162,18 @@ export const withReception = (props) => {
             usePut(
                 `${endpoint.save}${document[fields.TYPE]}/id/${document[fields.ID]}/release`,
                 dateToString(document)
-            ).then((data) => {
-                const _document = stringToDate(data);
-                updateDocument(_document);
-                updateCopy(_document);
-                const message = `El registro fue liberado con exito`;
-                showNotification('success', message);
-            });
+            )
+                .then((data) => {
+                    const _document = stringToDate(data);
+                    updateDocument(_document);
+                    updateCopy(_document);
+                    const message = `El registro fue liberado con exito`;
+                    showNotification('success', message);
+                })
+
+                .catch((error) => {
+                    showNotification('error', error.message);
+                });
         }
     };
 
