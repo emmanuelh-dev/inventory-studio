@@ -15,6 +15,7 @@ const LINE_NUMBER = 'lineNumber';
 const TOTAL_PRICE = 'totalPrice';
 const DESCRIPTION = 'description';
 const TOTAL_AMOUNT = 'totalAmount';
+const LAST_UPDATED = 'lastUpdated';
 const ITEM_SUMMARY = 'itemSummary';
 const VALUATION_TYPE = 'valuationType';
 const WAREHOUSE_NAME = 'warehouseName';
@@ -127,4 +128,12 @@ export const detailState = {
     unitPrice: 0,
     totalPrice: 0,
     deleted: false,
+};
+
+export const itemSummaryFields = {
+    ITEM,
+    QUANTITY,
+    UNIT_PRICE,
+    TOTAL_PRICE,
+    LAST_UPDATED,
 };
