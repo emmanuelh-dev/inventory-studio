@@ -1,4 +1,5 @@
 const ID = 'id';
+const KEY = 'key';
 const TYPE = 'type';
 const DATE = 'date';
 const ITEM = 'item';
@@ -131,6 +132,7 @@ export const detailState = {
 };
 
 export const itemSummaryFields = {
+    KEY,
     ITEM,
     QUANTITY,
     UNIT_PRICE,
