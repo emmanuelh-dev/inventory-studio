@@ -7,13 +7,15 @@ import { useGet } from '@hooks/useGet';
 //components
 import { Column } from 'primereact/column';
 import { DataTable } from 'primereact/datatable';
+//customs components
+import { objectTemplate, amountTemplate, quantityTemplate } from '@components/templates';
 
 export const ItemSummary = (props) => {
     const [data, setData] = useState([]);
     const [first, setFirst] = useState(0);
     const [loading, setLoading] = useState(false);
     const { warehouseId } = { ...props };
-    const { ITEM, QUANTITY, UNIT_PRICE, TOTAL_PRICE, LAST_UPDATED } = { ...itemSummaryFields };
+    const { KEY, ITEM, QUANTITY, UNIT_PRICE, TOTAL_PRICE, LAST_UPDATED } = { ...itemSummaryFields };
 
     const endpoint = {
         inventory: process.env.NEXT_PUBLIC_ITEM_SUMMARY_FIND,
@@ -61,10 +63,34 @@ export const ItemSummary = (props) => {
             value={data.content}
             totalRecords={data.totalElements}
         >
-            <Column field={ITEM} header="Articulo" />
-            <Column field={QUANTITY} header="Cantidad" />
-            <Column field={UNIT_PRICE} header="Precio Unitario" />
-            <Column field={TOTAL_PRICE} header="Precio Total" />
+            <Column
+                field={KEY}
+                header="Articulo"
+                body={(row) => {
+                    return objectTemplate(row[KEY], ITEM);
+                }}
+            />
+            <Column
+                field={QUANTITY}
+                header="Cantidad"
+                body={(row) => {
+                    return quantityTemplate(row, QUANTITY);
+                }}
+            />
+            <Column
+                field={UNIT_PRICE}
+                header="Precio Unitario"
+                body={(row) => {
+                    return amountTemplate(row, UNIT_PRICE);
+                }}
+            />
+            <Column
+                field={TOTAL_PRICE}
+                header="Precio Total"
+                body={(row) => {
+                    return amountTemplate(row, UNIT_PRICE);
+                }}
+            />
             <Column field={LAST_UPDATED} header="Fecha de Actualizacion" />
         </DataTable>
     );
