@@ -14,7 +14,7 @@ export const UsedChip = (props) => {
     const { value } = { ...props };
     let label = 'Bloqueado';
     let icon = 'pi pi-lock';
-    if (value) {
+    if (!value) {
         label = 'Desbloqueado';
         icon = 'pi pi-lock-open';
     }
