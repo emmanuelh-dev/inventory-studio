@@ -15,8 +15,6 @@ export const BarcodeSheet = (props) => {
 
     const onButtonClick = (event, index) => {
         const _grid = [...grid];
-
-        console.log('====>', index);
         _grid[index] = getValue(event);
         setGrid(_grid);
     };
@@ -39,8 +37,13 @@ export const BarcodeSheet = (props) => {
         setFirst(event.first);
     };
 
+    const calcNumberOfPages = () => {
+        const _pages = Math.ceil(elements / 30);
+        return _pages;
+    };
+
     useEffect(() => {
-        let _pages = Math.ceil(elements / 30);
+        let _pages = calcNumberOfPages();
         let _labels = _pages * 30;
         setPages(_pages);
         setGrid(new Array(_labels).fill(false));
