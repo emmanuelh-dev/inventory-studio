@@ -27,8 +27,39 @@ export const BarcodeSheet = (props) => {
         setFirst(30 * newPage);
     };
 
-    const addPageButton = () => {
-        return <Button icon="pi pi-plus" label="Agregar Pagina" onClick={addPage} />;
+    const AddPageButton = () => {
+        return (
+            <Button
+                onClick={addPage}
+                icon="pi pi-plus"
+                label="Agregar Pagina"
+                className="p-button-outlined"
+            />
+        );
+    };
+
+    const RemovePageButton = () => {
+        return (
+            <Button
+                onClick={addPage}
+                icon="pi pi-trash"
+                label="Eliminar Pagina"
+                className="p-button-outlined p-button-danger"
+            />
+        );
+    };
+
+    const actionButtons = () => {
+        return (
+            <div className="p-fluid formgrid grid">
+                <div className="field col">
+                    <AddPageButton />
+                </div>
+                <div className="field col">
+                    <RemovePageButton />
+                </div>
+            </div>
+        );
     };
 
     const onPage = (event) => {
@@ -57,7 +88,7 @@ export const BarcodeSheet = (props) => {
         return sheet;
     };
     return (
-        <Panel header={addPageButton}>
+        <Panel headerTemplate={actionButtons}>
             <div className="grid">{createSheet()}</div>
             <Paginator first={first} rows={30} totalRecords={grid.length} onPageChange={onPage} />
         </Panel>
