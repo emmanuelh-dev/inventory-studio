@@ -1,17 +1,16 @@
 import { useState, useEffect } from 'react';
 import { getValue } from '@utils';
+//components
 import { Panel } from 'primereact/panel';
+import { Button } from 'primereact/button';
 import { Checkbox } from 'primereact/checkbox';
 import { Paginator } from 'primereact/paginator';
 import { ToggleButton } from 'primereact/togglebutton';
 
 export const BarcodeSheet = (props) => {
     const [page, setPage] = useState(0);
-    const [grid, setGrid] = useState([]);
     const [first, setFirst] = useState(0);
-    const [pages, setPages] = useState(1);
-    const [fullSheet, setFullSheet] = useState(false);
-    const { elements } = { ...props };
+    const [grid, setGrid] = useState(new Array(30).fill(false));
 
     const onButtonClick = (event, index) => {
         const _grid = [...grid];
@@ -19,35 +18,23 @@ export const BarcodeSheet = (props) => {
         setGrid(_grid);
     };
 
-    const onCheckBoxClick = (event) => {
-        setFullSheet(event.checked);
+    const addPage = () => {
+        const newGrid = new Array(30).fill(false);
+        const _grid = [...grid, ...newGrid];
+        const newPage = page + 1;
+        setGrid(_grid);
+        setPage(newPage);
+        setFirst(30 * newPage);
     };
 
-    const checkBox = () => {
-        return (
-            <div className="field-checkbox">
-                <Checkbox inputId="fullSheet" checked={fullSheet} onChange={onCheckBoxClick} />
-                <label htmlFor="fullSheet">Hojas restantes completas</label>
-            </div>
-        );
+    const addPageButton = () => {
+        return <Button icon="pi pi-plus" label="Agregar Pagina" onClick={addPage} />;
     };
 
     const onPage = (event) => {
         setPage(event.page);
         setFirst(event.first);
     };
-
-    const calcNumberOfPages = () => {
-        const _pages = Math.ceil(elements / 30);
-        return _pages;
-    };
-
-    useEffect(() => {
-        let _pages = calcNumberOfPages();
-        let _labels = _pages * 30;
-        setPages(_pages);
-        setGrid(new Array(_labels).fill(false));
-    }, []);
 
     const createSheet = () => {
         const sheet = [];
@@ -70,9 +57,9 @@ export const BarcodeSheet = (props) => {
         return sheet;
     };
     return (
-        <Panel header={checkBox}>
+        <Panel header={addPageButton}>
             <div className="grid">{createSheet()}</div>
-            <Paginator first={first} rows={30} totalRecords={elements} onPageChange={onPage} />
+            <Paginator first={first} rows={30} totalRecords={grid.length} onPageChange={onPage} />
         </Panel>
     );
 };
