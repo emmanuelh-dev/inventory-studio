@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { getValue } from '@utils';
 //components
 import { Panel } from 'primereact/panel';
+import { Dialog } from 'primereact/dialog';
 import { Button } from 'primereact/button';
 import { Paginator } from 'primereact/paginator';
 import { ToggleButton } from 'primereact/togglebutton';
@@ -11,6 +12,7 @@ export const BarcodeSheet = (props) => {
     const [first, setFirst] = useState(0);
     const [disabled, setDisabled] = useState(false);
     const [grid, setGrid] = useState(new Array(30).fill(false));
+    const { visible, onHide, onYes } = { ...props };
 
     const onButtonClick = (event, index) => {
         const _grid = [...grid];
@@ -74,6 +76,32 @@ export const BarcodeSheet = (props) => {
         );
     };
 
+    const onProcess = () => {
+        const places = grid.reduce((accumulator, value, index) => {
+            value ? accumulator.push(index) : accumulator;
+            return accumulator;
+        }, []);
+        onYes(places);
+        onHide();
+    };
+
+    const footer = (
+        <div>
+            <Button
+                label="Aceptar"
+                icon="pi pi-check"
+                onClick={onProcess}
+                className="p-button-success"
+            />
+            <Button
+                onClick={onHide}
+                label="Cancelar"
+                icon="pi pi-times"
+                className="p-button-danger"
+            />
+        </div>
+    );
+
     const onPage = (event) => {
         setPage(event.page);
         setFirst(event.first);
@@ -105,9 +133,22 @@ export const BarcodeSheet = (props) => {
     }, [grid]);
 
     return (
-        <Panel headerTemplate={actionButtons}>
-            <div className="grid">{createSheet()}</div>
-            <Paginator first={first} rows={30} totalRecords={grid.length} onPageChange={onPage} />
-        </Panel>
+        <Dialog
+            header="Personalizar impresion de etiquetas"
+            visible={visible}
+            style={{ width: '70vw' }}
+            footer={footer}
+            onHide={onHide}
+        >
+            <Panel headerTemplate={actionButtons}>
+                <div className="grid">{createSheet()}</div>
+                <Paginator
+                    first={first}
+                    rows={30}
+                    totalRecords={grid.length}
+                    onPageChange={onPage}
+                />
+            </Panel>
+        </Dialog>
     );
 };
