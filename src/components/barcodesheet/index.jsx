@@ -21,10 +21,21 @@ export const BarcodeSheet = (props) => {
     const addPage = () => {
         const newGrid = new Array(30).fill(false);
         const _grid = [...grid, ...newGrid];
-        const newPage = page + 1;
+        const nextPage = page + 1;
         setGrid(_grid);
-        setPage(newPage);
-        setFirst(30 * newPage);
+        setPage(nextPage);
+        setFirst(30 * nextPage);
+    };
+
+    const removePage = () => {
+        const lastPage = Math.ceil(grid.length / 30) - 1;
+        const previousPage = lastPage - 1;
+        const firstIndex = lastPage * 30;
+        const _grid = [...grid];
+        _grid.splice(firstIndex);
+        setGrid(_grid);
+        setPage(previousPage);
+        setFirst(firstIndex - 30);
     };
 
     const AddPageButton = () => {
@@ -41,8 +52,8 @@ export const BarcodeSheet = (props) => {
     const RemovePageButton = () => {
         return (
             <Button
-                onClick={addPage}
                 icon="pi pi-trash"
+                onClick={removePage}
                 label="Eliminar Pagina"
                 className="p-button-outlined p-button-danger"
             />
