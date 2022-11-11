@@ -3,13 +3,13 @@ import { getValue } from '@utils';
 //components
 import { Panel } from 'primereact/panel';
 import { Button } from 'primereact/button';
-import { Checkbox } from 'primereact/checkbox';
 import { Paginator } from 'primereact/paginator';
 import { ToggleButton } from 'primereact/togglebutton';
 
 export const BarcodeSheet = (props) => {
     const [page, setPage] = useState(0);
     const [first, setFirst] = useState(0);
+    const [disabled, setDisabled] = useState(false);
     const [grid, setGrid] = useState(new Array(30).fill(false));
 
     const onButtonClick = (event, index) => {
@@ -53,6 +53,7 @@ export const BarcodeSheet = (props) => {
         return (
             <Button
                 icon="pi pi-trash"
+                disabled={disabled}
                 onClick={removePage}
                 label="Eliminar Pagina"
                 className="p-button-outlined p-button-danger"
@@ -98,6 +99,11 @@ export const BarcodeSheet = (props) => {
 
         return sheet;
     };
+
+    useEffect(() => {
+        setDisabled(grid.length == 30);
+    }, [grid]);
+
     return (
         <Panel headerTemplate={actionButtons}>
             <div className="grid">{createSheet()}</div>
