@@ -11,6 +11,7 @@ import { Menubar } from 'primereact/menubar';
 //custom components
 import { Search } from '@components/search';
 import { Details } from '@components/details';
+import { BarcodeSheet } from '@components/barcodesheet';
 import { ReceptionForm } from '@components/receptionform';
 //hooks
 import { useNew } from '@hooks/useNew';
@@ -27,6 +28,8 @@ import { useSumarizeField } from '@hooks/useSumarizeField';
 
 export const withReception = (props) => {
     const [released, setReleased] = useState(false);
+    const [showSheet, setShowSheet] = useState(false);
+
     let { initialState } = { ...props };
 
     initialState =
@@ -177,6 +180,10 @@ export const withReception = (props) => {
         }
     };
 
+    const onHideSheet = () => {
+        setShowSheet(false);
+    };
+
     const actions = () => {
         const release = {
             label: 'Liberar',
@@ -184,7 +191,15 @@ export const withReception = (props) => {
             disabled: document[fields.STATUS] == 'RELEASED' || isEmpty(document[fields.ID]),
         };
 
-        return [release];
+        const sheet = {
+            label: 'Personalizar etiquetas',
+            command: () => {
+                setShowSheet(true);
+            },
+            disabled: document[fields.STATUS] != 'RELEASED',
+        };
+
+        return [release, sheet];
     };
 
     const updateDetails = (detail) => {
@@ -342,6 +357,7 @@ export const withReception = (props) => {
             <Details {...detailProps} />
             {search ? <Search {...searchProps} /> : <></>}
             <Toast ref={notification} />
+            <BarcodeSheet visible={showSheet} onHide={onHideSheet} />
         </Panel>
     );
 };
