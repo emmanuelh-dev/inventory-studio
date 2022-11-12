@@ -6,6 +6,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@react-18-pdf/renderer": "^2.3.4",
     "next": "^12.2.5",
     "primeflex": "^3.2.1",
     "primeicons": "^5.0.0",
