@@ -184,6 +184,8 @@ export const withReception = (props) => {
         setShowSheet(false);
     };
 
+    const onCustomSheet = (labels) => {};
+
     const actions = () => {
         const release = {
             label: 'Liberar',
@@ -319,6 +321,12 @@ export const withReception = (props) => {
         fields: documentSearchFields,
     };
 
+    const barcodeSheetProps = {
+        visible: showSheet,
+        onHide: onHideSheet,
+        onYes: onCustomSheet,
+    };
+
     //hooks
     useEffect(() => {
         endpoint.suggestions = `${endpoint.suggestions}${document[fields.TYPE]}`;
@@ -357,7 +365,7 @@ export const withReception = (props) => {
             <Details {...detailProps} />
             {search ? <Search {...searchProps} /> : <></>}
             <Toast ref={notification} />
-            <BarcodeSheet visible={showSheet} onHide={onHideSheet} />
+            <BarcodeSheet {...barcodeSheetProps} />
         </Panel>
     );
 };
