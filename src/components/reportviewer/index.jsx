@@ -11,13 +11,14 @@ import { ToggleButton } from 'primereact/togglebutton';
 import { ProgressSpinner } from 'primereact/progressspinner';
 
 export const Viewer = (props) => {
-    const [loading, setLoading] = useState(true);
     const [fileURL, setFileURL] = useState();
-    const { params, positions, endpoint, visible, onHide, onYes } = { ...props };
+    const [loading, setLoading] = useState(true);
+    const { params, body, endpoint, visible, onHide, onYes } = { ...props };
+
     useEffect(() => {
         if (visible) {
             const url = replaceParams(endpoint.barcode, params);
-            usePost(url).then((data) => {
+            usePost(url, body).then((data) => {
                 const bytes = new Uint8Array(data);
                 const file = new Blob([bytes], { type: 'application/pdf' });
                 const link = URL.createObjectURL(file);
@@ -27,7 +28,7 @@ export const Viewer = (props) => {
         }
     }, [visible]);
 
-    const content = () => {
+    const Content = () => {
         if (loading) {
             return (
                 <div className="flex justify-content-center flex-wrap">
@@ -39,15 +40,15 @@ export const Viewer = (props) => {
         return (
             <iframe
                 src={fileURL}
-                style={{ width: '100%', height: '500px' }}
+                style={{ width: '100%', height: '100%' }}
                 frameBorder="0"
             ></iframe>
         );
     };
 
     return (
-        <Dialog visible={visible} style={{ width: '70vw' }} onHide={onHide}>
-            {content}
+        <Dialog visible={visible} style={{ width: '80vw', height: '90%' }} onHide={onHide}>
+            <Content />
         </Dialog>
     );
 };
