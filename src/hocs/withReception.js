@@ -11,6 +11,7 @@ import { Menubar } from 'primereact/menubar';
 //custom components
 import { Search } from '@components/search';
 import { Details } from '@components/details';
+import { Viewer } from '@components/reportviewer';
 import { BarcodeSheet } from '@components/barcodesheet';
 import { ReceptionForm } from '@components/receptionform';
 //hooks
@@ -29,6 +30,8 @@ import { useSumarizeField } from '@hooks/useSumarizeField';
 export const withReception = (props) => {
     const [released, setReleased] = useState(false);
     const [showSheet, setShowSheet] = useState(false);
+    const [customSheet, setCustomSheet] = useState([]);
+    const [showViewer, setShowViewer] = useState(false);
 
     let { initialState } = { ...props };
 
@@ -49,6 +52,7 @@ export const withReception = (props) => {
     const fields = { ...receptionFields };
     const endpoint = {
         save: process.env.NEXT_PUBLIC_RECEPTIONS_SAVE,
+        barcode: process.env.NEXT_PUBLIC_REPORT_BARCODE,
         update: process.env.NEXT_PUBLIC_RECEPTIONS_SAVE,
         suggestions: `${process.env.NEXT_PUBLIC_RECEPTIONS_SUGGESTIONS}${document[fields.TYPE]}`,
     };
@@ -184,7 +188,13 @@ export const withReception = (props) => {
         setShowSheet(false);
     };
 
-    const onCustomSheet = (labels) => {};
+    const onCustomSheet = (positions) => {
+        setCustomSheet(positions);
+    };
+
+    const onHideViewer = () => {
+        setShowViewer(false);
+    };
 
     const actions = () => {
         const release = {
@@ -201,7 +211,15 @@ export const withReception = (props) => {
             disabled: document[fields.STATUS] != 'RELEASED',
         };
 
-        return [release, sheet];
+        const viewer = {
+            label: 'Imprimir Etiquetas',
+            command: () => {
+                setShowViewer(true);
+            },
+            disabled: document[fields.STATUS] != 'RELEASED',
+        };
+
+        return [release, sheet, viewer];
     };
 
     const updateDetails = (detail) => {
@@ -327,6 +345,19 @@ export const withReception = (props) => {
         onYes: onCustomSheet,
     };
 
+    const viewerProps = {
+        endpoint,
+        body: customSheet,
+        visible: showViewer,
+        onHide: onHideViewer,
+        params: {
+            id: document[fields.ID],
+            type: document[fields.TYPE],
+            barcodeType: 'CODE128',
+            sheetType: 'OD5160',
+        },
+    };
+
     //hooks
     useEffect(() => {
         endpoint.suggestions = `${endpoint.suggestions}${document[fields.TYPE]}`;
@@ -366,6 +397,7 @@ export const withReception = (props) => {
             {search ? <Search {...searchProps} /> : <></>}
             <Toast ref={notification} />
             <BarcodeSheet {...barcodeSheetProps} />
+            <Viewer {...viewerProps} />
         </Panel>
     );
 };
