@@ -77,11 +77,11 @@ export const BarcodeSheet = (props) => {
     };
 
     const onProcess = () => {
-        const places = grid.reduce((accumulator, value, index) => {
+        const positions = grid.reduce((accumulator, value, index) => {
             value ? accumulator.push(index) : accumulator;
             return accumulator;
         }, []);
-        onYes(places);
+        onYes(positions);
         onHide();
     };
 
