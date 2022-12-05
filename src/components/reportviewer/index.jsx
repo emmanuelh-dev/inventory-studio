@@ -1,13 +1,9 @@
 import { useState, useEffect } from 'react';
-import { getValue, replaceParams } from '@utils';
+import { replaceParams } from '@utils';
 //hooks
 import { usePost } from '@hooks/usePost';
 //components
-import { Panel } from 'primereact/panel';
 import { Dialog } from 'primereact/dialog';
-import { Button } from 'primereact/button';
-import { Paginator } from 'primereact/paginator';
-import { ToggleButton } from 'primereact/togglebutton';
 import { ProgressSpinner } from 'primereact/progressspinner';
 
 export const Viewer = (props) => {
