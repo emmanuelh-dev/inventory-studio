@@ -40,13 +40,31 @@ export const BarcodeSheet = (props) => {
         setFirst(firstIndex - 30);
     };
 
+    const resetPage = () => {
+        const _grid = new Array(30).fill(false);
+        setGrid(_grid);
+        setPage(0);
+        setFirst(0);
+    };
+
+    const ResetPageButton = () => {
+        return (
+            <Button
+                onClick={resetPage}
+                icon="pi pi-refresh"
+                label="Reiniciar Pagina"
+                className="p-button-outlined"
+            />
+        );
+    };
+
     const AddPageButton = () => {
         return (
             <Button
                 onClick={addPage}
                 icon="pi pi-plus"
                 label="Agregar Pagina"
-                className="p-button-outlined"
+                className="p-button-outlined p-button-success"
             />
         );
     };
@@ -66,6 +84,9 @@ export const BarcodeSheet = (props) => {
     const actionButtons = () => {
         return (
             <div className="p-fluid formgrid grid">
+                <div className="field col">
+                    <ResetPageButton />
+                </div>
                 <div className="field col">
                     <AddPageButton />
                 </div>
