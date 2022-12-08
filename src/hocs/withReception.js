@@ -343,6 +343,7 @@ export const withReception = (props) => {
         visible: showSheet,
         onHide: onHideSheet,
         onYes: onCustomSheet,
+        quantity: document[fields.TOTAL_QUANTITY],
     };
 
     const viewerProps = {

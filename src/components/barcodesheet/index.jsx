@@ -10,14 +10,19 @@ import { ToggleButton } from 'primereact/togglebutton';
 export const BarcodeSheet = (props) => {
     const [page, setPage] = useState(0);
     const [first, setFirst] = useState(0);
+    const [limit, setLimit] = useState(false);
+    const [counter, setCounter] = useState(0);
     const [disabled, setDisabled] = useState(false);
     const [grid, setGrid] = useState(new Array(30).fill(false));
-    const { visible, onHide, onYes } = { ...props };
+    const { quantity, visible, onHide, onYes } = { ...props };
 
     const onButtonClick = (event, index) => {
         const _grid = [...grid];
-        _grid[index] = getValue(event);
+        const value = getValue(event);
+        _grid[index] = value;
         setGrid(_grid);
+        const _counter = value ? counter + 1 : counter - 1;
+        setCounter(_counter);
     };
 
     const addPage = () => {
@@ -45,6 +50,7 @@ export const BarcodeSheet = (props) => {
         setGrid(_grid);
         setPage(0);
         setFirst(0);
+        setCounter(0);
     };
 
     const ResetPageButton = () => {
@@ -65,6 +71,7 @@ export const BarcodeSheet = (props) => {
                 icon="pi pi-plus"
                 label="Agregar Pagina"
                 className="p-button-outlined p-button-success"
+                disabled={limit}
             />
         );
     };
@@ -130,20 +137,23 @@ export const BarcodeSheet = (props) => {
 
     const createSheet = () => {
         const sheet = [];
+        let button = null;
         for (let counter = 0; counter < 30; counter++) {
             const index = counter + page * 30;
-            sheet.push(
+            button = (
                 <ToggleButton
                     key={counter}
                     checked={grid[index]}
                     className="col-4 barcode"
                     onLabel=" |||||||||||||||||||||||||||||||||||||||||||||||||||||| "
                     offLabel={`${index}`}
+                    disabled={limit && !grid[index]}
                     onChange={(event) => {
                         onButtonClick(event, index);
                     }}
                 />
             );
+            sheet.push(button);
         }
 
         return sheet;
@@ -152,6 +162,10 @@ export const BarcodeSheet = (props) => {
     useEffect(() => {
         setDisabled(grid.length == 30);
     }, [grid]);
+
+    useEffect(() => {
+        setLimit(counter == quantity);
+    }, [counter, quantity]);
 
     return (
         <Dialog
