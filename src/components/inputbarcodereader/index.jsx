@@ -29,7 +29,6 @@ export const InputBarcodeReader = (props) => {
 
     const onKeyDown = (event) => {
         if (event.key === 'Enter') {
-            console.log('---->', barcode);
             readBarcode(barcode);
         }
     };
