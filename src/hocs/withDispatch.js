@@ -12,6 +12,7 @@ import { Menubar } from 'primereact/menubar';
 import { Search } from '@components/search';
 import { Details } from '@components/details';
 import { DispatchForm } from '@components/dispatchform';
+import { InputBarcodeReader } from '@components/inputbarcodereader';
 //hooks
 import { useNew } from '@hooks/useNew';
 import { useGet } from '@hooks/useGet';
@@ -302,6 +303,11 @@ export const withDispatch = (props) => {
         fields: documentSearchFields,
     };
 
+    const barcodeProps = {
+        documentType: document[fields.TYPE],
+        processBarcode: () => {},
+    };
+
     //hooks
     useEffect(() => {
         endpoint.suggestions = `${endpoint.suggestions}${document[fields.TYPE]}`;
@@ -337,6 +343,7 @@ export const withDispatch = (props) => {
     return (
         <Panel header={documentToolbar}>
             <DispatchForm {...dispatchProps} />
+            <InputBarcodeReader {...barcodeProps} />
             <Details {...detailProps} />
             {search ? <Search {...searchProps} /> : <></>}
             <Toast ref={notification} />
