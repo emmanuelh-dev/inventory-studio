@@ -34,5 +34,12 @@ export const InputBarcodeReader = (props) => {
         }
     };
 
-    return <InputText value={barcode} onChange={onChange} onKeyDown={onKeyDown} />;
+    return (
+        <InputText
+            value={barcode}
+            onChange={onChange}
+            onKeyDown={onKeyDown}
+            className="p-inputtext-lg block"
+        />
+    );
 };
