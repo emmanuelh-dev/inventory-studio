@@ -306,6 +306,7 @@ export const withDispatch = (props) => {
     const barcodeProps = {
         documentType: document[fields.TYPE],
         processBarcode: () => {},
+        disabled: isEmpty(document[fields.WAREHOUSE]),
     };
 
     //hooks

@@ -5,9 +5,9 @@ import { InputText } from 'primereact/inputtext';
 
 export const InputBarcodeReader = (props) => {
     const [barcode, setBarcode] = useState('');
-    const { processBarcode, documentType } = { ...props };
+    const { processBarcode, documentType, disabled } = { ...props };
     const endpoint = {
-        readBarcode: process.env.NEXT_PUBLIC_DISPATCHES_READ_BARCODE,
+        readBarcode: process.env.NEXT_PUBLIC_RECEPTIONS_READ_BARCODE,
     };
 
     const readBarcode = (value) => {
@@ -39,6 +39,7 @@ export const InputBarcodeReader = (props) => {
             onChange={onChange}
             onKeyDown={onKeyDown}
             className="p-inputtext-lg block"
+            disabled={disabled}
         />
     );
 };
