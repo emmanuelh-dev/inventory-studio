@@ -5,7 +5,7 @@ import { InputText } from 'primereact/inputtext';
 
 export const InputBarcodeReader = (props) => {
     const [barcode, setBarcode] = useState('');
-    const { processBarcode, documentType, disabled, warehouse } = { ...props };
+    const { processBarcode, documentType, disabled, warehouse, showNotification } = { ...props };
     const endpoint = {
         readBarcode: process.env.NEXT_PUBLIC_RECEPTIONS_READ_BARCODE,
     };
@@ -18,9 +18,13 @@ export const InputBarcodeReader = (props) => {
             format: 'CODE128',
         };
         const url = replaceParams(endpoint.readBarcode, params);
-        useGet(url).then((data) => {
-            processBarcode(data);
-        });
+        useGet(url)
+            .then((data) => {
+                processBarcode(data);
+            })
+            .catch((error) => {
+                showNotification('error', error.message);
+            });
     };
 
     const onChange = (event) => {
