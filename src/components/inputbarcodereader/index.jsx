@@ -5,13 +5,14 @@ import { InputText } from 'primereact/inputtext';
 
 export const InputBarcodeReader = (props) => {
     const [barcode, setBarcode] = useState('');
-    const { processBarcode, documentType, disabled } = { ...props };
+    const { processBarcode, documentType, disabled, warehouse } = { ...props };
     const endpoint = {
         readBarcode: process.env.NEXT_PUBLIC_RECEPTIONS_READ_BARCODE,
     };
 
     const readBarcode = (value) => {
         const params = {
+            warehouse,
             type: documentType,
             barcode: value,
             format: 'CODE128',
