@@ -11,6 +11,7 @@ export const InputBarcodeReader = (props) => {
     };
 
     const readBarcode = (value) => {
+        const detail = {};
         const params = {
             warehouse,
             type: documentType,
@@ -20,7 +21,13 @@ export const InputBarcodeReader = (props) => {
         const url = replaceParams(endpoint.readBarcode, params);
         useGet(url)
             .then((data) => {
-                processBarcode(data);
+                detail.item = data.item;
+                detail.quantity = 1;
+                detail.unitPrice = data.unitPrice;
+                detail.totalPrice = data.unitPrice;
+                detail.description = data.description;
+                processBarcode(detail);
+                setBarcode('');
             })
             .catch((error) => {
                 showNotification('error', error.message);
