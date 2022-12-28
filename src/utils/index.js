@@ -166,3 +166,20 @@ export const transformFilter = (filter) => {
 
     return elements;
 };
+
+export const addQuantity = (details, detail) => {
+    const element = details.find((element, index) => {
+        if (element.item.id == detail.itemId) {
+            element.quantity = element.quantity + detail.quantity;
+            element.totalPrice = element.quantity * element.unitPrice;
+            return { index, detail: element };
+        }
+    });
+
+    if (element != null) {
+        details[element.index] = element.detail;
+        return details;
+    }
+
+    return null;
+};
