@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 //utils
-import { isEmpty, dateToString, stringToDate } from '@utils';
+import { isEmpty, dateToString, stringToDate, addQuantity } from '@utils';
 //constants
 import { dispatchState, dispatchFields, detailState } from '@constants';
 import { toolbar, detailColumns, dispatchTypes, documentSearchFields } from '@constants/options';
@@ -194,11 +194,17 @@ export const withDispatch = (props) => {
             return element[fields.LINE_NUMBER] == _detail[fields.LINE_NUMBER];
         });
 
-        if (index > -1) {
+        const updatedDetails = addQuantity(_details, _detail);
+
+        if (index > -1 && updatedDetails != null) {
             _details[index] = _detail;
             _document[fields.DETAILS] = _details;
         } else {
-            _document = addDetail(_document, _details, _detail);
+            if (updatedDetails) {
+                _document[fields.DETAILS] = updatedDetails;
+            } else {
+                _document = addDetail(_document, _details, _detail);
+            }
         }
         updateDocument(_document);
     };
