@@ -169,7 +169,7 @@ export const transformFilter = (filter) => {
 
 export const addQuantity = (details, detail) => {
     const element = details.find((element, index) => {
-        if (element.item.id == detail.itemId) {
+        if (element.item.id == detail.item.id) {
             element.quantity = element.quantity + detail.quantity;
             element.totalPrice = element.quantity * element.unitPrice;
             return { index, detail: element };
