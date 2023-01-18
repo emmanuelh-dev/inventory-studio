@@ -226,17 +226,22 @@ export const withReception = (props) => {
         const _detail = { ...detail };
         const _document = { ...document };
         const _details = [...document[fields.DETAILS]];
-        const index = _details.findIndex((element) => {
-            return element[fields.LINE_NUMBER] == _detail[fields.LINE_NUMBER];
-        });
 
-        if (index > -1) {
-            _details[index] = _detail;
-            _document[fields.DETAILS] = _details;
-        } else {
-            _document = addDetail(_document, _details, _detail);
+        if(!validateRepeatedItem(_detail, _details, fields, showNotification)){
+
+            const index = _details.findIndex((element) => {
+                return element[fields.LINE_NUMBER] == _detail[fields.LINE_NUMBER];
+            });
+    
+            if (index > -1) {
+                _details[index] = _detail;
+                _document[fields.DETAILS] = _details;
+            } else {
+                _document = addDetail(_document, _details, _detail);
+            }
+            updateDocument(_document);
         }
-        updateDocument(_document);
+
     };
 
     const addDetail = (_document, _details, _detail) => {
@@ -426,3 +431,17 @@ const validateField = (value, fieldName, showNotification) => {
 
     return !validate;
 };
+
+const validateRepeatedItem = (detail, details, fields, showNotification) => {
+    
+    const validate = details.findIndex((element) => 
+        element[fields.ITEM][fields.ID] == detail[fields.ITEM][fields.ID] 
+        && element[fields.LINE_NUMBER] !== element[fields.LINE_NUMBER]);
+    
+    validate = validate != undefined;
+    if(validate){
+        const message = `El articulo ${detail[fields.ITEM].item_name} ya se encuentra en este documento`;
+        showNotification('error', message);
+    }
+    return validate;
+}
