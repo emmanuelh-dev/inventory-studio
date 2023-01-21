@@ -433,15 +433,18 @@ const validateField = (value, fieldName, showNotification) => {
 };
 
 const validateRepeatedItem = (detail, details, fields, showNotification) => {
-    
-    const validate = details.findIndex((element) => 
+    console.log('detail: ', detail);
+    console.log('details: ', details);
+    const validate = details.find((element) => 
         element[fields.ITEM][fields.ID] == detail[fields.ITEM][fields.ID] 
-        && element[fields.LINE_NUMBER] !== element[fields.LINE_NUMBER]);
-    
+        && element[fields.LINE_NUMBER] !== detail[fields.LINE_NUMBER]);
+    console.log('validate: ',validate);
     validate = validate != undefined;
     if(validate){
-        const message = `El articulo ${detail[fields.ITEM].item_name} ya se encuentra en este documento`;
+        const message = `El articulo ${detail[fields.ITEM].itemName} ya se encuentra en este documento`;
         showNotification('error', message);
     }
     return validate;
 }
+
+const validateDetail = ()=>{}
