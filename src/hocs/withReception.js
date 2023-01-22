@@ -229,9 +229,7 @@ export const withReception = (props) => {
 
         if(!validateRepeatedItem(_detail, _details, fields, showNotification)){
 
-            const index = _details.findIndex((element) => {
-                return element[fields.LINE_NUMBER] == _detail[fields.LINE_NUMBER];
-            });
+            const index = findDetail(_detail, _details, fields);
     
             if (index > -1) {
                 _details[index] = _detail;
@@ -445,4 +443,11 @@ const validateRepeatedItem = (detail, details, fields, showNotification) => {
     return validate;
 }
 
-const validateDetail = ()=>{}
+const findDetail = (detail, details, fields)=>{
+    const index = details.findIndex((element) => {
+        return element[fields.LINE_NUMBER] == detail[fields.LINE_NUMBER] && 
+        element[fields.ITEM][fields.ID] == detail[fields.ITEM][fields.ID];
+    });
+
+    return index;
+}
