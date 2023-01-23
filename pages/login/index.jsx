@@ -1,3 +1,4 @@
 import { LoginForm } from '@components/loginform';
-
-export default LoginForm;
+//hocs
+import { withAuthentication } from '@hocs/withAuthentication';
+export default withAuthentication(LoginForm);
