@@ -14,7 +14,7 @@ export const LoginForm = (props) => {
                 <InputText type="password" className="p-inputtext-lg" value="" />
             </div>
             <div className="field col-12">
-                <Button type="submit" label="Enviar" className="p-button-lg " />
+                <Button type="submit" label="Enviar" className="p-button" />
             </div>
         </Card>
     );
