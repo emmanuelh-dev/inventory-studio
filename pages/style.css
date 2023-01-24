@@ -7,3 +7,11 @@ body
 .barcode {
   height: 50px;
 }
+
+.login-container {
+  height: 25rem;
+}
+
+.login-card {
+  width: 25rem;
+}
