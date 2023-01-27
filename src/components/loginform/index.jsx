@@ -3,7 +3,7 @@ import { Button } from 'primereact/button';
 import { InputText } from 'primereact/inputtext';
 
 export const LoginForm = (props) => {
-    const { credentials, handleInputChange, handleFormSubmit } = { ...props };
+    const { userAccount, handleInputChange, handleFormSubmit } = { ...props };
     return (
         <div className="flex align-content-center justify-content-center flex-wrap login-container">
             <Card className="login-card">
@@ -14,7 +14,7 @@ export const LoginForm = (props) => {
                             type="email"
                             name="username"
                             className="p-inputtext-lg"
-                            value={credentials.username}
+                            value={userAccount.username}
                             onChange={handleInputChange}
                         />
                     </div>
@@ -24,7 +24,7 @@ export const LoginForm = (props) => {
                             type="password"
                             name="password"
                             className="p-inputtext-lg"
-                            value={credentials.password}
+                            value={userAccount.password}
                             onChange={handleInputChange}
                         />
                     </div>
