@@ -1,30 +1,35 @@
 import React, { useState } from 'react';
 import { useAuthPost } from '@hooks/usePost';
 export const withAuthentication = (WrappedComponent) => (props) => {
-    const [credentials, setCredentials] = useState({
+    const endpoint = {
+        auth: process.env.NEXT_PUBLIC_AUTH,
+    }
+
+    const credentials = {
+        client: process.env.NEXT_PUBLIC_CLIENT,
+        secret: process.env.NEXT_PUBLIC_SECRET
+    }
+
+    const [userAccount, setUserAccount] = useState({
         username: '',
         password: '',
     });
 
     const handleInputChange = (event) => {
-        setCredentials({
-            ...credentials,
+        setUserAccount({
+            ...userAccount,
             [event.target.name]: event.target.value,
         });
     };
 
     const handleFormSubmit = async (event) => {
         event.preventDefault();
-        const appCredentials = {
-            client: 'InventoryStudio',
-            secret: 'secreto'
-        }
-        const response = await useAuthPost('http://localhost:8180/inventory-item/oauth/token', appCredentials, credentials);
+        const response = await useAuthPost(endpoint.auth, credentials, userAccount);
         console.log('token json: ', response);
     };
 
     const authenticationProps = {
-        credentials,
+        userAccount,
         handleFormSubmit,
         handleInputChange,
     };
