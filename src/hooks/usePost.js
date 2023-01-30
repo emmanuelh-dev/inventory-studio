@@ -1,4 +1,4 @@
-import { buildFetchOptions, buildAuthOptions } from '@utils/request';
+import { buildFetchOptions, buildAuthOptions, buildAuthTokenOptions } from '@utils/request';
 
 export const usePost = async (url, body) => {
     const options = buildFetchOptions('POST', body);
@@ -25,11 +25,6 @@ export const useAuthPost = async (url, credentials, body) => {
         throw new Error(body.message);
     }
 
-    let data;
-    if (url.includes('reports')) {
-        data = await response.arrayBuffer();
-    } else {
-        data = await response.json();
-    }
+    const data = await response.json();
     return data;
 }
