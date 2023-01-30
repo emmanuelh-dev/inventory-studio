@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { useGet } from './src/hooks/useGet';
+import { useGet } from '@hooks/useGet';
 const middleware = async (request) => {
     const endpoint = {
         verifyOAuth: process.env.NEXT_PUBLIC_AUTH_VERIFY,
@@ -7,14 +7,22 @@ const middleware = async (request) => {
 
     const jwt = request.cookies.get('access_token');
     if (jwt && jwt !== undefined) {
-        try {
-            const url = `${endpoint.verifyOAuth}${new URLSearchParams({ token: jwt })}`;
-            const response = await useGet(url);
-        } catch (error) {
-            console.log('mensaje de error ', error);
-        }
+        const url = `${endpoint.verifyOAuth}${new URLSearchParams({ token: jwt })}`;
+        const valid = validateToken(url);
     }
     NextResponse.next();
 };
+
+const validateToken = async (url)=>{
+
+    try{
+        const response = await useGet(url);
+    }catch(error){
+        
+        console.log('mensaje de error ', error);
+    }
+
+    return response.active;
+}
 
 export default middleware;
