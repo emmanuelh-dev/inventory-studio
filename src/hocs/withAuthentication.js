@@ -1,6 +1,11 @@
-import React, { useState } from 'react';
+import { useRouter } from 'next/router';
+import React, { useState, useRef } from 'react';
+//hook
 import { useAuthPost } from '@hooks/usePost';
 export const withAuthentication = (WrappedComponent) => (props) => {
+    const router = useRouter();
+    const message = useRef(null);
+
     const endpoint = {
         auth: process.env.NEXT_PUBLIC_AUTH,
     };
@@ -24,13 +29,30 @@ export const withAuthentication = (WrappedComponent) => (props) => {
 
     const handleFormSubmit = async (event) => {
         event.preventDefault();
-        const response = await useAuthPost(endpoint.auth, credentials, userAccount);
-        const { access_token, token_type, refresh_token, expires_in, scope, jti } = { ...response };
-        document.cookie = `access_token=${access_token};`;
-        document.cookie = `refresh_token=${refresh_token}`;
+        try {
+            const response = await useAuthPost(endpoint.auth, credentials, userAccount);
+            const { access_token, refresh_token } = { ...response };
+            document.cookie = `access_token=${access_token};`;
+            document.cookie = `refresh_token=${refresh_token}`;
+            router.push('reception');
+        } catch (error) {
+            showMessage();
+        }
+    };
+
+    const showMessage = () => {
+        message.current.show([
+            {
+                severity: 'error',
+                summary: '',
+                detail: 'Usuario o contraseña son incorrectos',
+                sticky: true,
+            },
+        ]);
     };
 
     const authenticationProps = {
+        message,
         userAccount,
         handleFormSubmit,
         handleInputChange,

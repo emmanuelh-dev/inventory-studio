@@ -1,12 +1,14 @@
 import { Card } from 'primereact/card';
 import { Button } from 'primereact/button';
+import { Messages } from 'primereact/messages';
 import { InputText } from 'primereact/inputtext';
 
 export const LoginForm = (props) => {
-    const { userAccount, handleInputChange, handleFormSubmit } = { ...props };
+    const { message, userAccount, handleInputChange, handleFormSubmit } = { ...props };
     return (
         <div className="flex align-content-center justify-content-center flex-wrap login-container">
             <Card className="login-card">
+                <Messages ref={message} />
                 <form onSubmit={handleFormSubmit} className="p-fluid formgrid grid">
                     <div className="field col-12">
                         <label>Nombre de usuario</label>
