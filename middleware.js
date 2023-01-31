@@ -14,15 +14,13 @@ const middleware = async (request) => {
 };
 
 const validateToken = async (url)=>{
-
     try{
         const response = await useGet(url);
+        return response.active;
     }catch(error){
         
         console.log('mensaje de error ', error);
     }
-
-    return response.active;
 }
 
 export default middleware;
