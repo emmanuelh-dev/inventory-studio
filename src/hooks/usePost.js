@@ -1,4 +1,4 @@
-import { buildFetchOptions, buildAuthOptions, buildAuthTokenOptions } from '@utils/request';
+import { buildFetchOptions, buildAuthOptions } from '@utils/request';
 
 export const usePost = async (url, body) => {
     const options = buildFetchOptions('POST', body);
