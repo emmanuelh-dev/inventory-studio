@@ -1,2 +1,1 @@
-# Inventory Studioss
-# commit of the day
+# Inventory Studios
