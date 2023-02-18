@@ -1,8 +1,12 @@
 import React from 'react';
 import { Menu } from 'primereact/menu';
-
 export const Navbar = (props) => {
     const nav = [
+        {
+            label: 'Home',
+            url: '/',
+            icon:'pi pi-fw pi-home',
+        },
         {
             label: 'Documentos',
             items: [
@@ -44,5 +48,5 @@ export const Navbar = (props) => {
         },
     ];
 
-    return <Menu model={nav} className="navbar" />;
+    return <Menu model={nav} className="navbar" multiple="true"/>;
 };
