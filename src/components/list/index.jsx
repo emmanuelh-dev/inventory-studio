@@ -4,6 +4,8 @@ import { isEmpty, replaceParams, transformFilter } from '@utils';
 
 //hooks
 import { useGet } from '@hooks/useGet';
+//custom components
+import { Dashboard } from '@components/dashboard';
 
 import { Column } from 'primereact/column';
 import { Button } from 'primereact/button';
@@ -74,44 +76,46 @@ export const List = (props) => {
     };
 
     return (
-        <DataTable
-            lazy
-            paginator
-            stripedRows
-            dataKey="id"
-            first={first}
-            selection={row}
-            rows={data.size}
-            loading={loading}
-            filters={filters}
-            onFilter={onFilter}
-            filterDisplay="row"
-            value={data.content}
-            selectionMode="single"
-            responsiveLayout="scroll"
-            totalRecords={data.totalElements}
-            onSelectionChange={(event) => {
-                setRow(event.value);
-            }}
-            onPage={onPage}
-        >
-            {fields.map((element) => {
-                if (element.template !== undefined) {
-                    return <Column key="id" body={element.template} header={element.header} />;
-                } else if (element.filter) {
-                    return (
-                        <Column
-                            key="id"
-                            field={element.field}
-                            header={element.header}
-                            filterPlaceholder={`Buscar por ${element.header}`}
-                            filter
-                        />
-                    );
-                }
-                return <Column key="id" field={element.field} header={element.header} />;
-            })}
-            <Column body={actionTemplate} />
-        </DataTable>
+        <Dashboard>
+            <DataTable
+                lazy
+                paginator
+                stripedRows
+                dataKey="id"
+                first={first}
+                selection={row}
+                rows={data.size}
+                loading={loading}
+                filters={filters}
+                onFilter={onFilter}
+                filterDisplay="row"
+                value={data.content}
+                selectionMode="single"
+                responsiveLayout="scroll"
+                totalRecords={data.totalElements}
+                onSelectionChange={(event) => {
+                    setRow(event.value);
+                }}
+                onPage={onPage}
+            >
+                {fields.map((element) => {
+                    if (element.template !== undefined) {
+                        return <Column key="id" body={element.template} header={element.header} />;
+                    } else if (element.filter) {
+                        return (
+                            <Column
+                                key="id"
+                                field={element.field}
+                                header={element.header}
+                                filterPlaceholder={`Buscar por ${element.header}`}
+                                filter
+                            />
+                        );
+                    }
+                    return <Column key="id" field={element.field} header={element.header} />;
+                })}
+                <Column body={actionTemplate} />
+            </DataTable>
+        </Dashboard>
     );
 };
