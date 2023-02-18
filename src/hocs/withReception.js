@@ -12,6 +12,7 @@ import { Menubar } from 'primereact/menubar';
 import { Search } from '@components/search';
 import { Details } from '@components/details';
 import { Viewer } from '@components/reportviewer';
+import { Dashboard } from '@components/dashboard';
 import { BarcodeSheet } from '@components/barcodesheet';
 import { ReceptionForm } from '@components/receptionform';
 //hooks
@@ -395,14 +396,16 @@ export const withReception = (props) => {
     };
 
     return (
-        <Panel header={documentToolbar}>
-            <ReceptionForm {...receptionProps} />
-            <Details {...detailProps} />
-            {search ? <Search {...searchProps} /> : <></>}
-            <Toast ref={notification} />
-            <BarcodeSheet {...barcodeSheetProps} />
-            <Viewer {...viewerProps} />
-        </Panel>
+        <Dashboard>
+            <Panel header={documentToolbar}>
+                <ReceptionForm {...receptionProps} />
+                <Details {...detailProps} />
+                {search ? <Search {...searchProps} /> : <></>}
+                <Toast ref={notification} />
+                <BarcodeSheet {...barcodeSheetProps} />
+                <Viewer {...viewerProps} />
+            </Panel>
+        </Dashboard>
     );
 };
 

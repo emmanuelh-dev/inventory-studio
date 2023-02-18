@@ -11,6 +11,7 @@ import { Menubar } from 'primereact/menubar';
 //custom components
 import { Search } from '@components/search';
 import { Details } from '@components/details';
+import { Dashboard } from '@components/dashboard';
 import { DispatchForm } from '@components/dispatchform';
 import { InputBarcodeReader } from '@components/inputbarcodereader';
 //hooks
@@ -350,13 +351,15 @@ export const withDispatch = (props) => {
     };
 
     return (
-        <Panel header={documentToolbar}>
-            <DispatchForm {...dispatchProps} />
-            <InputBarcodeReader {...barcodeProps} />
-            <Details {...detailProps} />
-            {search ? <Search {...searchProps} /> : <></>}
-            <Toast ref={notification} />
-        </Panel>
+        <Dashboard>
+            <Panel header={documentToolbar}>
+                <DispatchForm {...dispatchProps} />
+                <InputBarcodeReader {...barcodeProps} />
+                <Details {...detailProps} />
+                {search ? <Search {...searchProps} /> : <></>}
+                <Toast ref={notification} />
+            </Panel>
+        </Dashboard>
     );
 };
 
