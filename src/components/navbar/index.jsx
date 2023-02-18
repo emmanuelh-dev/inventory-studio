@@ -5,11 +5,13 @@ export const Navbar = (props) => {
     const nav = [
         {
             label:'Recepciones',
+            url: '/reception'
         },
         {
-            label:'Salidas'
+            label:'Salidas',
+            url: '/dispatch'
         }
     ]
 
-    return <Menu model={nav} />
+    return <Menu model={nav} className="navbar"/>
 };
