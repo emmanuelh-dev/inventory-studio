@@ -4,7 +4,7 @@ export const Dashboard = (props) => {
     return (
         <div>
             <Splitter>
-                <SplitterPanel size={20}>
+                <SplitterPanel size={20} minSize={20}>
                     <Navbar />
                 </SplitterPanel>
                 <SplitterPanel size={80}>
