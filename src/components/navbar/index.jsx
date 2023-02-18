@@ -48,5 +48,5 @@ export const Navbar = (props) => {
         },
     ];
 
-    return <Menu model={nav} className="navbar" multiple="true"/>;
+    return <Menu model={nav} className="navbar"/>;
 };
