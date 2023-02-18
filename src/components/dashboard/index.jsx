@@ -7,7 +7,9 @@ export const Dashboard = (props) => {
                 <SplitterPanel size={20}>
                     <Navbar />
                 </SplitterPanel>
-                <SplitterPanel size={80}>{props.children}</SplitterPanel>
+                <SplitterPanel size={80}>
+                        {props.children}
+                    </SplitterPanel>
             </Splitter>
         </div>
     );
