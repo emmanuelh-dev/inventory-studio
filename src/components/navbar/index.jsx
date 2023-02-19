@@ -11,7 +11,7 @@ export const Navbar = (props) => {
             label: 'Documentos',
             items: [
                 {
-                    label: 'Recepciones',
+                    label: 'Ingreso',
                     url: '/reception',
                 },
                 {
