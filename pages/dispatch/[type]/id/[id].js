@@ -27,6 +27,7 @@ export default () => {
         },
         
     };
+    
     useEffect(() => {
         if (type && id) {
             const params = { type, id };
