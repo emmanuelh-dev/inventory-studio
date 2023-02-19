@@ -19,7 +19,7 @@ export const MessageDialog = (props) => {
             footer={footer}
             visible={showDialog}
             onHide={onHideDialog}
-            style={{ width: '50vw' }}
+            style={{ width: '40%' }}
         >
             <p>
                 Documento de tipo {documentTypes[type]} con el numero de folio {id} no fue encontrado en el sistema
