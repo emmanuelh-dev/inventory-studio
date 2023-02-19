@@ -34,7 +34,7 @@ export const withAuthentication = (WrappedComponent) => (props) => {
             const { access_token, refresh_token } = { ...response };
             document.cookie = `access_token=${access_token};`;
             document.cookie = `refresh_token=${refresh_token}`;
-            router.push('reception');
+            router.push('dashboard');
         } catch (error) {
             showMessage();
         }
