@@ -18,6 +18,13 @@ export const dispatchTypes = [
     { label: 'Devolucion por compra', value: 'PURCHASE_RETURN' },
 ];
 
+export const documentTypes = {
+    INPUT: 'Ingreso',
+    OUTPUT: 'Salida',
+    SALE_RETURN: 'Devolucion por venta',
+    PURCHASE_RETURN: 'Devolucion por compra'
+}
+
 export const toolbar = [
     {
         label: 'Nuevo',
