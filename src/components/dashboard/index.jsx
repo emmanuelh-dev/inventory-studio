@@ -1,4 +1,3 @@
-import { Splitter, SplitterPanel } from 'primereact/splitter';
 import { Navbar } from '@components/navbar';
 export const Dashboard = ({ children }) => {
     return (
