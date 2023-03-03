@@ -5,15 +5,6 @@ export const withAuthentication = (WrappedComponent) => (props) => {
     const router = useRouter();
     const message = useRef(null);
 
-    const endpoint = {
-        auth: process.env.NEXT_PUBLIC_AUTH,
-    };
-
-    const credentials = {
-        client: process.env.NEXT_PUBLIC_CLIENT,
-        secret: process.env.NEXT_PUBLIC_SECRET,
-    };
-
     const [userAccount, setUserAccount] = useState({
         username: '',
         password: '',
