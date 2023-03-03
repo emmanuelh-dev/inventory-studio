@@ -1,22 +1,29 @@
 import React from 'react';
+import { useRouter } from 'next/router';
+//components
 import { Menu } from 'primereact/menu';
 export const Navbar = (props) => {
+    const router = useRouter();
     const nav = [
         {
             label: 'Home',
             url: '/',
-            icon:'pi pi-fw pi-home',
+            icon: 'pi pi-fw pi-home',
         },
         {
             label: 'Documentos',
             items: [
                 {
                     label: 'Ingreso',
-                    url: '/reception',
+                    command: () => {
+                        router.push('/reception');
+                    },
                 },
                 {
                     label: 'Salidas',
-                    url: '/dispatch',
+                    command: () => {
+                        router.push('/dispatch');
+                    },
                 },
             ],
         },
@@ -25,11 +32,15 @@ export const Navbar = (props) => {
             items: [
                 {
                     label: 'Compras',
-                    url: '/input-reception-list',
+                    command: () => {
+                        router.push('/input-reception-list');
+                    },
                 },
                 {
                     label: 'Devolucion por venta',
-                    url: '/sales-return-reception-list',
+                    command: () => {
+                        router.push('/sales-return-reception-list');
+                    },
                 },
             ],
         },
@@ -38,15 +49,19 @@ export const Navbar = (props) => {
             items: [
                 {
                     label: 'Ventas',
-                    url: '/output-dispatch-list',
+                    command: () => {
+                        router.push('/output-dispatch-list');
+                    },
                 },
                 {
                     label: 'Devolucion por compras',
-                    url: '/purchase-return-dispatch-list',
+                    command: () => {
+                        router.push('/purchase-return-dispatch-list');
+                    },
                 },
             ],
         },
     ];
 
-    return <Menu model={nav} className="navbar"/>;
+    return <Menu model={nav} className="navbar" />;
 };
