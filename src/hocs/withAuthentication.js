@@ -1,8 +1,6 @@
 import { useRouter } from 'next/router';
 import { signIn } from 'next-auth/react';
 import React, { useState, useRef } from 'react';
-//hook
-//import { useAuthPost } from '@hooks/usePost';
 export const withAuthentication = (WrappedComponent) => (props) => {
     const router = useRouter();
     const message = useRef(null);
@@ -30,23 +28,16 @@ export const withAuthentication = (WrappedComponent) => (props) => {
 
     const handleFormSubmit = async (event) => {
         event.preventDefault();
-        const result = await signIn('credentials',{
+        const result = await signIn('credentials', {
             username: userAccount.username,
-            password: userAccount.password, 
-            redirect: false
+            password: userAccount.password,
+            redirect: false,
         });
-        if(result == null){
+        if (result.ok) {
+            router.push('dashboard');
+        } else {
             showMessage();
         }
-        // try {
-        //     const response = await useAuthPost(endpoint.auth, credentials, userAccount);
-        //     const { access_token, refresh_token } = { ...response };
-        //     document.cookie = `access_token=${access_token};`;
-        //     document.cookie = `refresh_token=${refresh_token}`;
-        //     router.push('dashboard');
-        // } catch (error) {
-        //     showMessage();
-        // }
     };
 
     const showMessage = () => {
