@@ -1,16 +1,12 @@
 import { Splitter, SplitterPanel } from 'primereact/splitter';
 import { Navbar } from '@components/navbar';
-export const Dashboard = (props) => {
+export const Dashboard = ({ children }) => {
     return (
-        <div>
-            <Splitter>
-                <SplitterPanel size={20} minSize={20}>
-                    <Navbar />
-                </SplitterPanel>
-                <SplitterPanel size={80}>
-                        {props.children}
-                    </SplitterPanel>
-            </Splitter>
+        <div className="grid">
+            <div className="col-2">
+                <Navbar />
+            </div>
+            <div className="col-10">{children}</div>
         </div>
     );
 };
