@@ -33,22 +33,18 @@ export const authOptions = {
     },
     callbacks: {
         async jwt({ token, user, account, profile }) {
-            console.log('::::::::>', token);
             if (user) {
                 token.accessToken = user.access_token;
                 token.refreshToken = user.refresh_token;
                 token.refreshToken = user.refresh_token;
                 token.accessTokenExpires = user.expires_in;
             }
-            console.log('---===:::>', token);
             return token;
         },
         async session({ token, session }) {
             session.user.accessToken = token.accessToken;
             session.user.refreshToken = token.refreshToken;
             session.user.accessTokenExpires = token.accessTokenExpires;
-
-            console.log('--------->', token);
             return session;
         },
     },
