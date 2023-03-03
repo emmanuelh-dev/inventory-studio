@@ -19,16 +19,12 @@ export const authOptions = {
                     secret: process.env.JWT_SECRET,
                 };
 
-                try {
-                    const response = await useAuthPost(
-                        process.env.AUTHENTICATION,
-                        credentials,
-                        account
-                    );
-                    return response;
-                } catch (error) {
-                    return null;
-                }
+                const response = await useAuthPost(
+                    process.env.AUTHENTICATION,
+                    credentials,
+                    account
+                );
+                return response;
             },
         }),
     ],
