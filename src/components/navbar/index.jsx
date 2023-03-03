@@ -7,7 +7,9 @@ export const Navbar = (props) => {
     const nav = [
         {
             label: 'Home',
-            url: '/',
+            command: () => {
+                router.push('/');
+            },
             icon: 'pi pi-fw pi-home',
         },
         {
