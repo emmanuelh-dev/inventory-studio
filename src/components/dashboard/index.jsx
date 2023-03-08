@@ -2,6 +2,7 @@ import { useRouter } from 'next/router';
 import { useSession } from 'next-auth/react';
 //custom components
 import { Navbar } from '@components/navbar';
+import { Userbar } from '@components/userbar';
 //components
 import { ProgressSpinner } from 'primereact/progressspinner';
 export const Dashboard = ({ children }) => {
@@ -22,6 +23,9 @@ export const Dashboard = ({ children }) => {
 
     return (
         <div className="grid">
+            <div className="col-12">
+                <Userbar />
+            </div>
             <div className="col-2">
                 <Navbar />
             </div>
