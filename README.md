@@ -1,3 +1,3 @@
 # Inventory Studio
 
-# commit of the day
+# revert changes
