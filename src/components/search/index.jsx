@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react';
 //utils
 import { stringToDate } from '@utils';
-//hooks
-import { useGet } from '@hooks/useGet';
 
 //components
 import { Dialog } from 'primereact/dialog';
@@ -15,24 +13,32 @@ export const Search = (props) => {
     const [data, setData] = useState([]);
     const [first, setFirst] = useState(0);
     const [loading, setLoading] = useState(true);
-    const { visible, onHide, fields, selectOption, endpoint } = { ...props };
+    const { type, visible, onHide, fields, selectOption, getDataAsPage, getDataByPage } = {
+        ...props,
+    };
+
+    const fetchDataAsPage = async () => {
+        if (visible) {
+            const result = await getDataAsPage(type);
+            setFirst(0);
+            setData(result);
+            setLoading(false);
+        }
+    };
+
+    const fetchDataByPage = async (event) => {
+        const result = await getDataByPage(type, event.page);
+        setData(result);
+        setFirst(event.first);
+        setLoading(false);
+    };
 
     useEffect(() => {
-        if (visible) {
-            useGet(`${endpoint.suggestions}?page=0&size=10`).then((data) => {
-                setFirst(0);
-                setData(data);
-                setLoading(false);
-            });
-        }
+        fetchDataAsPage();
     }, [visible]);
 
     const onPage = (event) => {
-        useGet(`${endpoint.suggestions}?page=${event.page}&size=10`).then((data) => {
-            setData(data);
-            setFirst(event.first);
-            setLoading(false);
-        });
+        fetchDataByPage(event);
     };
 
     const onYes = () => {
