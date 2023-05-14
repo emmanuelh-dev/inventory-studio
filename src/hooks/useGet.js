@@ -1,5 +1,7 @@
-export const useGet = async (url) => {
-    const response = await fetch(url);
+import { buildFetchOptions } from '@utils/request';
+export const useGet = async (url, session) => {
+    const options = buildFetchOptions('GET', session, {});
+    const response = await fetch(url, options);
 
     if (!response.ok) {
         const body = await response.json();
