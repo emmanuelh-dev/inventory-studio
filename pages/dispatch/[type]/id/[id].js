@@ -1,22 +1,17 @@
 import { useRouter } from 'next/router';
 import React, { useState, useEffect } from 'react';
-//utils
-import { stringToDate, replaceParams } from '@utils';
-//hooks
-import { useGet } from '@hooks/useGet';
-//custom components
-import { MessageDialog } from '@components/messagedialog';
-//components
-import { ProgressSpinner } from 'primereact/progressspinner';
-//hocs
+import services from '@services/api-services';
 import { withDispatch } from '@hocs/withDispatch';
+import { MessageDialog } from '@components/messagedialog';
+import { ProgressSpinner } from 'primereact/progressspinner';
+
 const Dispatch = withDispatch;
+
 export default () => {
-    const [showDialog, setShowDialog] = useState(false);
     const [document, setDocument] = useState(null);
+    const [showDialog, setShowDialog] = useState(false);
     const router = useRouter();
     const { type, id } = router.query;
-    const endpoint = process.env.NEXT_PUBLIC_DISPATCHES_FIND;
     const messageDialogProps = {
         id,
         type,
@@ -25,29 +20,28 @@ export default () => {
             setShowDialog(false);
             router.push(`/dispatch`);
         },
-        
     };
-    
-    useEffect(() => {
+
+    const fetchData = async () => {
         if (type && id) {
-            const params = { type, id };
-            const url = replaceParams(endpoint, params);
-            useGet(url)
-                .then((data) => {
-                    const _document = stringToDate(data);
-                    setDocument(_document);
-                })
-                .catch((error) => {
-                    setShowDialog(true);
-                });
+            try {
+                const result = await services.findDispatchDocumentById(type, id);
+                setDocument(result);
+            } catch (error) {
+                setShowDialog(true);
+            }
         }
+    };
+
+    useEffect(() => {
+        fetchData();
     }, [type, id]);
 
     if (document == null) {
         return (
             <div className="flex justify-content-center flex-wrap">
                 <ProgressSpinner animationDuration=".5s" />
-                <MessageDialog {...messageDialogProps}/>
+                <MessageDialog {...messageDialogProps} />
             </div>
         );
     }
