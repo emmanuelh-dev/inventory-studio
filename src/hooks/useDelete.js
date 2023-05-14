@@ -2,6 +2,10 @@ import { buildFetchOptions } from '@utils/request';
 export const useDelete = async (url, session) => {
     const options = buildFetchOptions('DELETE', session, {});
     const response = await fetch(url, options);
+    if (!response.ok) {
+        const body = await response.json();
+        throw new Error(body.message);
+    }
     return response.status;
 };
 
