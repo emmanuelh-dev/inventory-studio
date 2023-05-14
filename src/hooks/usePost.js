@@ -1,7 +1,7 @@
 import { buildFetchOptions, buildAuthOptions } from '@utils/request';
 
-export const usePost = async (url, body) => {
-    const options = buildFetchOptions('POST', body);
+export const usePost = async (url, session, body) => {
+    const options = buildFetchOptions('POST', session, body);
     const response = await fetch(url, options);
     if (!response.ok) {
         const body = await response.json();
@@ -27,4 +27,4 @@ export const useAuthPost = async (url, credentials, body) => {
 
     const data = await response.json();
     return data;
-}
+};
