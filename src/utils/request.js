@@ -1,17 +1,18 @@
-export const buildFetchOptions = (method, data) => {
+export const buildFetchOptions = (method, session, data) => {
     let options = {
         method: method,
         redirect: 'manual',
         mode: 'cors',
         cache: 'default',
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${session.user.accessToken}`,
+        },
     };
 
     if (method === 'POST' || method === 'PUT') {
         options.body = JSON.stringify(data);
-        options.headers = {
-            'Content-Type': 'application/json',
-            'Access-Control-Expose-Headers': 'Location',
-        };
+        options.headers['Access-Control-Expose-Headers'] = 'Location';
     }
 
     return options;
