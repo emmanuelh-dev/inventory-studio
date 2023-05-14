@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
+import services from '@services/api-services';
 //utils
 import { isEmpty, dateToString, stringToDate, addQuantity } from '@utils';
 //constants
-import { dispatchState, dispatchFields, detailState } from '@constants';
+import { outputDocumentState, dispatchFields, detailState } from '@constants';
 import { toolbar, detailColumns, dispatchTypes, documentSearchFields } from '@constants/options';
 //components
 import { Toast } from 'primereact/toast';
@@ -16,13 +17,9 @@ import { DispatchForm } from '@components/dispatchform';
 import { InputBarcodeReader } from '@components/inputbarcodereader';
 //hooks
 import { useNew } from '@hooks/useNew';
-import { useGet } from '@hooks/useGet';
-import { usePut } from '@hooks/usePut';
-import { usePost } from '@hooks/usePost';
 import { useCopy } from '@hooks/useCopy';
-import { useDelete } from '@hooks/useDelete';
 import { useSearch } from '@hooks/useSearch';
-import { useFormState } from '@hooks/useFormState';
+import { useFormState, useForm, useDetail } from '@hooks/useFormState';
 import { useNotification } from '@hooks/useNotification';
 import { useControlField } from '@hooks/useControlField';
 import { useSumarizeField } from '@hooks/useSumarizeField';
@@ -30,31 +27,30 @@ import { useSumarizeField } from '@hooks/useSumarizeField';
 export const withDispatch = (props) => {
     const [released, setReleased] = useState(false);
 
-    let { initialState } = { ...props };
-    initialState = initialState == undefined || initialState == null ? dispatchState : initialState;
-    //states
-    const {
-        state: document,
-        updateState: updateDocument,
-        updateField: updateDocumentField,
-    } = useFormState({ ...initialState }, { ...dispatchState });
-    const { state: selection, updateState: updateSelection } = useFormState([], []);
-
-    const { buttonState, updateCopy, updateSaveButton } = useCopy({ ...initialState }, document);
-    const { onNew } = useNew(updateDocument, updateCopy, { ...dispatchState });
-
-    //constants
     const fields = { ...dispatchFields };
-    const endpoint = {
-        save: process.env.NEXT_PUBLIC_DISPATCHES_SAVE,
-        update: process.env.NEXT_PUBLIC_DISPATCHES_SAVE,
-        suggestions: `${process.env.NEXT_PUBLIC_DISPATCHES_SUGGESTIONS}${document[fields.TYPE]}`,
-    };
+    const { initialState } = { ...props };
+    const {
+        document,
+        clearDocument,
+        updateDocument,
+        updateDocumentCopy,
+        saveButtonDisabled,
+        updateDocumentField,
+        updateInitialDocument,
+        updateSaveButtonStatus,
+        updateDocumentFromService,
+    } = useForm(initialState, outputDocumentState);
+
+    const { createRow, removeRows, updateRowTotalPrice } = useDetail();
+    const { state: selection, updateState: updateSelection } = useFormState([], []);
 
     //actions
     useSumarizeField(document, updateDocument, fields);
     const { notification, showNotification } = useNotification();
-    const { search, showSearch, hideSearch, selectOption } = useSearch(updateDocument, updateCopy);
+    const { search, showSearch, hideSearch, selectOption } = useSearch(
+        updateDocument,
+        updateDocumentCopy
+    );
 
     const {
         controlField: controlQuantityField,
@@ -71,85 +67,73 @@ export const withDispatch = (props) => {
     } = useControlField(document[fields.TOTAL_AMOUNT], showNotification, 0);
 
     const onNewDocument = () => {
-        const _initialState = { ...dispatchState };
-        _initialState[fields.TYPE] = document[fields.TYPE];
-        onNew(_initialState);
+        clearDocument();
         updateSelection([]);
         cleanControlAmountField();
         cleanControlQuantityField();
     };
 
     const onSave = () => {
-        const onSaveDocument = () => {
+        const onSaveDocument = async () => {
             const validation = saveValidations();
 
             if (validation) {
+                const body = dateToString(document);
                 if (isEmpty(document[fields.ID])) {
-                    usePost(`${endpoint.save}${document[fields.TYPE]}`, dateToString(document))
-                        .then((data) => {
-                            const _document = stringToDate(data);
-                            updateDocument(_document);
-                            updateCopy(_document);
-                            showNotification('success');
-                        })
-                        .catch((error) => {
-                            showNotification('error', error.message);
-                        });
+                    try {
+                        const response = await services.postDispatchDocument(body);
+                        updateDocumentFromService(response);
+                        showNotification('success');
+                    } catch (error) {
+                        showNotification('error', error.message);
+                    }
                 } else {
-                    usePut(
-                        `${endpoint.save}${document[fields.TYPE]}/id/${document[fields.ID]}`,
-                        dateToString(document)
-                    )
-                        .then((data) => {
-                            const _document = stringToDate(data);
-                            updateDocument(_document);
-                            updateCopy(_document);
-                            const message = `El registro fue actualizado con exito`;
-                            showNotification('success', message);
-                        })
-                        .catch((error) => {
-                            showNotification('error', error.message);
-                        });
+                    try {
+                        const response = await services.putDispatchDocument(body);
+                        updateDocumentFromService(response);
+                        const message = `El registro fue actualizado con exito`;
+                        showNotification('success', message);
+                    } catch (error) {
+                        showNotification('error', error.message);
+                    }
                 }
             }
         };
 
         return {
-            state: buttonState,
+            state: saveButtonDisabled,
             command: onSaveDocument,
         };
     };
 
     const onCancel = () => {
-        const onCancelDocument = () => {
+        const onCancelDocument = async () => {
             if (!isEmpty(document[fields.ID])) {
-                useGet(`${endpoint.suggestions}/id/${document[fields.ID]}`).then((data) => {
-                    const _document = stringToDate(data);
-                    updateDocument(_document);
-                    updateCopy(_document);
-                });
+                const response = await services.findDispatchDocumentById(
+                    document[fields.TYPE],
+                    document[fields.ID]
+                );
+                updateDocumentFromService(response);
             } else {
                 onNewDocument();
             }
         };
 
         return {
-            state: buttonState,
+            state: saveButtonDisabled,
             command: onCancelDocument,
         };
     };
 
     const onDelete = () => {
-        const onDeleteDocument = () => {
-            useDelete(`${endpoint.save}${document[fields.TYPE]}/id/${document[fields.ID]}`)
-                .then(() => {
-                    onNewDocument();
-                    const message = `El registro fue eliminado con exito`;
-                    showNotification('success', message);
-                })
-                .catch((error) => {
-                    showNotification('error', error.message);
-                });
+        const onDeleteDocument = async () => {
+            try {
+                await services.deleteDispatchDocument(document);
+                const message = `El registro fue eliminado con exito`;
+                showNotification('success', message);
+            } catch (error) {
+                showNotification('error', error.message);
+            }
         };
 
         return {
@@ -158,22 +142,16 @@ export const withDispatch = (props) => {
         };
     };
 
-    const onRelease = () => {
+    const onRelease = async () => {
         if (!isEmpty(document[fields.ID])) {
-            usePut(
-                `${endpoint.save}${document[fields.TYPE]}/id/${document[fields.ID]}/release`,
-                dateToString(document)
-            )
-                .then((data) => {
-                    const _document = stringToDate(data);
-                    updateDocument(_document);
-                    updateCopy(_document);
-                    const message = `El registro fue liberado con exito`;
-                    showNotification('success', message);
-                })
-                .catch((error) => {
-                    showNotification('error', error.message);
-                });
+            try {
+                const response = await services.releaseDispatchDocument(dateToString(document));
+                updateDocumentFromService(response);
+                const message = `El registro fue liberado con exito`;
+                showNotification('success', message);
+            } catch (error) {
+                showNotification('error', error.message);
+            }
         }
     };
 
@@ -188,68 +166,25 @@ export const withDispatch = (props) => {
     };
 
     const updateDetails = (detail) => {
-        const _detail = { ...detail };
-        const _document = { ...document };
-        const _details = [...document[fields.DETAILS]];
-        const index = _details.findIndex((element) => {
-            return element[fields.LINE_NUMBER] == _detail[fields.LINE_NUMBER];
-        });
-
-        const updatedDetails = addQuantity(_details, _detail);
-
-        if (index > -1 && updatedDetails != null) {
-            _details[index] = _detail;
-            _document[fields.DETAILS] = _details;
+        const result = updateRowTotalPrice([...document[fields.DETAILS]], { ...detail });
+        if (!isEmpty(result)) {
+            updateDocumentField(fields.DETAILS, result.details);
         } else {
-            if (updatedDetails) {
-                _document[fields.DETAILS] = updatedDetails;
-            } else {
-                _document = addDetail(_document, _details, _detail);
-            }
+            addDetail([...document[fields.DETAILS]], { ...detail });
         }
-        updateDocument(_document);
     };
 
-    const addDetail = (_document, _details, _detail) => {
-        _document[fields.COUNTER] = _document[fields.COUNTER] + 1;
-        const _initialState = { ...detailState };
-        _initialState[fields.ITEM] = _detail[fields.ITEM];
-        _initialState[fields.QUANTITY] = _detail[fields.QUANTITY];
-        _initialState[fields.UNIT_PRICE] = _detail[fields.UNIT_PRICE];
-        _initialState[fields.LINE_NUMBER] = _document[fields.COUNTER];
-        _initialState[fields.TOTAL_PRICE] = _detail[fields.TOTAL_PRICE];
-        _initialState[fields.DESCRIPTION] = _detail[fields.DESCRIPTION];
-        _details.unshift(_initialState);
-        _document[fields.DETAILS] = _details;
-        return _document;
+    const addDetail = (details, detail) => {
+        const nextCounter = document[fields.COUNTER] + 1;
+        const row = createRow(detail, nextCounter);
+        details.unshift(row);
+        updateDocumentField(fields.COUNTER, nextCounter);
+        updateDocumentField(fields.DETAILS, details);
     };
 
     const removeDetail = () => {
-        const _document = { ...document };
-        const _details = [...document[fields.DETAILS]];
-
-        const __details = _details.reduce((accumulator, element) => {
-            const removed = selection.find((value) => {
-                return value[fields.LINE_NUMBER] === element[fields.LINE_NUMBER];
-            });
-
-            if (removed == undefined) {
-                accumulator.unshift(element);
-            } else if (removed !== undefined && removed[fields.ID]) {
-                element[fields.DELETED] = true;
-
-                accumulator.unshift(element);
-            }
-
-            return accumulator;
-        }, []);
-
-        __details.sort((first, second) => {
-            return second[fields.LINE_NUMBER] - first[fields.LINE_NUMBER];
-        });
-
-        _document[fields.DETAILS] = __details;
-        updateDocument(_document);
+        const details = removeRows([...document[fields.DETAILS]], selection);
+        updateDocumentField(fields.DETAILS, details);
     };
 
     //validations
@@ -303,11 +238,13 @@ export const withDispatch = (props) => {
     };
 
     const searchProps = {
-        endpoint,
         selectOption,
         visible: search,
         onHide: hideSearch,
+        type: document[fields.TYPE],
         fields: documentSearchFields,
+        getDataByPage: services.findAllDispatchDocumentByPage,
+        getDataAsPage: services.findAllDispatchDocumentAsPage,
     };
 
     const barcodeProps = {
@@ -320,14 +257,11 @@ export const withDispatch = (props) => {
 
     //hooks
     useEffect(() => {
-        endpoint.suggestions = `${endpoint.suggestions}${document[fields.TYPE]}`;
-        if (isEmpty(initialState) || initialState[fields.TYPE] !== document[fields.TYPE]) {
-            onNewDocument();
-        }
+        updateInitialDocument(document[fields.TYPE]);
     }, [document[fields.TYPE]]);
 
     useEffect(() => {
-        updateSaveButton();
+        updateSaveButtonStatus();
     }, [document]);
 
     useEffect(() => {
