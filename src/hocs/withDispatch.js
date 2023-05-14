@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import services from '@services/api-services';
 //utils
-import { isEmpty, dateToString, stringToDate, addQuantity } from '@utils';
+import { isEmpty, dateToString } from '@utils';
 //constants
-import { outputDocumentState, dispatchFields, detailState } from '@constants';
+import { outputDocumentState, dispatchFields } from '@constants';
 import { toolbar, detailColumns, dispatchTypes, documentSearchFields } from '@constants/options';
 //components
 import { Toast } from 'primereact/toast';
@@ -16,13 +16,11 @@ import { Dashboard } from '@components/dashboard';
 import { DispatchForm } from '@components/dispatchform';
 import { InputBarcodeReader } from '@components/inputbarcodereader';
 //hooks
-import { useNew } from '@hooks/useNew';
-import { useCopy } from '@hooks/useCopy';
 import { useSearch } from '@hooks/useSearch';
-import { useFormState, useForm, useDetail } from '@hooks/useFormState';
 import { useNotification } from '@hooks/useNotification';
 import { useControlField } from '@hooks/useControlField';
 import { useSumarizeField } from '@hooks/useSumarizeField';
+import { useFormState, useForm, useDetail } from '@hooks/useFormState';
 
 export const withDispatch = (props) => {
     const [released, setReleased] = useState(false);
@@ -39,6 +37,8 @@ export const withDispatch = (props) => {
         updateInitialDocument,
         updateSaveButtonStatus,
         updateDocumentFromService,
+        deleteButtonStatusDisabled,
+        releaseButtonStatusDisabled,
     } = useForm(initialState, outputDocumentState);
 
     const { createRow, removeRows, updateRowTotalPrice } = useDetail();
@@ -129,6 +129,7 @@ export const withDispatch = (props) => {
         const onDeleteDocument = async () => {
             try {
                 await services.deleteDispatchDocument(document);
+                onNewDocument();
                 const message = `El registro fue eliminado con exito`;
                 showNotification('success', message);
             } catch (error) {
@@ -137,7 +138,7 @@ export const withDispatch = (props) => {
         };
 
         return {
-            state: isEmpty(document[fields.ID]) || document[fields.STATUS] == 'RELEASED',
+            state: deleteButtonStatusDisabled(),
             command: onDeleteDocument,
         };
     };
@@ -159,7 +160,7 @@ export const withDispatch = (props) => {
         const release = {
             label: 'Liberar',
             command: onRelease,
-            disabled: document[fields.STATUS] == 'RELEASED' || isEmpty(document[fields.ID]),
+            disabled: releaseButtonStatusDisabled(),
         };
 
         return [release];

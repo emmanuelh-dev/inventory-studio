@@ -75,6 +75,18 @@ export const useForm = (initialState, defaultInitialState) => {
         updateDocumentCopy(value);
     };
 
+    const releaseButtonStatusDisabled = () => {
+        return !saveButtonDisabled || releasedOrEmpty();
+    };
+
+    const deleteButtonStatusDisabled = () => {
+        return releasedOrEmpty();
+    };
+
+    const releasedOrEmpty = () => {
+        return isEmpty(document[fields.ID]) || document[fields.STATUS] == 'RELEASED';
+    };
+
     return {
         document,
         documentCopy,
@@ -86,6 +98,8 @@ export const useForm = (initialState, defaultInitialState) => {
         updateInitialDocument,
         updateSaveButtonStatus,
         updateDocumentFromService,
+        deleteButtonStatusDisabled,
+        releaseButtonStatusDisabled,
     };
 };
 
