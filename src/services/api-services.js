@@ -1,3 +1,4 @@
+import itemServices, { setItemSession } from './item-api-services';
 import outputServices, { setOutputDocumentSession } from './output-api-service';
 import warehouseServices, { setWarehouseSession } from './warehouse-api-services';
 import purchaseReturnServices, {
@@ -5,6 +6,7 @@ import purchaseReturnServices, {
 } from './purchase-return-api-service';
 
 export const setSession = (session) => {
+    setItemSession(session);
     setWarehouseSession(session);
     setOutputDocumentSession(session);
     setPurchaseReturnDocumentSession(session);
@@ -81,6 +83,7 @@ const services = {
     findDispatchDocumentById,
     findAllDispatchDocumentAsPage,
     findAllDispatchDocumentByPage,
+    findAllItemsAsOption: itemServices.findAllItemsAsOption,
     findAllWarehousesAsOption: warehouseServices.findAllWarehousesAsOption,
 };
 
