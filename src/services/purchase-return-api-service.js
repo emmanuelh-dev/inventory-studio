@@ -51,10 +51,10 @@ const putDispatchPurchaseReturnDocument = async (document) => {
     return response;
 };
 
-const releaseDispatchPurchaseReturnDocument = async (document) => {
+const releaseDispatchPurchaseReturnDocument = async (id) => {
     console.log('releaseDispatchPurchaseReturnDocument sesssion ====>', session);
     const endpoint = process.env.NEXT_PUBLIC_DISPATCHES_PURCHASE_RETURN_RELEASE;
-    const url = replaceParams(endpoint, { id: document.id });
+    const url = replaceParams(endpoint, { id });
     const response = await usePut(url, session, {});
 
     return response;
