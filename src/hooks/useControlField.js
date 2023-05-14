@@ -15,9 +15,9 @@ export const useControlField = (fieldValue, showNotification, initialValue) => {
         setcontrolField(event.target.value);
     };
 
-    const cleanControlField = () => {
+    const clearControlField = () => {
         setcontrolField(initialValue);
     };
 
-    return { controlField, updateControlField, validate, cleanControlField };
+    return { controlField, updateControlField, validate, clearControlField };
 };

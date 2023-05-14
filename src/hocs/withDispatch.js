@@ -55,22 +55,22 @@ export const withDispatch = (props) => {
     const {
         controlField: controlQuantityField,
         validate: validateControlQuantityField,
-        cleanControlField: cleanControlQuantityField,
+        clearControlField: clearControlQuantityField,
         updateControlField: updateControlQuantityField,
     } = useControlField(document[fields.TOTAL_QUANTITY], showNotification, 0);
 
     const {
         controlField: controlAmountField,
         validate: validateControlAmountField,
-        cleanControlField: cleanControlAmountField,
+        clearControlField: clearControlAmountField,
         updateControlField: updateControlAmountField,
     } = useControlField(document[fields.TOTAL_AMOUNT], showNotification, 0);
 
     const onNewDocument = () => {
         clearDocument();
         updateSelection([]);
-        cleanControlAmountField();
-        cleanControlQuantityField();
+        clearControlAmountField();
+        clearControlQuantityField();
     };
 
     const onSave = () => {
@@ -265,8 +265,8 @@ export const withDispatch = (props) => {
     }, [document]);
 
     useEffect(() => {
-        cleanControlAmountField();
-        cleanControlQuantityField();
+        clearControlAmountField();
+        clearControlQuantityField();
     }, [document[fields.ID]]);
 
     useEffect(() => {
