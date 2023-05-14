@@ -63,10 +63,10 @@ const releaseDispatchOutputDocument = async (id) => {
 
 const deleteDispatchOutputDocument = async (id) => {
     console.log('deleteDispatchOutputDocument sesssion ====>', session);
-    const endpoint = process.env.NEXT_PUBLIC_DISPATCHES_PURCHASE_RETURN_BY_ID;
+    const endpoint = process.env.NEXT_PUBLIC_DISPATCHES_OUTPUT_BY_ID;
     const url = replaceParams(endpoint, { id });
     const response = await useDelete(url, session);
-
+    console.log('response delete----->>>', response);
     return response;
 };
 
