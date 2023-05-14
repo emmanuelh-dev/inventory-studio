@@ -17,10 +17,11 @@ import { DispatchForm } from '@components/dispatchform';
 import { InputBarcodeReader } from '@components/inputbarcodereader';
 //hooks
 import { useSearch } from '@hooks/useSearch';
+import { useSelection } from '@hooks/useSelection';
+import { useForm, useDetail } from '@hooks/useFormState';
 import { useNotification } from '@hooks/useNotification';
 import { useControlField } from '@hooks/useControlField';
 import { useSumarizeField } from '@hooks/useSumarizeField';
-import { useFormState, useForm, useDetail } from '@hooks/useFormState';
 
 export const withDispatch = (props) => {
     const [released, setReleased] = useState(false);
@@ -42,7 +43,7 @@ export const withDispatch = (props) => {
     } = useForm(initialState, outputDocumentState);
 
     const { createRow, removeRows, updateRowTotalPrice } = useDetail();
-    const { state: selection, updateState: updateSelection } = useFormState([], []);
+    const { selection, clearSelection, updateSelection } = useSelection();
 
     //actions
     useSumarizeField(document, updateDocument, fields);
@@ -68,7 +69,7 @@ export const withDispatch = (props) => {
 
     const onNewDocument = () => {
         clearDocument();
-        updateSelection([]);
+        clearSelection();
         clearControlAmountField();
         clearControlQuantityField();
     };
