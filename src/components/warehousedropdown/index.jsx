@@ -1,20 +1,17 @@
 import { useState, useEffect } from 'react';
-//hooks
-import { useGet } from '@hooks/useGet';
-//components
 import { Dropdown } from 'primereact/dropdown';
-
+import services from '@services/api-services';
 export const WarehouseDropdown = (props) => {
     const [options, setOptions] = useState([]);
     const { state, field, updateField, trigger, disabled } = { ...props };
-    const endpoint = {
-        suggestions: process.env.NEXT_PUBLIC_WAREHOUSES_OPTIONS,
+
+    const fetchData = async () => {
+        const result = await services.findAllWarehousesAsOption();
+        setOptions(result);
     };
 
     useEffect(() => {
-        useGet(endpoint.suggestions).then((data) => {
-            setOptions(data);
-        });
+        fetchData();
     }, [trigger]);
 
     return (
