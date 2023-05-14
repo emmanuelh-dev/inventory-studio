@@ -87,9 +87,23 @@ export const receptionFields = {
     TOTAL_QUANTITY,
 };
 
-export const dispatchState = {
+export const outputDocumentState = {
     id: null,
     type: 'OUTPUT',
+    date: new Date(),
+    status: 'OPEN',
+    warehouse: {},
+    description: '',
+    totalQuantity: 0,
+    totalAmount: 0,
+    counter: 0,
+    deleted: false,
+    details: [],
+};
+
+export const purchaseReturnDocumentState = {
+    id: null,
+    type: 'PURCHASE_RETURN',
     date: new Date(),
     status: 'OPEN',
     warehouse: {},
