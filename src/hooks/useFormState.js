@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { isEmpty, getValue, stringToDate, findObjectByProp } from '@utils';
 import {
     detailState,
@@ -137,6 +137,20 @@ export const useDetail = () => {
         return sortRow(result);
     };
 
+    const updateRows = (details, detail) => {
+        const index = details.findIndex(
+            (element) => element[fields.LINE_NUMBER] == detail[fields.LINE_NUMBER]
+        );
+
+        if (index > -1) {
+            details[index] = detail;
+
+            return details;
+        }
+
+        return [];
+    };
+
     const sortRow = (details) => {
         details.sort((first, second) => {
             return second[fields.LINE_NUMBER] - first[fields.LINE_NUMBER];
@@ -145,24 +159,37 @@ export const useDetail = () => {
         return details;
     };
 
-    const updateRowTotalPrice = (details, detail) => {
-        const result = details.find((element, index) => {
-            if (element.item.id == detail.item.id) {
-                element.quantity = element.quantity + detail.quantity;
-                element.totalPrice = element.quantity * element.unitPrice;
-                return { index, detail: element };
-            }
-        });
+    return { createRow, removeRows, updateRows };
+};
 
-        if (result != undefined) {
-            details[result.index] = result.detail;
-            return { details };
-        }
+export const useRowData = () => {
+    const [rowData, setRowData] = useState(detailState);
 
-        return {};
+    const updateRowData = (value) => {
+        setRowData(value);
     };
 
-    return { createRow, removeRows, updateRowTotalPrice };
+    const updateRowDataField = (field, fieldValue) => {
+        const state = { ...rowData };
+        const value = getValue(fieldValue);
+        state[field] = value;
+        updateRowData(state);
+    };
+
+    const updateRowDataTotalPrice = () => {
+        const value = rowData[fields.QUANTITY] * rowData[fields.UNIT_PRICE];
+        updateRowDataField(fields.TOTAL_PRICE, { target: { value } });
+    };
+
+    const clearRowData = () => {
+        updateRowData(detailState);
+    };
+
+    useEffect(() => {
+        updateRowDataTotalPrice();
+    }, [rowData[fields.QUANTITY], rowData[fields.UNIT_PRICE]]);
+
+    return { rowData, clearRowData, updateRowData, updateRowDataField };
 };
 
 export const useStateStatus = (state, field) => {
