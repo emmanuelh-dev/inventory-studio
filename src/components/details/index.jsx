@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { isArrayEmpty } from '@utils';
 import { detailState } from '@constants';
 import { detailsToolbar } from '@constants/options';
-import { useFormState } from '@hooks/useFormState';
+import { useRowData } from '@hooks/useFormState';
 //components
 import { Panel } from 'primereact/panel';
 import { Button } from 'primereact/button';
@@ -16,11 +16,13 @@ import { DetailDialog } from '@components/detaildialog';
 
 export const Details = (props) => {
     const [visible, setVisible] = useState(false);
-    const {
-        state: detail,
-        updateState: updateDetail,
-        updateField: updateDetailField,
-    } = useFormState({}, { ...detailState });
+    // const {
+    //     state: detail,
+    //     updateState: updateDetail,
+    //     updateField: updateDetailField,
+    // } = useFormState({}, { ...detailState });
+
+    const { rowData, clearRowData, updateRowData, updateRowDataField } = useRowData();
 
     const {
         data,
@@ -40,8 +42,7 @@ export const Details = (props) => {
     };
 
     const addDetail = () => {
-        const _detail = { ...detail };
-        updateDetails(_detail);
+        updateDetails({ ...rowData });
         hideDialog();
     };
 
@@ -66,7 +67,7 @@ export const Details = (props) => {
 
     const actionTemplate = (rowData) => {
         const editDetail = () => {
-            updateDetail(rowData);
+            updateRowData(rowData);
             showDialog();
         };
 
@@ -84,18 +85,19 @@ export const Details = (props) => {
     const showDialog = () => {
         setVisible(true);
     };
+
     const hideDialog = () => {
-        updateDetail({ ...detailState });
+        clearRowData();
         setVisible(false);
     };
 
     const detailDialogProps = {
         fields,
         visible,
+        rowData,
         addDetail,
         hideDialog,
-        rowData: detail,
-        updateField: updateDetailField,
+        updateRowDataField,
     };
 
     return (
