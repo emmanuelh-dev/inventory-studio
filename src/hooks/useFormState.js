@@ -97,6 +97,7 @@ export const useForm = (initialState, defaultInitialState) => {
 
     return {
         document,
+        isReleased,
         documentCopy,
         clearDocument,
         updateDocument,
