@@ -28,7 +28,7 @@ export const Details = (props) => {
         data,
         fields,
         columns,
-        released,
+        editable,
         selection,
         removeDetail,
         updateDetails,
@@ -53,12 +53,12 @@ export const Details = (props) => {
     const toolbar = () => {
         const onRemoveDetail = {
             command: removeDetail,
-            state: isArrayEmpty(data) || released,
+            state: isArrayEmpty(data) || editable,
         };
 
         const onAddDetail = {
             command: showDialog,
-            state: released,
+            state: editable,
         };
 
         const detailToolbar = createDetailToolbar(onAddDetail, onRemoveDetail);
@@ -76,7 +76,7 @@ export const Details = (props) => {
                 icon="pi pi-pencil"
                 onClick={editDetail}
                 className="p-button-rounded p-button-success mr-2"
-                disabled={released}
+                disabled={editable}
             />
         );
     };
