@@ -24,12 +24,11 @@ import { useControlField } from '@hooks/useControlField';
 import { useSumarizeField } from '@hooks/useSumarizeField';
 
 export const withDispatch = (props) => {
-    const [released, setReleased] = useState(false);
-
     const fields = { ...dispatchFields };
     const { initialState } = { ...props };
     const {
         document,
+        isReleased,
         clearDocument,
         updateDocument,
         updateDocumentCopy,
@@ -37,6 +36,7 @@ export const withDispatch = (props) => {
         updateDocumentField,
         updateInitialDocument,
         updateSaveButtonStatus,
+        addButtonStatusDisabled,
         updateDocumentFromService,
         deleteButtonStatusDisabled,
         releaseButtonStatusDisabled,
@@ -145,7 +145,7 @@ export const withDispatch = (props) => {
     };
 
     const onRelease = async () => {
-        if (!isEmpty(document[fields.ID])) {
+        if (releaseValidations()) {
             try {
                 const response = await services.releaseDispatchDocument(dateToString(document));
                 updateDocumentFromService(response);
@@ -154,6 +154,9 @@ export const withDispatch = (props) => {
             } catch (error) {
                 showNotification('error', error.message);
             }
+
+            clearControlAmountField();
+            clearControlQuantityField();
         }
     };
 
@@ -191,8 +194,6 @@ export const withDispatch = (props) => {
 
     //validations
     const saveValidations = () => {
-        const validateAmountField = validateControlAmountField('Control Monto Total');
-        const validateQuantityField = validateControlQuantityField('Control Cantidad Total');
         const validateWarehouseField = validateField(
             document[fields.WAREHOUSE],
             'Almacen',
@@ -204,11 +205,16 @@ export const withDispatch = (props) => {
             showNotification
         );
 
+        return validateWarehouseField && validateDescriptionField;
+    };
+
+    const releaseValidations = () => {
+        const validateSaveFields = saveValidations();
+        const validateIdField = !releaseButtonStatusDisabled();
+        const validateAmountField = validateControlAmountField('Control Monto Total');
+        const validateQuantityField = validateControlQuantityField('Control Cantidad Total');
         return (
-            validateAmountField &&
-            validateQuantityField &&
-            validateWarehouseField &&
-            validateDescriptionField
+            validateIdField && validateSaveFields && validateAmountField && validateQuantityField
         );
     };
 
@@ -216,11 +222,11 @@ export const withDispatch = (props) => {
     const dispatchProps = {
         fields,
         document,
-        released,
         showSearch,
         controlAmountField,
         updateDocumentField,
         controlQuantityField,
+        isReleased: isReleased(),
         updateControlAmountField,
         updateControlQuantityField,
         options: {
@@ -230,13 +236,13 @@ export const withDispatch = (props) => {
 
     const detailProps = {
         fields,
-        released,
         selection,
         removeDetail,
         updateDetails,
         updateSelection,
         columns: detailColumns,
         data: document[fields.DETAILS],
+        editable: addButtonStatusDisabled(),
     };
 
     const searchProps = {
@@ -270,10 +276,6 @@ export const withDispatch = (props) => {
         clearControlAmountField();
         clearControlQuantityField();
     }, [document[fields.ID]]);
-
-    useEffect(() => {
-        setReleased(document[fields.STATUS] == 'RELEASED');
-    }, [document[fields.STATUS]]);
 
     const documentToolbar = () => {
         const _documentToolbar = createDocumentToolbar(
