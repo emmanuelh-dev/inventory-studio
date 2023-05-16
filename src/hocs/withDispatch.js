@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import services from '@services/api-services';
 //utils
-import { isEmpty, dateToString } from '@utils';
+import { isEmpty, isArrayEmpty, dateToString } from '@utils';
 //constants
 import { outputDocumentState, dispatchFields } from '@constants';
 import { toolbar, detailColumns, dispatchTypes, documentSearchFields } from '@constants/options';
@@ -42,7 +42,7 @@ export const withDispatch = (props) => {
         releaseButtonStatusDisabled,
     } = useForm(initialState, outputDocumentState);
 
-    const { createRow, removeRows, updateRowTotalPrice } = useDetail();
+    const { createRow, removeRows, updateRows } = useDetail();
     const { selection, clearSelection, updateSelection } = useSelection();
 
     //actions
@@ -168,11 +168,11 @@ export const withDispatch = (props) => {
     };
 
     const updateDetails = (detail) => {
-        const result = updateRowTotalPrice([...document[fields.DETAILS]], { ...detail });
-        if (!isEmpty(result)) {
-            updateDocumentField(fields.DETAILS, result.details);
-        } else {
+        if (detail[fields.LINE_NUMBER] == 0) {
             addDetail([...document[fields.DETAILS]], { ...detail });
+        } else {
+            const rows = updateRows([...document[fields.DETAILS]], { ...detail });
+            !isArrayEmpty(rows) && updateDocumentField(fields.DETAILS, rows);
         }
     };
 
