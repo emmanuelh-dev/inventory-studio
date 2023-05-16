@@ -9,16 +9,11 @@ import { InputAmountEditor } from '@components/inputamounteditor';
 import { InputQuantityEditor } from '@components/inputquantityeditor';
 
 export const DetailDialog = (props) => {
-    const { visible, hideDialog, rowData, addDetail, fields, updateField } = { ...props };
+    const { fields, visible, rowData, addDetail, hideDialog, updateRowDataField } = { ...props };
 
     const footer = () => {
         return <Footer onYes={addDetail} onCancel={hideDialog} />;
     };
-
-    useEffect(() => {
-        const total = rowData[fields.QUANTITY] * rowData[fields.UNIT_PRICE];
-        updateField(fields.TOTAL_PRICE, { target: { value: total } });
-    }, [rowData[fields.QUANTITY], rowData[fields.UNIT_PRICE]]);
 
     return (
         <Dialog
@@ -31,14 +26,18 @@ export const DetailDialog = (props) => {
             <div className="p-fluid formgrid grid">
                 <div className="field col-12">
                     <label>Articulo</label>
-                    <ItemDropdown row={rowData} field={fields.ITEM} updateField={updateField} />
+                    <ItemDropdown
+                        row={rowData}
+                        field={fields.ITEM}
+                        updateField={updateRowDataField}
+                    />
                 </div>
                 <div className="field col-12">
                     <label>Descripcion</label>
                     <InputTextEditor
                         row={rowData}
                         field={fields.DESCRIPTION}
-                        updateField={updateField}
+                        updateField={updateRowDataField}
                     />
                 </div>
                 <div className="field col-12">
@@ -46,7 +45,7 @@ export const DetailDialog = (props) => {
                     <InputQuantityEditor
                         row={rowData}
                         field={fields.QUANTITY}
-                        updateField={updateField}
+                        updateField={updateRowDataField}
                         disable={false}
                     />
                 </div>
@@ -55,7 +54,7 @@ export const DetailDialog = (props) => {
                     <InputAmountEditor
                         row={rowData}
                         field={fields.UNIT_PRICE}
-                        updateField={updateField}
+                        updateField={updateRowDataField}
                         disable={false}
                     />
                 </div>
