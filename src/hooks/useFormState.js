@@ -75,6 +75,10 @@ export const useForm = (initialState, defaultInitialState) => {
         updateDocumentCopy(value);
     };
 
+    const addButtonStatusDisabled = () => {
+        return isReleased() || isEmpty(document[fields.WAREHOUSE]);
+    };
+
     const releaseButtonStatusDisabled = () => {
         return !saveButtonDisabled || releasedOrEmpty();
     };
@@ -84,7 +88,11 @@ export const useForm = (initialState, defaultInitialState) => {
     };
 
     const releasedOrEmpty = () => {
-        return isEmpty(document[fields.ID]) || document[fields.STATUS] == 'RELEASED';
+        return isEmpty(document[fields.ID]) || isReleased();
+    };
+
+    const isReleased = () => {
+        return document[fields.STATUS] == 'RELEASED';
     };
 
     return {
@@ -97,6 +105,7 @@ export const useForm = (initialState, defaultInitialState) => {
         updateDocumentField,
         updateInitialDocument,
         updateSaveButtonStatus,
+        addButtonStatusDisabled,
         updateDocumentFromService,
         deleteButtonStatusDisabled,
         releaseButtonStatusDisabled,
