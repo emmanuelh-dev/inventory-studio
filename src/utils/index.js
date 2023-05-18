@@ -167,19 +167,14 @@ export const transformFilter = (filter) => {
     return elements;
 };
 
-export const addQuantity = (details, detail) => {
-    const element = details.find((element, index) => {
-        if (element.item.id == detail.item.id) {
-            element.quantity = element.quantity + detail.quantity;
-            element.totalPrice = element.quantity * element.unitPrice;
-            return { index, detail: element };
-        }
-    });
+export const isOutputDocument = (type) => {
+    return type === 'OUTPUT';
+};
 
-    if (element != null) {
-        details[element.index] = element.detail;
-        return details;
-    }
+export const isInputDocument = (type) => {
+    return type === 'INPUT';
+};
 
-    return null;
+export const isDispatchDocument = (type) => {
+    return type === 'OUTPUT' || type === 'PURCHASE_RETURN';
 };
