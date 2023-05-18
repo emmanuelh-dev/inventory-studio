@@ -10,7 +10,7 @@ import {
 export const valuation = [{ label: 'Promedio Ponderado', value: 'AVERAGE' }];
 export const receptionTypes = [
     { label: 'Ingreso', value: 'INPUT' },
-    { label: 'Devolucion por venta', value: 'SALE_RETURN' },
+    { label: 'Devolucion por venta', value: 'SALES_RETURN' },
 ];
 
 export const dispatchTypes = [
@@ -22,8 +22,8 @@ export const documentTypes = {
     INPUT: 'Ingreso',
     OUTPUT: 'Salida',
     SALE_RETURN: 'Devolucion por venta',
-    PURCHASE_RETURN: 'Devolucion por compra'
-}
+    PURCHASE_RETURN: 'Devolucion por compra',
+};
 
 export const toolbar = [
     {
