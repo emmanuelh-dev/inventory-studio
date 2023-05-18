@@ -16,11 +16,6 @@ import { DetailDialog } from '@components/detaildialog';
 
 export const Details = (props) => {
     const [visible, setVisible] = useState(false);
-    // const {
-    //     state: detail,
-    //     updateState: updateDetail,
-    //     updateField: updateDetailField,
-    // } = useFormState({}, { ...detailState });
 
     const { rowData, clearRowData, updateRowData, updateRowDataField } = useRowData();
 
@@ -29,6 +24,7 @@ export const Details = (props) => {
         fields,
         columns,
         editable,
+        warehouse,
         selection,
         removeDetail,
         updateDetails,
@@ -96,6 +92,7 @@ export const Details = (props) => {
         visible,
         rowData,
         addDetail,
+        warehouse,
         hideDialog,
         updateRowDataField,
     };

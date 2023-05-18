@@ -243,6 +243,7 @@ export const withDispatch = (props) => {
         columns: detailColumns,
         data: document[fields.DETAILS],
         editable: addButtonStatusDisabled(),
+        warehouse: document[fields.WAREHOUSE],
     };
 
     const searchProps = {
