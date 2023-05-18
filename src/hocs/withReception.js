@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
+import services from '@services/api-services';
 //utils
 import { isEmpty, dateToString, stringToDate } from '@utils';
 //constants
-import { receptionState, receptionFields, detailState } from '@constants';
+import { inputDocumentState, receptionFields } from '@constants';
 import { toolbar, detailColumns, receptionTypes, documentSearchFields } from '@constants/options';
 //components
 import { Toast } from 'primereact/toast';
@@ -16,41 +17,44 @@ import { Dashboard } from '@components/dashboard';
 import { BarcodeSheet } from '@components/barcodesheet';
 import { ReceptionForm } from '@components/receptionform';
 //hooks
-import { useNew } from '@hooks/useNew';
-import { useGet } from '@hooks/useGet';
-import { usePut } from '@hooks/usePut';
-import { usePost } from '@hooks/usePost';
-import { useCopy } from '@hooks/useCopy';
-import { useDelete } from '@hooks/useDelete';
 import { useSearch } from '@hooks/useSearch';
-import { useFormState } from '@hooks/useFormState';
+import { useSelection } from '@hooks/useSelection';
+import { useForm, useDetail } from '@hooks/useFormState';
 import { useNotification } from '@hooks/useNotification';
 import { useControlField } from '@hooks/useControlField';
 import { useSumarizeField } from '@hooks/useSumarizeField';
 
 export const withReception = (props) => {
+    const fields = { ...receptionFields };
     const [released, setReleased] = useState(false);
     const [showSheet, setShowSheet] = useState(false);
     const [customSheet, setCustomSheet] = useState([]);
     const [showViewer, setShowViewer] = useState(false);
 
-    let { initialState } = { ...props };
-
-    initialState =
-        initialState == undefined || initialState == null ? receptionState : initialState;
+    const { initialState } = { ...props };
     //states
     const {
-        state: document,
-        updateState: updateDocument,
-        updateField: updateDocumentField,
-    } = useFormState({ ...initialState }, { ...receptionState });
-    const { state: selection, updateState: updateSelection } = useFormState([], []);
+        document,
+        isReleased,
+        clearDocument,
+        updateDocument,
+        updateDocumentCopy,
+        saveButtonDisabled,
+        updateDocumentField,
+        updateInitialDocument,
+        updateSaveButtonStatus,
+        addButtonStatusDisabled,
+        updateDocumentFromService,
+        deleteButtonStatusDisabled,
+        releaseButtonStatusDisabled,
+    } = useForm(initialState, inputDocumentState);
+    const { createRow, removeRows, updateRows } = useDetail();
+    const { selection, clearSelection, updateSelection } = useSelection();
 
-    const { buttonState, updateCopy, updateSaveButton } = useCopy({ ...initialState }, document);
-    const { onNew } = useNew(updateDocument, updateCopy, { ...receptionState });
+    // const { buttonState, updateCopy, updateSaveButton } = useCopy({ ...initialState }, document);
+    // const { onNew } = useNew(updateDocument, updateCopy, { ...receptionState });
 
-    //constants
-    const fields = { ...receptionFields };
+    // //constants
     const endpoint = {
         save: process.env.NEXT_PUBLIC_RECEPTIONS_SAVE,
         barcode: process.env.NEXT_PUBLIC_REPORT_BARCODE,
@@ -61,127 +65,191 @@ export const withReception = (props) => {
     //actions
     useSumarizeField(document, updateDocument, fields);
     const { notification, showNotification } = useNotification();
-    const { search, showSearch, hideSearch, selectOption } = useSearch(updateDocument, updateCopy);
+    const { search, showSearch, hideSearch, selectOption } = useSearch(
+        updateDocument,
+        updateDocumentCopy
+    );
 
     const {
         controlField: controlQuantityField,
         validate: validateControlQuantityField,
-        cleanControlField: cleanControlQuantityField,
+        clearControlField: clearControlQuantityField,
         updateControlField: updateControlQuantityField,
     } = useControlField(document[fields.TOTAL_QUANTITY], showNotification, 0);
 
     const {
         controlField: controlAmountField,
         validate: validateControlAmountField,
-        cleanControlField: cleanControlAmountField,
+        clearControlField: clearControlAmountField,
         updateControlField: updateControlAmountField,
     } = useControlField(document[fields.TOTAL_AMOUNT], showNotification, 0);
 
     const onNewDocument = () => {
-        const _initialState = { ...receptionState };
-        _initialState[fields.TYPE] = document[fields.TYPE];
-        onNew(_initialState);
-        updateSelection([]);
-        cleanControlAmountField();
-        cleanControlQuantityField();
+        clearDocument();
+        clearSelection();
+        clearControlAmountField();
+        clearControlQuantityField();
     };
 
     const onSave = () => {
-        const onSaveDocument = () => {
+        // const onSaveDocument = () => {
+        //     const validation = saveValidations();
+
+        //     if (validation) {
+        //         if (isEmpty(document[fields.ID])) {
+        //             usePost(`${endpoint.save}${document[fields.TYPE]}`, dateToString(document))
+        //                 .then((data) => {
+        //                     const _document = stringToDate(data);
+        //                     updateDocument(_document);
+        //                     updateCopy(_document);
+        //                     showNotification('success');
+        //                 })
+        //                 .catch((error) => {
+        //                     showNotification('error', error.message);
+        //                 });
+        //         } else {
+        //             usePut(
+        //                 `${endpoint.save}${document[fields.TYPE]}/id/${document[fields.ID]}`,
+        //                 dateToString(document)
+        //             )
+        //                 .then((data) => {
+        //                     const _document = stringToDate(data);
+        //                     updateDocument(_document);
+        //                     updateCopy(_document);
+        //                     const message = `El registro fue actualizado con exito`;
+        //                     showNotification('success', message);
+        //                 })
+        //                 .catch((error) => {
+        //                     showNotification('error', error.message);
+        //                 });
+        //         }
+        //     }
+        // };
+
+        const onSaveDocument = async () => {
             const validation = saveValidations();
 
             if (validation) {
+                const body = dateToString(document);
                 if (isEmpty(document[fields.ID])) {
-                    usePost(`${endpoint.save}${document[fields.TYPE]}`, dateToString(document))
-                        .then((data) => {
-                            const _document = stringToDate(data);
-                            updateDocument(_document);
-                            updateCopy(_document);
-                            showNotification('success');
-                        })
-                        .catch((error) => {
-                            showNotification('error', error.message);
-                        });
+                    try {
+                        const response = await services.postReceptionDocument(body);
+                        updateDocumentFromService(response);
+                        showNotification('success');
+                    } catch (error) {
+                        showNotification('error', error.message);
+                    }
                 } else {
-                    usePut(
-                        `${endpoint.save}${document[fields.TYPE]}/id/${document[fields.ID]}`,
-                        dateToString(document)
-                    )
-                        .then((data) => {
-                            const _document = stringToDate(data);
-                            updateDocument(_document);
-                            updateCopy(_document);
-                            const message = `El registro fue actualizado con exito`;
-                            showNotification('success', message);
-                        })
-                        .catch((error) => {
-                            showNotification('error', error.message);
-                        });
+                    try {
+                        const response = await services.putReceptionDocument(body);
+                        updateDocumentFromService(response);
+                        const message = `El registro fue actualizado con exito`;
+                        showNotification('success', message);
+                    } catch (error) {
+                        showNotification('error', error.message);
+                    }
                 }
             }
         };
 
         return {
-            state: buttonState,
+            state: saveButtonDisabled,
             command: onSaveDocument,
         };
     };
 
     const onCancel = () => {
-        const onCancelDocument = () => {
+        // const onCancelDocument = () => {
+        //     if (!isEmpty(document[fields.ID])) {
+        //         useGet(`${endpoint.suggestions}/id/${document[fields.ID]}`).then((data) => {
+        //             const _document = stringToDate(data);
+        //             updateDocument(_document);
+        //             updateCopy(_document);
+        //         });
+        //     } else {
+        //         onNewDocument();
+        //     }
+        // };
+
+        const onCancelDocument = async () => {
             if (!isEmpty(document[fields.ID])) {
-                useGet(`${endpoint.suggestions}/id/${document[fields.ID]}`).then((data) => {
-                    const _document = stringToDate(data);
-                    updateDocument(_document);
-                    updateCopy(_document);
-                });
+                const response = await services.findReceptionDocumentById(
+                    document[fields.TYPE],
+                    document[fields.ID]
+                );
+                updateDocumentFromService(response);
             } else {
                 onNewDocument();
             }
         };
 
         return {
-            state: buttonState,
+            state: saveButtonDisabled,
             command: onCancelDocument,
         };
     };
 
     const onDelete = () => {
-        const onDeleteDocument = () => {
-            useDelete(`${endpoint.save}${document[fields.TYPE]}/id/${document[fields.ID]}`)
-                .then(() => {
-                    onNewDocument();
-                    const message = `El registro fue eliminado con exito`;
-                    showNotification('success', message);
-                })
-                .catch((error) => {
-                    showNotification('error', error.message);
-                });
+        // const onDeleteDocument = () => {
+        //     useDelete(`${endpoint.save}${document[fields.TYPE]}/id/${document[fields.ID]}`)
+        //         .then(() => {
+        //             onNewDocument();
+        //             const message = `El registro fue eliminado con exito`;
+        //             showNotification('success', message);
+        //         })
+        //         .catch((error) => {
+        //             showNotification('error', error.message);
+        //         });
+        // };
+
+        const onDeleteDocument = async () => {
+            try {
+                await services.deleteReceptionDocument(document);
+                onNewDocument();
+                const message = `El registro fue eliminado con exito`;
+                showNotification('success', message);
+            } catch (error) {
+                showNotification('error', error.message);
+            }
         };
 
         return {
-            state: isEmpty(document[fields.ID]) || document[fields.STATUS] == 'RELEASED',
+            state: deleteButtonStatusDisabled(),
             command: onDeleteDocument,
         };
     };
 
-    const onRelease = () => {
-        if (!isEmpty(document[fields.ID])) {
-            usePut(
-                `${endpoint.save}${document[fields.TYPE]}/id/${document[fields.ID]}/release`,
-                dateToString(document)
-            )
-                .then((data) => {
-                    const _document = stringToDate(data);
-                    updateDocument(_document);
-                    updateCopy(_document);
-                    const message = `El registro fue liberado con exito`;
-                    showNotification('success', message);
-                })
+    const onRelease = async () => {
+        // if (!isEmpty(document[fields.ID])) {
+        //     usePut(
+        //         `${endpoint.save}${document[fields.TYPE]}/id/${document[fields.ID]}/release`,
+        //         dateToString(document)
+        //     )
+        //         .then((data) => {
+        //             const _document = stringToDate(data);
+        //             updateDocument(_document);
+        //             updateCopy(_document);
+        //             const message = `El registro fue liberado con exito`;
+        //             showNotification('success', message);
+        //         })
 
-                .catch((error) => {
-                    showNotification('error', error.message);
-                });
+        //         .catch((error) => {
+        //             showNotification('error', error.message);
+        //         });
+        // }
+
+        if (releaseValidations()) {
+            try {
+                const response = await services.releaseReceptionDocument(dateToString(document));
+                updateDocumentFromService(response);
+                const message = `El registro fue liberado con exito`;
+                showNotification('success', message);
+            } catch (error) {
+                showNotification('error', error.message);
+            }
+
+            clearControlAmountField();
+            clearControlQuantityField();
         }
     };
 
@@ -201,7 +269,7 @@ export const withReception = (props) => {
         const release = {
             label: 'Liberar',
             command: onRelease,
-            disabled: document[fields.STATUS] == 'RELEASED' || isEmpty(document[fields.ID]),
+            disabled: releaseButtonStatusDisabled(),
         };
 
         const sheet = {
@@ -224,71 +292,103 @@ export const withReception = (props) => {
     };
 
     const updateDetails = (detail) => {
-        const _detail = { ...detail };
-        const _document = { ...document };
-        const _details = [...document[fields.DETAILS]];
+        // const _detail = { ...detail };
+        // const _document = { ...document };
+        // const _details = [...document[fields.DETAILS]];
 
-        if(!validateRepeatedItem(_detail, _details, fields, showNotification)){
+        // if (!validateRepeatedItem(_detail, _details, fields, showNotification)) {
+        //     const index = findDetail(_detail, _details, fields);
 
-            const index = findDetail(_detail, _details, fields);
-    
-            if (index > -1) {
-                _details[index] = _detail;
-                _document[fields.DETAILS] = _details;
-            } else {
-                _document = addDetail(_document, _details, _detail);
-            }
-            updateDocument(_document);
+        //     if (index > -1) {
+        //         _details[index] = _detail;
+        //         _document[fields.DETAILS] = _details;
+        //     } else {
+        //         _document = addDetail(_document, _details, _detail);
+        //     }
+        //     updateDocument(_document);
+        // }
+
+        if (detail[fields.LINE_NUMBER] == 0) {
+            addDetail([...document[fields.DETAILS]], { ...detail });
+        } else {
+            const rows = updateRows([...document[fields.DETAILS]], { ...detail });
+            !isArrayEmpty(rows) && updateDocumentField(fields.DETAILS, rows);
         }
-
     };
 
-    const addDetail = (_document, _details, _detail) => {
-        _document[fields.COUNTER] = _document[fields.COUNTER] + 1;
-        const _initialState = { ...detailState };
-        _initialState[fields.ITEM] = _detail[fields.ITEM];
-        _initialState[fields.QUANTITY] = _detail[fields.QUANTITY];
-        _initialState[fields.UNIT_PRICE] = _detail[fields.UNIT_PRICE];
-        _initialState[fields.LINE_NUMBER] = _document[fields.COUNTER];
-        _initialState[fields.TOTAL_PRICE] = _detail[fields.TOTAL_PRICE];
-        _initialState[fields.DESCRIPTION] = _detail[fields.DESCRIPTION];
-        _details.unshift(_initialState);
-        _document[fields.DETAILS] = _details;
-        return _document;
+    const addDetail = (details, detail) => {
+        // _document[fields.COUNTER] = _document[fields.COUNTER] + 1;
+        // const _initialState = { ...detailState };
+        // _initialState[fields.ITEM] = _detail[fields.ITEM];
+        // _initialState[fields.QUANTITY] = _detail[fields.QUANTITY];
+        // _initialState[fields.UNIT_PRICE] = _detail[fields.UNIT_PRICE];
+        // _initialState[fields.LINE_NUMBER] = _document[fields.COUNTER];
+        // _initialState[fields.TOTAL_PRICE] = _detail[fields.TOTAL_PRICE];
+        // _initialState[fields.DESCRIPTION] = _detail[fields.DESCRIPTION];
+        // _details.unshift(_initialState);
+        // _document[fields.DETAILS] = _details;
+        // return _document;
+
+        const nextCounter = document[fields.COUNTER] + 1;
+        const row = createRow(detail, nextCounter);
+        details.unshift(row);
+        updateDocumentField(fields.COUNTER, nextCounter);
+        updateDocumentField(fields.DETAILS, details);
     };
 
     const removeDetail = () => {
-        const _document = { ...document };
-        const _details = [...document[fields.DETAILS]];
+        // const _document = { ...document };
+        // const _details = [...document[fields.DETAILS]];
 
-        const __details = _details.reduce((accumulator, element) => {
-            const removed = selection.find((value) => {
-                return value[fields.LINE_NUMBER] === element[fields.LINE_NUMBER];
-            });
+        // const __details = _details.reduce((accumulator, element) => {
+        //     const removed = selection.find((value) => {
+        //         return value[fields.LINE_NUMBER] === element[fields.LINE_NUMBER];
+        //     });
 
-            if (removed == undefined) {
-                accumulator.unshift(element);
-            } else if (removed !== undefined && removed[fields.ID]) {
-                element[fields.DELETED] = true;
+        //     if (removed == undefined) {
+        //         accumulator.unshift(element);
+        //     } else if (removed !== undefined && removed[fields.ID]) {
+        //         element[fields.DELETED] = true;
 
-                accumulator.unshift(element);
-            }
+        //         accumulator.unshift(element);
+        //     }
 
-            return accumulator;
-        }, []);
+        //     return accumulator;
+        // }, []);
 
-        __details.sort((first, second) => {
-            return second[fields.LINE_NUMBER] - first[fields.LINE_NUMBER];
-        });
+        // __details.sort((first, second) => {
+        //     return second[fields.LINE_NUMBER] - first[fields.LINE_NUMBER];
+        // });
 
-        _document[fields.DETAILS] = __details;
-        updateDocument(_document);
+        // _document[fields.DETAILS] = __details;
+        // updateDocument(_document);
+
+        const details = removeRows([...document[fields.DETAILS]], selection);
+        updateDocumentField(fields.DETAILS, details);
     };
 
     //validations
     const saveValidations = () => {
-        const validateAmountField = validateControlAmountField('Control Monto Total');
-        const validateQuantityField = validateControlQuantityField('Control Cantidad Total');
+        // const validateAmountField = validateControlAmountField('Control Monto Total');
+        // const validateQuantityField = validateControlQuantityField('Control Cantidad Total');
+        // const validateWarehouseField = validateField(
+        //     document[fields.WAREHOUSE],
+        //     'Almacen',
+        //     showNotification
+        // );
+        // const validateDescriptionField = validateField(
+        //     document[fields.DESCRIPTION],
+        //     'Descripcion',
+        //     showNotification
+        // );
+
+        // return (
+        //     validateAmountField &&
+        //     validateQuantityField &&
+        //     validateWarehouseField &&
+        //     validateDescriptionField
+        // );
+
         const validateWarehouseField = validateField(
             document[fields.WAREHOUSE],
             'Almacen',
@@ -300,11 +400,16 @@ export const withReception = (props) => {
             showNotification
         );
 
+        return validateWarehouseField && validateDescriptionField;
+    };
+
+    const releaseValidations = () => {
+        const validateSaveFields = saveValidations();
+        const validateIdField = !releaseButtonStatusDisabled();
+        const validateAmountField = validateControlAmountField('Control Monto Total');
+        const validateQuantityField = validateControlQuantityField('Control Cantidad Total');
         return (
-            validateAmountField &&
-            validateQuantityField &&
-            validateWarehouseField &&
-            validateDescriptionField
+            validateIdField && validateSaveFields && validateAmountField && validateQuantityField
         );
     };
 
@@ -312,11 +417,11 @@ export const withReception = (props) => {
     const receptionProps = {
         fields,
         document,
-        released,
         showSearch,
         controlAmountField,
         updateDocumentField,
         controlQuantityField,
+        isReleased: isReleased(),
         updateControlAmountField,
         updateControlQuantityField,
         options: {
@@ -326,21 +431,25 @@ export const withReception = (props) => {
 
     const detailProps = {
         fields,
-        released,
         selection,
         removeDetail,
         updateDetails,
         updateSelection,
         columns: detailColumns,
+        type: document[fields.TYPE],
         data: document[fields.DETAILS],
+        editable: addButtonStatusDisabled(),
+        warehouse: document[fields.WAREHOUSE],
     };
 
     const searchProps = {
-        endpoint,
         selectOption,
         visible: search,
         onHide: hideSearch,
+        type: document[fields.TYPE],
         fields: documentSearchFields,
+        getDataByPage: services.findAllReceptionDocumentByPage,
+        getDataAsPage: services.findAllReceptionDocumentAsPage,
     };
 
     const barcodeSheetProps = {
@@ -365,19 +474,16 @@ export const withReception = (props) => {
 
     //hooks
     useEffect(() => {
-        endpoint.suggestions = `${endpoint.suggestions}${document[fields.TYPE]}`;
-        if (isEmpty(initialState) || initialState[fields.TYPE] !== document[fields.TYPE]) {
-            onNewDocument();
-        }
+        updateInitialDocument(document[fields.TYPE]);
     }, [document[fields.TYPE]]);
 
     useEffect(() => {
-        updateSaveButton();
+        updateSaveButtonStatus();
     }, [document]);
 
     useEffect(() => {
-        cleanControlAmountField();
-        cleanControlQuantityField();
+        clearControlAmountField();
+        clearControlQuantityField();
     }, [document[fields.ID]]);
 
     useEffect(() => {
@@ -434,23 +540,29 @@ const validateField = (value, fieldName, showNotification) => {
 };
 
 const validateRepeatedItem = (detail, details, fields, showNotification) => {
-    const validate = details.find((element) => 
-        element[fields.ITEM][fields.ID] == detail[fields.ITEM][fields.ID] 
-        && element[fields.LINE_NUMBER] !== detail[fields.LINE_NUMBER]);
-    
+    const validate = details.find(
+        (element) =>
+            element[fields.ITEM][fields.ID] == detail[fields.ITEM][fields.ID] &&
+            element[fields.LINE_NUMBER] !== detail[fields.LINE_NUMBER]
+    );
+
     validate = validate != undefined;
-    if(validate){
-        const message = `El articulo ${detail[fields.ITEM].itemName} ya se encuentra en este documento`;
+    if (validate) {
+        const message = `El articulo ${
+            detail[fields.ITEM].itemName
+        } ya se encuentra en este documento`;
         showNotification('error', message);
     }
     return validate;
-}
+};
 
-const findDetail = (detail, details, fields)=>{
+const findDetail = (detail, details, fields) => {
     const index = details.findIndex((element) => {
-        return element[fields.LINE_NUMBER] == detail[fields.LINE_NUMBER] && 
-        element[fields.ITEM][fields.ID] == detail[fields.ITEM][fields.ID];
+        return (
+            element[fields.LINE_NUMBER] == detail[fields.LINE_NUMBER] &&
+            element[fields.ITEM][fields.ID] == detail[fields.ITEM][fields.ID]
+        );
     });
 
     return index;
-}
+};
