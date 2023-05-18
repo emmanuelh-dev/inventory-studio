@@ -50,9 +50,6 @@ export const withReception = (props) => {
     const { createRow, removeRows, updateRows } = useDetail();
     const { selection, clearSelection, updateSelection } = useSelection();
 
-    // const { buttonState, updateCopy, updateSaveButton } = useCopy({ ...initialState }, document);
-    // const { onNew } = useNew(updateDocument, updateCopy, { ...receptionState });
-
     // //constants
     const endpoint = {
         save: process.env.NEXT_PUBLIC_RECEPTIONS_SAVE,
@@ -158,18 +155,6 @@ export const withReception = (props) => {
     };
 
     const onCancel = () => {
-        // const onCancelDocument = () => {
-        //     if (!isEmpty(document[fields.ID])) {
-        //         useGet(`${endpoint.suggestions}/id/${document[fields.ID]}`).then((data) => {
-        //             const _document = stringToDate(data);
-        //             updateDocument(_document);
-        //             updateCopy(_document);
-        //         });
-        //     } else {
-        //         onNewDocument();
-        //     }
-        // };
-
         const onCancelDocument = async () => {
             if (!isEmpty(document[fields.ID])) {
                 const response = await services.findReceptionDocumentById(
@@ -189,18 +174,6 @@ export const withReception = (props) => {
     };
 
     const onDelete = () => {
-        // const onDeleteDocument = () => {
-        //     useDelete(`${endpoint.save}${document[fields.TYPE]}/id/${document[fields.ID]}`)
-        //         .then(() => {
-        //             onNewDocument();
-        //             const message = `El registro fue eliminado con exito`;
-        //             showNotification('success', message);
-        //         })
-        //         .catch((error) => {
-        //             showNotification('error', error.message);
-        //         });
-        // };
-
         const onDeleteDocument = async () => {
             try {
                 await services.deleteReceptionDocument(document);
@@ -219,24 +192,6 @@ export const withReception = (props) => {
     };
 
     const onRelease = async () => {
-        // if (!isEmpty(document[fields.ID])) {
-        //     usePut(
-        //         `${endpoint.save}${document[fields.TYPE]}/id/${document[fields.ID]}/release`,
-        //         dateToString(document)
-        //     )
-        //         .then((data) => {
-        //             const _document = stringToDate(data);
-        //             updateDocument(_document);
-        //             updateCopy(_document);
-        //             const message = `El registro fue liberado con exito`;
-        //             showNotification('success', message);
-        //         })
-
-        //         .catch((error) => {
-        //             showNotification('error', error.message);
-        //         });
-        // }
-
         if (releaseValidations()) {
             try {
                 const response = await services.releaseReceptionDocument(dateToString(document));
@@ -291,22 +246,6 @@ export const withReception = (props) => {
     };
 
     const updateDetails = (detail) => {
-        // const _detail = { ...detail };
-        // const _document = { ...document };
-        // const _details = [...document[fields.DETAILS]];
-
-        // if (!validateRepeatedItem(_detail, _details, fields, showNotification)) {
-        //     const index = findDetail(_detail, _details, fields);
-
-        //     if (index > -1) {
-        //         _details[index] = _detail;
-        //         _document[fields.DETAILS] = _details;
-        //     } else {
-        //         _document = addDetail(_document, _details, _detail);
-        //     }
-        //     updateDocument(_document);
-        // }
-
         if (detail[fields.LINE_NUMBER] == 0) {
             addDetail([...document[fields.DETAILS]], { ...detail });
         } else {
@@ -316,18 +255,6 @@ export const withReception = (props) => {
     };
 
     const addDetail = (details, detail) => {
-        // _document[fields.COUNTER] = _document[fields.COUNTER] + 1;
-        // const _initialState = { ...detailState };
-        // _initialState[fields.ITEM] = _detail[fields.ITEM];
-        // _initialState[fields.QUANTITY] = _detail[fields.QUANTITY];
-        // _initialState[fields.UNIT_PRICE] = _detail[fields.UNIT_PRICE];
-        // _initialState[fields.LINE_NUMBER] = _document[fields.COUNTER];
-        // _initialState[fields.TOTAL_PRICE] = _detail[fields.TOTAL_PRICE];
-        // _initialState[fields.DESCRIPTION] = _detail[fields.DESCRIPTION];
-        // _details.unshift(_initialState);
-        // _document[fields.DETAILS] = _details;
-        // return _document;
-
         const nextCounter = document[fields.COUNTER] + 1;
         const row = createRow(detail, nextCounter);
         details.unshift(row);
@@ -549,15 +476,4 @@ const validateRepeatedItem = (detail, details, fields, showNotification) => {
         showNotification('error', message);
     }
     return validate;
-};
-
-const findDetail = (detail, details, fields) => {
-    const index = details.findIndex((element) => {
-        return (
-            element[fields.LINE_NUMBER] == detail[fields.LINE_NUMBER] &&
-            element[fields.ITEM][fields.ID] == detail[fields.ITEM][fields.ID]
-        );
-    });
-
-    return index;
 };
