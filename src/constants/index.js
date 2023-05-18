@@ -54,7 +54,7 @@ export const warehouseFields = {
     WAREHOUSE_NAME,
 };
 
-export const receptionState = {
+export const inputDocumentState = {
     id: null,
     type: 'INPUT',
     date: new Date(),
@@ -68,9 +68,9 @@ export const receptionState = {
     details: [],
 };
 
-export const inputDocumentState = {
+export const salesReturnDocumentState = {
     id: null,
-    type: 'INPUT',
+    type: 'SALES_RETURN',
     date: new Date(),
     status: 'OPEN',
     warehouse: {},
