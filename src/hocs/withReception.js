@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import services from '@services/api-services';
 //utils
-import { isEmpty, dateToString, stringToDate } from '@utils';
+import { isEmpty, isArrayEmpty, dateToString } from '@utils';
 //constants
 import { inputDocumentState, receptionFields } from '@constants';
 import { toolbar, detailColumns, receptionTypes, documentSearchFields } from '@constants/options';
@@ -26,7 +26,6 @@ import { useSumarizeField } from '@hooks/useSumarizeField';
 
 export const withReception = (props) => {
     const fields = { ...receptionFields };
-    const [released, setReleased] = useState(false);
     const [showSheet, setShowSheet] = useState(false);
     const [customSheet, setCustomSheet] = useState([]);
     const [showViewer, setShowViewer] = useState(false);
@@ -485,10 +484,6 @@ export const withReception = (props) => {
         clearControlAmountField();
         clearControlQuantityField();
     }, [document[fields.ID]]);
-
-    useEffect(() => {
-        setReleased(document[fields.STATUS] == 'RELEASED');
-    }, [document[fields.STATUS]]);
 
     const documentToolbar = () => {
         const _documentToolbar = createDocumentToolbar(
