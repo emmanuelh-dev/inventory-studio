@@ -66,7 +66,6 @@ const deleteDispatchOutputDocument = async (id) => {
     const endpoint = process.env.NEXT_PUBLIC_DISPATCHES_OUTPUT_BY_ID;
     const url = replaceParams(endpoint, { id });
     const response = await useDelete(url, session);
-    console.log('response delete----->>>', response);
     return response;
 };
 
