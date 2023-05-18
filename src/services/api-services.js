@@ -1,5 +1,6 @@
 import itemServices, { setItemSession } from './item-api-services';
 import inputServices, { setInputDocumentSession } from './input-api-service';
+import { isInputDocument, isOutputDocument, isDispatchDocument } from '@utils';
 import outputServices, { setOutputDocumentSession } from './output-api-service';
 import warehouseServices, { setWarehouseSession } from './warehouse-api-service';
 import purchaseReturnServices, {
@@ -15,73 +16,65 @@ export const setSession = (session) => {
 };
 
 const findDispatchDocumentById = async (type, id) => {
-    const response =
-        type === 'OUTPUT'
-            ? await outputServices.findDispatchOutputDocumentById(id)
-            : await purchaseReturnServices.findDispatchPurchaseReturnDocumentById(id);
+    const response = isOutputDocument(type)
+        ? await outputServices.findDispatchOutputDocumentById(id)
+        : await purchaseReturnServices.findDispatchPurchaseReturnDocumentById(id);
 
     return response;
 };
 
 const findAllDispatchDocumentByPage = async (type, page) => {
-    const response =
-        type === 'OUTPUT'
-            ? await outputServices.findAllDispatchOutputDocumentByPage(page)
-            : await purchaseReturnServices.findAllDispatchPurchaseReturnDocumentByPage(page);
+    const response = isOutputDocument(type)
+        ? await outputServices.findAllDispatchOutputDocumentByPage(page)
+        : await purchaseReturnServices.findAllDispatchPurchaseReturnDocumentByPage(page);
 
     return response;
 };
 
 const findAllDispatchDocumentAsPage = async (type) => {
-    const response =
-        type === 'OUTPUT'
-            ? await outputServices.findAllDispatchOutputDocumentAsPage()
-            : await purchaseReturnServices.findAllDispatchPurchaseReturnDocumentAsPage();
+    const response = isOutputDocument(type)
+        ? await outputServices.findAllDispatchOutputDocumentAsPage()
+        : await purchaseReturnServices.findAllDispatchPurchaseReturnDocumentAsPage();
 
     return response;
 };
 
 const postDispatchDocument = async (document) => {
-    const response =
-        document.type === 'OUTPUT'
-            ? await outputServices.postDispatchOutputDocument(document)
-            : await purchaseReturnServices.postDispatchPurchaseReturnDocument(document);
+    const response = isOutputDocument(document.type)
+        ? await outputServices.postDispatchOutputDocument(document)
+        : await purchaseReturnServices.postDispatchPurchaseReturnDocument(document);
 
     return response;
 };
 
 const putDispatchDocument = async (document) => {
-    const response =
-        document.type === 'OUTPUT'
-            ? await outputServices.putDispatchOutputDocument(document)
-            : await purchaseReturnServices.putDispatchPurchaseReturnDocument(document);
+    const response = isOutputDocument(document.type)
+        ? await outputServices.putDispatchOutputDocument(document)
+        : await purchaseReturnServices.putDispatchPurchaseReturnDocument(document);
 
     return response;
 };
 
 const releaseDispatchDocument = async (document) => {
-    const response =
-        document.type === 'OUTPUT'
-            ? await outputServices.releaseDispatchOutputDocument(document.id)
-            : await purchaseReturnServices.releaseDispatchPurchaseReturnDocument(document.id);
+    const response = isOutputDocument(document.type)
+        ? await outputServices.releaseDispatchOutputDocument(document.id)
+        : await purchaseReturnServices.releaseDispatchPurchaseReturnDocument(document.id);
 
     return response;
 };
 
 const deleteDispatchDocument = async (document) => {
-    const response =
-        document.type === 'OUTPUT'
-            ? await outputServices.deleteDispatchOutputDocument(document.id)
-            : await purchaseReturnServices.deleteDispatchPurchaseReturnDocument(document.id);
+    const response = isOutputDocument(document.type)
+        ? await outputServices.deleteDispatchOutputDocument(document.id)
+        : await purchaseReturnServices.deleteDispatchPurchaseReturnDocument(document.id);
 
     return response;
 };
 
 const findAllItemsAsOption = async (type, warehouse) => {
-    const response =
-        type === 'OUTPUT' || type === 'PURCHASE_RETURN'
-            ? await itemServices.findAllItemsAsOptionForDistpatchDocument(warehouse)
-            : await itemServices.findAllItemsAsOptionForReceptionDocument();
+    const response = isDispatchDocument(type)
+        ? await itemServices.findAllItemsAsOptionForDistpatchDocument(warehouse)
+        : await itemServices.findAllItemsAsOptionForReceptionDocument();
 
     return response;
 };
@@ -89,64 +82,57 @@ const findAllItemsAsOption = async (type, warehouse) => {
 //Reception
 
 const findReceptionDocumentById = async (type, id) => {
-    const response =
-        type === 'INPUT'
-            ? await inputServices.findReceptionInputDocumentById(id)
-            : await purchaseReturnServices.findDispatchPurchaseReturnDocumentById(id);
+    const response = isInputDocument(type)
+        ? await inputServices.findReceptionInputDocumentById(id)
+        : await purchaseReturnServices.findDispatchPurchaseReturnDocumentById(id);
 
     return response;
 };
 
 const findAllReceptionDocumentByPage = async (type, page) => {
-    const response =
-        type === 'INPUT'
-            ? await inputServices.findAllReceptionInputDocumentByPage(page)
-            : await purchaseReturnServices.findAllDispatchPurchaseReturnDocumentByPage(page);
+    const response = isInputDocument(type)
+        ? await inputServices.findAllReceptionInputDocumentByPage(page)
+        : await purchaseReturnServices.findAllDispatchPurchaseReturnDocumentByPage(page);
 
     return response;
 };
 
 const findAllReceptionDocumentAsPage = async (type) => {
-    const response =
-        type === 'INPUT'
-            ? await inputServices.findAllReceptionInputDocumentAsPage()
-            : await purchaseReturnServices.findAllDispatchPurchaseReturnDocumentAsPage();
+    const response = isInputDocument(type)
+        ? await inputServices.findAllReceptionInputDocumentAsPage()
+        : await purchaseReturnServices.findAllDispatchPurchaseReturnDocumentAsPage();
 
     return response;
 };
 
 const postReceptionDocument = async (document) => {
-    const response =
-        document.type === 'INPUT'
-            ? await inputServices.postReceptionInputDocument(document)
-            : await purchaseReturnServices.postDispatchPurchaseReturnDocument(document);
+    const response = isInputDocument(document.type)
+        ? await inputServices.postReceptionInputDocument(document)
+        : await purchaseReturnServices.postDispatchPurchaseReturnDocument(document);
 
     return response;
 };
 
 const putReceptionDocument = async (document) => {
-    const response =
-        document.type === 'INPUT'
-            ? await inputServices.putReceptionInputDocument(document)
-            : await purchaseReturnServices.putDispatchPurchaseReturnDocument(document);
+    const response = isInputDocument(document.type)
+        ? await inputServices.putReceptionInputDocument(document)
+        : await purchaseReturnServices.putDispatchPurchaseReturnDocument(document);
 
     return response;
 };
 
 const releaseReceptionDocument = async (document) => {
-    const response =
-        document.type === 'INPUT'
-            ? await inputServices.releaseReceptionInputDocument(document.id)
-            : await purchaseReturnServices.releaseDispatchPurchaseReturnDocument(document.id);
+    const response = isInputDocument(document.type)
+        ? await inputServices.releaseReceptionInputDocument(document.id)
+        : await purchaseReturnServices.releaseDispatchPurchaseReturnDocument(document.id);
 
     return response;
 };
 
 const deleteReceptionDocument = async (document) => {
-    const response =
-        document.type === 'INPUT'
-            ? await inputServices.deleteReceptionInputDocument(document.id)
-            : await purchaseReturnServices.deleteDispatchPurchaseReturnDocument(document.id);
+    const response = isInputDocument(document.type)
+        ? await inputServices.deleteReceptionInputDocument(document.id)
+        : await purchaseReturnServices.deleteDispatchPurchaseReturnDocument(document.id);
 
     return response;
 };
