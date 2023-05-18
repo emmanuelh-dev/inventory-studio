@@ -241,6 +241,7 @@ export const withDispatch = (props) => {
         updateDetails,
         updateSelection,
         columns: detailColumns,
+        type: document[fields.TYPE],
         data: document[fields.DETAILS],
         editable: addButtonStatusDisabled(),
         warehouse: document[fields.WAREHOUSE],

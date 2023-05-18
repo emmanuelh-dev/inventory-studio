@@ -21,6 +21,7 @@ export const Details = (props) => {
 
     const {
         data,
+        type,
         fields,
         columns,
         editable,
@@ -88,6 +89,7 @@ export const Details = (props) => {
     };
 
     const detailDialogProps = {
+        type,
         fields,
         visible,
         rowData,

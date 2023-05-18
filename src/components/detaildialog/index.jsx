@@ -9,9 +9,10 @@ import { InputAmountEditor } from '@components/inputamounteditor';
 import { InputQuantityEditor } from '@components/inputquantityeditor';
 
 export const DetailDialog = (props) => {
-    const { fields, visible, rowData, addDetail, warehouse, hideDialog, updateRowDataField } = {
-        ...props,
-    };
+    const { type, fields, visible, rowData, addDetail, warehouse, hideDialog, updateRowDataField } =
+        {
+            ...props,
+        };
 
     const footer = () => {
         return <Footer onYes={addDetail} onCancel={hideDialog} />;
@@ -29,6 +30,7 @@ export const DetailDialog = (props) => {
                 <div className="field col-12">
                     <label>Articulo</label>
                     <ItemDropdown
+                        type={type}
                         row={rowData}
                         field={fields.ITEM}
                         warehouse={warehouse[fields.ID]}

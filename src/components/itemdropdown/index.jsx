@@ -5,10 +5,10 @@ import { Dropdown } from 'primereact/dropdown';
 
 export const ItemDropdown = (props) => {
     const [options, setOptions] = useState([]);
-    const { row, field, updateField, warehouse } = { ...props };
+    const { row, field, updateField, warehouse, type } = { ...props };
 
     const fetchData = async () => {
-        const result = await services.findAllItemsAsOption(warehouse);
+        const result = await services.findAllItemsAsOption(type, warehouse);
         setOptions(result);
     };
 
