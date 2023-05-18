@@ -68,6 +68,20 @@ export const receptionState = {
     details: [],
 };
 
+export const inputDocumentState = {
+    id: null,
+    type: 'INPUT',
+    date: new Date(),
+    status: 'OPEN',
+    warehouse: {},
+    description: '',
+    totalQuantity: 0,
+    totalAmount: 0,
+    counter: 0,
+    deleted: false,
+    details: [],
+};
+
 export const receptionFields = {
     ID,
     TYPE,
