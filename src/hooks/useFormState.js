@@ -1,13 +1,25 @@
 import { useState, useEffect } from 'react';
-import { isEmpty, getValue, stringToDate, findObjectByProp } from '@utils';
+import {
+    isEmpty,
+    getValue,
+    stringToDate,
+    isInputDocument,
+    isOutputDocument,
+    findObjectByProp,
+    isDispatchDocument,
+} from '@utils';
 import {
     detailState,
     dispatchFields,
+    receptionFields,
+    inputDocumentState,
     outputDocumentState,
+    salesReturnDocumentState,
     purchaseReturnDocumentState,
 } from '@constants';
 
-const fields = { ...dispatchFields };
+let fields = {};
+
 export const useFormState = (initialState, defaultInitialState) => {
     initialState = isEmpty(initialState) ? defaultInitialState : initialState;
     const [state, setState] = useState(initialState);
@@ -28,6 +40,7 @@ export const useFormState = (initialState, defaultInitialState) => {
 
 export const useForm = (initialState, defaultInitialState) => {
     initialState = isEmpty(initialState) ? defaultInitialState : initialState;
+    fields = isDispatchDocument(initialState) ? { ...dispatchFields } : { ...receptionFields };
     const [document, setDocument] = useState(initialState);
     const [documentCopy, setDocumentCopy] = useState(initialState);
     const [saveButtonDisabled, setSaveButtonDisabled] = useState(false);
@@ -69,10 +82,18 @@ export const useForm = (initialState, defaultInitialState) => {
 
     const updateInitialDocument = (type) => {
         if (type === initialDocument.type) return;
-        const value = type === 'OUTPUT' ? outputDocumentState : purchaseReturnDocumentState;
+        const value = getDocumentState(type);
         setInitialDocument(value);
         updateDocument(value);
         updateDocumentCopy(value);
+    };
+
+    const getDocumentState = (type) => {
+        if (isDispatchDocument(type)) {
+            return isOutputDocument(type) ? outputDocumentState : purchaseReturnDocumentState;
+        }
+
+        return isInputDocument(type) ? inputDocumentState : salesReturnDocumentState;
     };
 
     const addButtonStatusDisabled = () => {
