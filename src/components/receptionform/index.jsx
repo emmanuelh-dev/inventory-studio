@@ -14,8 +14,8 @@ export const ReceptionForm = (props) => {
         fields,
         options,
         document,
-        released,
         showSearch,
+        isReleased,
         controlAmountField,
         updateDocumentField,
         controlQuantityField,
@@ -46,7 +46,7 @@ export const ReceptionForm = (props) => {
                 <div className="field col-4">
                     <label>Estado</label>
                     <div className="flex justify-content-center flex-wrap">
-                        <Chip label={released ? 'Lberado' : 'Abierto'} className="mr-2 mb-2 " />
+                        <Chip label={isReleased ? 'Lberado' : 'Abierto'} className="mr-2 mb-2 " />
                     </div>
                 </div>
                 <div className="field col-4">
@@ -60,7 +60,7 @@ export const ReceptionForm = (props) => {
                         hourFormat="12"
                         showTime
                         showSeconds
-                        disabled={released}
+                        disabled={isReleased}
                     />
                 </div>
                 <div className="field col-4">
@@ -71,7 +71,7 @@ export const ReceptionForm = (props) => {
                         mode="currency"
                         currency="USD"
                         locale="en-US"
-                        disabled={released}
+                        disabled={isReleased}
                     />
                 </div>
                 <div className="field col-4">
@@ -79,7 +79,7 @@ export const ReceptionForm = (props) => {
                     <InputNumber
                         value={controlQuantityField}
                         onValueChange={updateControlQuantityField}
-                        disabled={released}
+                        disabled={isReleased}
                     />
                 </div>
                 <div className="field col-4">
@@ -89,7 +89,7 @@ export const ReceptionForm = (props) => {
                         field={fields.WAREHOUSE}
                         trigger={document[fields.STATUS]}
                         updateField={updateDocumentField}
-                        disabled={released}
+                        disabled={isReleased}
                     />
                 </div>
                 <div className="field col-4">
@@ -116,7 +116,7 @@ export const ReceptionForm = (props) => {
                         onChange={(event) => {
                             updateDocumentField(fields.DESCRIPTION, event);
                         }}
-                        disabled={released}
+                        disabled={isReleased}
                     />
                 </div>
             </div>
