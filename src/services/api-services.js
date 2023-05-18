@@ -75,15 +75,22 @@ const deleteDispatchDocument = async (document) => {
     return response;
 };
 
+const findAllItemsAsOption = async (type, warehouse) => {
+    const response =
+        type === 'OUTPUT' || type === 'PURCHASE_RETURN'
+            ? await itemServices.findAllItemsAsOptionForDistpatchDocument(warehouse)
+            : await itemServices.findAllItemsAsOptionForReceptionDocument();
+};
+
 const services = {
     putDispatchDocument,
     postDispatchDocument,
+    findAllItemsAsOption,
     deleteDispatchDocument,
     releaseDispatchDocument,
     findDispatchDocumentById,
     findAllDispatchDocumentAsPage,
     findAllDispatchDocumentByPage,
-    findAllItemsAsOption: itemServices.findAllItemsAsOption,
     findAllWarehousesAsOption: warehouseServices.findAllWarehousesAsOption,
 };
 
