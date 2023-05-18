@@ -16,7 +16,7 @@ const findAllItemsAsOptionForDistpatchDocument = async (id) => {
 const findAllItemsAsOptionForReceptionDocument = async () => {
     console.log('findAllItemsAsOptionForReceptionDocument sesssion ====>', session);
     const endpoint = process.env.NEXT_PUBLIC_ITEMS_OPTIONS;
-    const response = await useGet(url, session);
+    const response = await useGet(endpoint, session);
     return response;
 };
 
