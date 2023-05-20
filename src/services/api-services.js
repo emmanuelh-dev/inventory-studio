@@ -6,12 +6,14 @@ import warehouseServices, { setWarehouseSession } from './warehouse-api-service'
 import purchaseReturnServices, {
     setPurchaseReturnDocumentSession,
 } from './purchase-return-api-service';
+import salesReturnServices, { setSalesReturnDocumentSession } from './sales-return-api-service';
 
 export const setSession = (session) => {
     setItemSession(session);
     setWarehouseSession(session);
     setInputDocumentSession(session);
     setOutputDocumentSession(session);
+    setSalesReturnDocumentSession(session);
     setPurchaseReturnDocumentSession(session);
 };
 
@@ -84,7 +86,7 @@ const findAllItemsAsOption = async (type, warehouse) => {
 const findReceptionDocumentById = async (type, id) => {
     const response = isInputDocument(type)
         ? await inputServices.findReceptionInputDocumentById(id)
-        : await purchaseReturnServices.findDispatchPurchaseReturnDocumentById(id);
+        : await salesReturnServices.findReceptionSalesReturnDocumentById(id);
 
     return response;
 };
@@ -92,7 +94,7 @@ const findReceptionDocumentById = async (type, id) => {
 const findAllReceptionDocumentByPage = async (type, page) => {
     const response = isInputDocument(type)
         ? await inputServices.findAllReceptionInputDocumentByPage(page)
-        : await purchaseReturnServices.findAllDispatchPurchaseReturnDocumentByPage(page);
+        : await salesReturnServices.findAllReceptionSalesReturnDocumentByPage(page);
 
     return response;
 };
@@ -100,7 +102,7 @@ const findAllReceptionDocumentByPage = async (type, page) => {
 const findAllReceptionDocumentAsPage = async (type) => {
     const response = isInputDocument(type)
         ? await inputServices.findAllReceptionInputDocumentAsPage()
-        : await purchaseReturnServices.findAllDispatchPurchaseReturnDocumentAsPage();
+        : await salesReturnServices.findAllReceptionSalesReturnDocumentAsPage();
 
     return response;
 };
@@ -108,7 +110,7 @@ const findAllReceptionDocumentAsPage = async (type) => {
 const postReceptionDocument = async (document) => {
     const response = isInputDocument(document.type)
         ? await inputServices.postReceptionInputDocument(document)
-        : await purchaseReturnServices.postDispatchPurchaseReturnDocument(document);
+        : await salesReturnServices.postReceptionSalesReturnDocument(document);
 
     return response;
 };
@@ -116,7 +118,7 @@ const postReceptionDocument = async (document) => {
 const putReceptionDocument = async (document) => {
     const response = isInputDocument(document.type)
         ? await inputServices.putReceptionInputDocument(document)
-        : await purchaseReturnServices.putDispatchPurchaseReturnDocument(document);
+        : await salesReturnServices.putReceptionSalesReturnDocument(document);
 
     return response;
 };
@@ -124,7 +126,7 @@ const putReceptionDocument = async (document) => {
 const releaseReceptionDocument = async (document) => {
     const response = isInputDocument(document.type)
         ? await inputServices.releaseReceptionInputDocument(document.id)
-        : await purchaseReturnServices.releaseDispatchPurchaseReturnDocument(document.id);
+        : await salesReturnServices.releaseReceptionSalesReturnDocument(document.id);
 
     return response;
 };
@@ -132,7 +134,7 @@ const releaseReceptionDocument = async (document) => {
 const deleteReceptionDocument = async (document) => {
     const response = isInputDocument(document.type)
         ? await inputServices.deleteReceptionInputDocument(document.id)
-        : await purchaseReturnServices.deleteDispatchPurchaseReturnDocument(document.id);
+        : await salesReturnServices.deleteReceptionSalesReturnDocument(document.id);
 
     return response;
 };
