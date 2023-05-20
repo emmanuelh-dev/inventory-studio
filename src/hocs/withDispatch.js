@@ -2,8 +2,9 @@ import React, { useEffect, useState } from 'react';
 import services from '@services/api-services';
 //utils
 import { MESSAGES } from '@messages';
+import { validateNotEmptyField } from '@utils/validations';
+import { isEmpty, isArrayEmpty, dateToString } from '@utils';
 import { MESSAGE_TYPES, outputDocumentState, dispatchFields } from '@constants';
-import { isEmpty, isArrayEmpty, dateToString, validateNotEmptyField } from '@utils';
 import { toolbar, detailColumns, dispatchTypes, documentSearchFields } from '@constants/options';
 //components
 import { Toast } from 'primereact/toast';

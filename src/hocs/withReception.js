@@ -2,8 +2,9 @@ import React, { useEffect, useState } from 'react';
 import services from '@services/api-services';
 //utils
 import { MESSAGES } from '@messages';
+import { validateNotEmptyField } from '@utils/validations';
+import { isEmpty, isArrayEmpty, dateToString } from '@utils';
 import { MESSAGE_TYPES, inputDocumentState, receptionFields } from '@constants';
-import { isEmpty, isArrayEmpty, dateToString, validateNotEmptyField } from '@utils';
 import { toolbar, detailColumns, receptionTypes, documentSearchFields } from '@constants/options';
 //components
 import { Toast } from 'primereact/toast';
@@ -209,6 +210,7 @@ export const withReception = (props) => {
     };
 
     const updateDetails = (detail) => {
+        // TODO: adds validate repeated item
         if (detail[fields.LINE_NUMBER] == 0) {
             addDetail([...document[fields.DETAILS]], { ...detail });
         } else {
@@ -366,21 +368,4 @@ const createDocumentToolbar = (onNew, onSave, onCancel, onDelete, actions) => {
     documentToolbar[4].items = actions;
 
     return documentToolbar;
-};
-
-const validateRepeatedItem = (detail, details, fields, showNotification) => {
-    const validate = details.find(
-        (element) =>
-            element[fields.ITEM][fields.ID] == detail[fields.ITEM][fields.ID] &&
-            element[fields.LINE_NUMBER] !== detail[fields.LINE_NUMBER]
-    );
-
-    validate = validate != undefined;
-    if (validate) {
-        const message = `El articulo ${
-            detail[fields.ITEM].itemName
-        } ya se encuentra en este documento`;
-        showNotification(MESSAGE_TYPES.ERROR, message);
-    }
-    return validate;
 };
