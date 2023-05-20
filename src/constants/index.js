@@ -84,6 +84,12 @@ export const salesReturnDocumentState = {
     details: [],
 };
 
+export const validationFields = {
+    ID,
+    ITEM,
+    LINE_NUMBER,
+};
+
 export const receptionFields = {
     ID,
     TYPE,

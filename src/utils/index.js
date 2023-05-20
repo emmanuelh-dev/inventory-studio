@@ -1,4 +1,3 @@
-import { MESSAGE_TYPES } from '@constants';
 /**
  * @param {object} object
  * Validate if a object is empty
@@ -178,15 +177,4 @@ export const isInputDocument = (type) => {
 
 export const isDispatchDocument = (type) => {
     return type === 'OUTPUT' || type === 'PURCHASE_RETURN';
-};
-
-export const validateNotEmptyField = (value, fieldLabel, showNotification) => {
-    const isBlankOrEmpty = isEmpty(value) || !value;
-
-    if (isBlankOrEmpty) {
-        const message = `El campo ${fieldLabel} esta vacio`;
-        showNotification(MESSAGE_TYPES.ERROR, message);
-    }
-
-    return !isBlankOrEmpty;
 };
