@@ -1,3 +1,5 @@
+import { MESSAGES } from '@messages';
+
 const ID = 'id';
 const KEY = 'key';
 const TYPE = 'type';
@@ -166,4 +168,29 @@ export const itemSummaryFields = {
     UNIT_PRICE,
     TOTAL_PRICE,
     LAST_UPDATED,
+};
+
+const SUMMARY_TYPES = {
+    ERROR: 'Error',
+    SUCCESS: 'Exitoso',
+};
+
+const SEVERITY_TYPES = {
+    ERROR: 'error',
+    SUCCESS: 'success',
+};
+
+export const MESSAGE_TYPES = {
+    SUCCESS: {
+        life: 3000,
+        summary: SUMMARY_TYPES.SUCCESS,
+        severity: SEVERITY_TYPES.SUCCESS,
+        detail: MESSAGES.SUCCESS_RECORD_CREATED,
+    },
+    ERROR: {
+        life: 3000,
+        summary: SUMMARY_TYPES.ERROR,
+        severity: SEVERITY_TYPES.ERROR,
+        detail: MESSAGES.ERROR_RECORD_CREATED,
+    },
 };
