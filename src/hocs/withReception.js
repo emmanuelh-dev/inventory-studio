@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import services from '@services/api-services';
 //utils
-import { isEmpty, isArrayEmpty, dateToString } from '@utils';
-//constants
-import { inputDocumentState, receptionFields } from '@constants';
+import { MESSAGES } from '@messages';
+import { MESSAGE_TYPES, inputDocumentState, receptionFields } from '@constants';
+import { isEmpty, isArrayEmpty, dateToString, validateNotEmptyField } from '@utils';
 import { toolbar, detailColumns, receptionTypes, documentSearchFields } from '@constants/options';
 //components
 import { Toast } from 'primereact/toast';
@@ -88,40 +88,6 @@ export const withReception = (props) => {
     };
 
     const onSave = () => {
-        // const onSaveDocument = () => {
-        //     const validation = saveValidations();
-
-        //     if (validation) {
-        //         if (isEmpty(document[fields.ID])) {
-        //             usePost(`${endpoint.save}${document[fields.TYPE]}`, dateToString(document))
-        //                 .then((data) => {
-        //                     const _document = stringToDate(data);
-        //                     updateDocument(_document);
-        //                     updateCopy(_document);
-        //                     showNotification('success');
-        //                 })
-        //                 .catch((error) => {
-        //                     showNotification('error', error.message);
-        //                 });
-        //         } else {
-        //             usePut(
-        //                 `${endpoint.save}${document[fields.TYPE]}/id/${document[fields.ID]}`,
-        //                 dateToString(document)
-        //             )
-        //                 .then((data) => {
-        //                     const _document = stringToDate(data);
-        //                     updateDocument(_document);
-        //                     updateCopy(_document);
-        //                     const message = `El registro fue actualizado con exito`;
-        //                     showNotification('success', message);
-        //                 })
-        //                 .catch((error) => {
-        //                     showNotification('error', error.message);
-        //                 });
-        //         }
-        //     }
-        // };
-
         const onSaveDocument = async () => {
             const validation = saveValidations();
 
@@ -131,18 +97,17 @@ export const withReception = (props) => {
                     try {
                         const response = await services.postReceptionDocument(body);
                         updateDocumentFromService(response);
-                        showNotification('success');
+                        showNotification(MESSAGE_TYPES.SUCCESS);
                     } catch (error) {
-                        showNotification('error', error.message);
+                        showNotification(MESSAGE_TYPES.ERROR, error.message);
                     }
                 } else {
                     try {
                         const response = await services.putReceptionDocument(body);
                         updateDocumentFromService(response);
-                        const message = `El registro fue actualizado con exito`;
-                        showNotification('success', message);
+                        showNotification(MESSAGE_TYPES.SUCCESS, MESSAGES.SUCCESS_UPDATED);
                     } catch (error) {
-                        showNotification('error', error.message);
+                        showNotification(MESSAGE_TYPES.ERROR, error.message);
                     }
                 }
             }
@@ -178,10 +143,9 @@ export const withReception = (props) => {
             try {
                 await services.deleteReceptionDocument(document);
                 onNewDocument();
-                const message = `El registro fue eliminado con exito`;
-                showNotification('success', message);
+                showNotification(MESSAGE_TYPES.SUCCESS, MESSAGES.SUCESS_RECORD_DELETED);
             } catch (error) {
-                showNotification('error', error.message);
+                showNotification(MESSAGE_TYPES.ERROR, error.message);
             }
         };
 
@@ -196,10 +160,9 @@ export const withReception = (props) => {
             try {
                 const response = await services.releaseReceptionDocument(dateToString(document));
                 updateDocumentFromService(response);
-                const message = `El registro fue liberado con exito`;
-                showNotification('success', message);
+                showNotification(MESSAGE_TYPES.SUCCESS, MESSAGES.SUCESS_RECORD_RELEASED);
             } catch (error) {
-                showNotification('error', error.message);
+                showNotification(MESSAGE_TYPES.ERROR, error.message);
             }
 
             clearControlAmountField();
@@ -263,64 +226,18 @@ export const withReception = (props) => {
     };
 
     const removeDetail = () => {
-        // const _document = { ...document };
-        // const _details = [...document[fields.DETAILS]];
-
-        // const __details = _details.reduce((accumulator, element) => {
-        //     const removed = selection.find((value) => {
-        //         return value[fields.LINE_NUMBER] === element[fields.LINE_NUMBER];
-        //     });
-
-        //     if (removed == undefined) {
-        //         accumulator.unshift(element);
-        //     } else if (removed !== undefined && removed[fields.ID]) {
-        //         element[fields.DELETED] = true;
-
-        //         accumulator.unshift(element);
-        //     }
-
-        //     return accumulator;
-        // }, []);
-
-        // __details.sort((first, second) => {
-        //     return second[fields.LINE_NUMBER] - first[fields.LINE_NUMBER];
-        // });
-
-        // _document[fields.DETAILS] = __details;
-        // updateDocument(_document);
-
         const details = removeRows([...document[fields.DETAILS]], selection);
         updateDocumentField(fields.DETAILS, details);
     };
 
     //validations
     const saveValidations = () => {
-        // const validateAmountField = validateControlAmountField('Control Monto Total');
-        // const validateQuantityField = validateControlQuantityField('Control Cantidad Total');
-        // const validateWarehouseField = validateField(
-        //     document[fields.WAREHOUSE],
-        //     'Almacen',
-        //     showNotification
-        // );
-        // const validateDescriptionField = validateField(
-        //     document[fields.DESCRIPTION],
-        //     'Descripcion',
-        //     showNotification
-        // );
-
-        // return (
-        //     validateAmountField &&
-        //     validateQuantityField &&
-        //     validateWarehouseField &&
-        //     validateDescriptionField
-        // );
-
-        const validateWarehouseField = validateField(
+        const validateWarehouseField = validateNotEmptyField(
             document[fields.WAREHOUSE],
             'Almacen',
             showNotification
         );
-        const validateDescriptionField = validateField(
+        const validateDescriptionField = validateNotEmptyField(
             document[fields.DESCRIPTION],
             'Descripcion',
             showNotification
@@ -332,8 +249,8 @@ export const withReception = (props) => {
     const releaseValidations = () => {
         const validateSaveFields = saveValidations();
         const validateIdField = !releaseButtonStatusDisabled();
-        const validateAmountField = validateControlAmountField('Control Monto Total');
-        const validateQuantityField = validateControlQuantityField('Control Cantidad Total');
+        const validateAmountField = validateControlAmountField(MESSAGES.CONTROL_TOTAL_AMOUNT);
+        const validateQuantityField = validateControlQuantityField(MESSAGES.CONTROL_TOTAL_QUANTITY);
         return (
             validateIdField && validateSaveFields && validateAmountField && validateQuantityField
         );
@@ -451,16 +368,6 @@ const createDocumentToolbar = (onNew, onSave, onCancel, onDelete, actions) => {
     return documentToolbar;
 };
 
-const validateField = (value, fieldName, showNotification) => {
-    const validate = isEmpty(value) || !value;
-    if (validate) {
-        const message = `El campo ${fieldName} esta vacio`;
-        showNotification('error', message);
-    }
-
-    return !validate;
-};
-
 const validateRepeatedItem = (detail, details, fields, showNotification) => {
     const validate = details.find(
         (element) =>
@@ -473,7 +380,7 @@ const validateRepeatedItem = (detail, details, fields, showNotification) => {
         const message = `El articulo ${
             detail[fields.ITEM].itemName
         } ya se encuentra en este documento`;
-        showNotification('error', message);
+        showNotification(MESSAGE_TYPES.ERROR, message);
     }
     return validate;
 };
