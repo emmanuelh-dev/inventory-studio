@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import services from '@services/api-services';
 //utils
-import { isEmpty, isArrayEmpty, dateToString } from '@utils';
-//constants
-import { outputDocumentState, dispatchFields } from '@constants';
+import { MESSAGES } from '@messages';
+import { MESSAGE_TYPES, outputDocumentState, dispatchFields } from '@constants';
+import { isEmpty, isArrayEmpty, dateToString, validateNotEmptyField } from '@utils';
 import { toolbar, detailColumns, dispatchTypes, documentSearchFields } from '@constants/options';
 //components
 import { Toast } from 'primereact/toast';
@@ -84,18 +84,17 @@ export const withDispatch = (props) => {
                     try {
                         const response = await services.postDispatchDocument(body);
                         updateDocumentFromService(response);
-                        showNotification('success');
+                        showNotification(MESSAGE_TYPES.SUCCESS);
                     } catch (error) {
-                        showNotification('error', error.message);
+                        showNotification(MESSAGE_TYPES.ERROR, error.message);
                     }
                 } else {
                     try {
                         const response = await services.putDispatchDocument(body);
                         updateDocumentFromService(response);
-                        const message = `El registro fue actualizado con exito`;
-                        showNotification('success', message);
+                        showNotification(MESSAGE_TYPES.SUCCESS, MESSAGES.SUCCESS_UPDATED);
                     } catch (error) {
-                        showNotification('error', error.message);
+                        showNotification(MESSAGE_TYPES.ERROR, error.message);
                     }
                 }
             }
@@ -131,10 +130,9 @@ export const withDispatch = (props) => {
             try {
                 await services.deleteDispatchDocument(document);
                 onNewDocument();
-                const message = `El registro fue eliminado con exito`;
-                showNotification('success', message);
+                showNotification(MESSAGE_TYPES.SUCCESS, MESSAGES.SUCESS_RECORD_DELETED);
             } catch (error) {
-                showNotification('error', error.message);
+                showNotification(MESSAGE_TYPES.ERROR, error.message);
             }
         };
 
@@ -149,10 +147,9 @@ export const withDispatch = (props) => {
             try {
                 const response = await services.releaseDispatchDocument(dateToString(document));
                 updateDocumentFromService(response);
-                const message = `El registro fue liberado con exito`;
-                showNotification('success', message);
+                showNotification(MESSAGE_TYPES.SUCCESS, MESSAGES.SUCESS_RECORD_RELEASED);
             } catch (error) {
-                showNotification('error', error.message);
+                showNotification(MESSAGE_TYPES.ERROR, error.message);
             }
 
             clearControlAmountField();
@@ -194,12 +191,12 @@ export const withDispatch = (props) => {
 
     //validations
     const saveValidations = () => {
-        const validateWarehouseField = validateField(
+        const validateWarehouseField = validateNotEmptyField(
             document[fields.WAREHOUSE],
             'Almacen',
             showNotification
         );
-        const validateDescriptionField = validateField(
+        const validateDescriptionField = validateNotEmptyField(
             document[fields.DESCRIPTION],
             'Descripcion',
             showNotification
@@ -211,8 +208,8 @@ export const withDispatch = (props) => {
     const releaseValidations = () => {
         const validateSaveFields = saveValidations();
         const validateIdField = !releaseButtonStatusDisabled();
-        const validateAmountField = validateControlAmountField('Control Monto Total');
-        const validateQuantityField = validateControlQuantityField('Control Cantidad Total');
+        const validateAmountField = validateControlAmountField(MESSAGES.CONTROL_TOTAL_AMOUNT);
+        const validateQuantityField = validateControlQuantityField(MESSAGES.CONTROL_TOTAL_QUANTITY);
         return (
             validateIdField && validateSaveFields && validateAmountField && validateQuantityField
         );
@@ -315,14 +312,4 @@ const createDocumentToolbar = (onNew, onSave, onCancel, onDelete, actions) => {
     documentToolbar[4].items = actions;
 
     return documentToolbar;
-};
-
-const validateField = (value, fieldName, showNotification) => {
-    const validate = isEmpty(value) || !value;
-    if (validate) {
-        const message = `El campo ${fieldName} esta vacio`;
-        showNotification('error', message);
-    }
-
-    return !validate;
 };
