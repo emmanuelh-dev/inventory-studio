@@ -24,6 +24,12 @@ const VALUATION_TYPE = 'valuationType';
 const WAREHOUSE_NAME = 'warehouseName';
 const TOTAL_QUANTITY = 'totalQuantity';
 
+export const DOCUMENT_TYPES = {
+    INPUT: 'INPUT',
+    OUTPUT: 'OUTPUT',
+    SALES_RETURN: 'SALES_RETURN',
+    PURCHASE_RETURN: 'PURCHASE_RETURN',
+};
 export const itemState = {
     id: null,
     itemName: '',
