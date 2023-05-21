@@ -13,13 +13,13 @@ export const Search = (props) => {
     const [data, setData] = useState([]);
     const [first, setFirst] = useState(0);
     const [loading, setLoading] = useState(true);
-    const { type, visible, onHide, fields, selectOption, getDataAsPage, getDataByPage } = {
+    const { visible, onHide, fields, selectOption, getDataAsPage, getDataByPage } = {
         ...props,
     };
 
     const fetchDataAsPage = async () => {
         if (visible) {
-            const result = await getDataAsPage(type);
+            const result = await getDataAsPage();
             setFirst(0);
             setData(result);
             setLoading(false);
@@ -27,7 +27,7 @@ export const Search = (props) => {
     };
 
     const fetchDataByPage = async (event) => {
-        const result = await getDataByPage(type, event.page);
+        const result = await getDataByPage(event.page);
         setData(result);
         setFirst(event.first);
         setLoading(false);

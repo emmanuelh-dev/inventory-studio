@@ -216,6 +216,18 @@ export const withDispatch = (props) => {
         );
     };
 
+    const getDataByPage = async (page) => {
+        const response = await services.findAllDispatchDocumentByPage(document[fields.TYPE], page);
+
+        return response;
+    };
+
+    const getDataAsPage = async () => {
+        const response = await services.findAllDispatchDocumentAsPage(document[fields.TYPE]);
+
+        return response;
+    };
+
     //props
     const dispatchProps = {
         fields,
@@ -249,10 +261,9 @@ export const withDispatch = (props) => {
         selectOption,
         visible: search,
         onHide: hideSearch,
-        type: document[fields.TYPE],
         fields: documentSearchFields,
-        getDataByPage: services.findAllDispatchDocumentByPage,
-        getDataAsPage: services.findAllDispatchDocumentAsPage,
+        getDataByPage: getDataByPage,
+        getDataAsPage: getDataAsPage,
     };
 
     const barcodeProps = {

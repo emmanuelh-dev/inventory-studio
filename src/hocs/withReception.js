@@ -258,6 +258,18 @@ export const withReception = (props) => {
         );
     };
 
+    const getDataByPage = async (page) => {
+        const response = await services.findAllReceptionDocumentByPage(document[fields.TYPE], page);
+
+        return response;
+    };
+
+    const getDataAsPage = async () => {
+        const response = await services.findAllReceptionDocumentAsPage(document[fields.TYPE]);
+
+        return response;
+    };
+
     //props
     const receptionProps = {
         fields,
@@ -291,10 +303,9 @@ export const withReception = (props) => {
         selectOption,
         visible: search,
         onHide: hideSearch,
-        type: document[fields.TYPE],
         fields: documentSearchFields,
-        getDataByPage: services.findAllReceptionDocumentByPage,
-        getDataAsPage: services.findAllReceptionDocumentAsPage,
+        getDataByPage: getDataByPage,
+        getDataAsPage: getDataAsPage,
     };
 
     const barcodeSheetProps = {
