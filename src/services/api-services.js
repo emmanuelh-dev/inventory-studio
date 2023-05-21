@@ -107,6 +107,14 @@ const findAllReceptionDocumentAsPage = async (type) => {
     return response;
 };
 
+const findReceptionDocumentFilteredBy = async (type, filter) => {
+    const response = isInputDocument(type)
+        ? await inputServices.findReceptionInputDocumentFilteredBy(filter)
+        : await salesReturnServices.findReceptionSalesReturnDocumentById(filter);
+
+    return response;
+};
+
 const postReceptionDocument = async (document) => {
     const response = isInputDocument(document.type)
         ? await inputServices.postReceptionInputDocument(document)
@@ -155,6 +163,7 @@ const services = {
     findAllDispatchDocumentByPage,
     findAllReceptionDocumentAsPage,
     findAllReceptionDocumentByPage,
+    findReceptionDocumentFilteredBy,
     findAllWarehousesAsOption: warehouseServices.findAllWarehousesAsOption,
 };
 
