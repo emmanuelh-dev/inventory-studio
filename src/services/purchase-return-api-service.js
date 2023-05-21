@@ -26,6 +26,14 @@ const findDispatchPurchaseReturnDocumentById = async (id) => {
     return response;
 };
 
+const findDispatchPurchaseReturnDocumentByFilter = async (filter) => {
+    const endpoint = process.env.NEXT_PUBLIC_DISPATCHES_PURCHASE_RETURN_FILTER;
+    const url = replaceParams(endpoint, filter);
+    const response = await useGet(url);
+
+    return response;
+};
+
 const postDispatchPurchaseReturnDocument = async (document) => {
     const endpoint = process.env.NEXT_PUBLIC_DISPATCHES_PURCHASE_RETURN_POST;
     const response = await usePost(endpoint, document);
@@ -63,6 +71,7 @@ const purchaseReturnServices = {
     deleteDispatchPurchaseReturnDocument,
     releaseDispatchPurchaseReturnDocument,
     findDispatchPurchaseReturnDocumentById,
+    findDispatchPurchaseReturnDocumentByFilter,
     findAllDispatchPurchaseReturnDocumentAsPage,
     findAllDispatchPurchaseReturnDocumentByPage,
 };

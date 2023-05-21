@@ -33,7 +33,7 @@ const findAllDispatchDocumentAsPage = async (type) => {
 const findDispatchDocumentByFilter = async (type, filter) => {
     const response = isOutputDocument(type)
         ? await outputServices.findDispatchOutputDocumentByFilter(filter)
-        : await purchaseReturnServices.findDispatcPurchaseReturhDocumentByFilter(filter);
+        : await purchaseReturnServices.findDispatchPurchaseReturnDocumentByFilter(filter);
 
     return response;
 };
