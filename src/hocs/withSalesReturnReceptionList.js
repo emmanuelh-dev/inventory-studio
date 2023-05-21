@@ -1,17 +1,44 @@
+import { DOCUMENT_TYPES } from '@constants';
+import services from '@services/api-services';
 import { documentSearchFields, documentFilters } from '@constants/options';
 
 export const withSalesReturnReceptionList = (WrappedComponent) => (props) => {
-    const endpoint = {
-        redirect: 'reception/SALES_RETURN/id',
-        search: process.env.NEXT_PUBLIC_SR_RECEPTIONS_SEARCH,
-        suggestions: process.env.NEXT_PUBLIC_SR_RECEPTIONS_SUGGESTIONS,
+    // const endpoint = {
+    //     redirect: 'reception/SALES_RETURN/id',
+    //     search: process.env.NEXT_PUBLIC_SR_RECEPTIONS_SEARCH,
+    //     suggestions: process.env.NEXT_PUBLIC_SR_RECEPTIONS_SUGGESTIONS,
+    // };
+
+    const getDataAsPage = async () => {
+        const result = await services.findAllReceptionDocumentAsPage(DOCUMENT_TYPES.SALES_RETURN);
+        return result;
     };
 
-    return (
-        <WrappedComponent
-            endpoint={endpoint}
-            filters={documentFilters}
-            fields={documentSearchFields}
-        />
-    );
+    const getDataByPage = async (page) => {
+        const result = await services.findAllReceptionDocumentByPage(
+            DOCUMENT_TYPES.SALES_RETURN,
+            page
+        );
+        return result;
+    };
+
+    const getDataByFilter = async (filter) => {
+        const result = await services.findReceptionDocumentByFilter(
+            DOCUMENT_TYPES.SALES_RETURN,
+            filter
+        );
+        return result;
+    };
+
+    const listProps = {
+        filters: documentFilters,
+        type: DOCUMENT_TYPES.INPUT,
+        fields: documentSearchFields,
+        getDataAsPage: getDataAsPage,
+        getDataByPage: getDataByPage,
+        redirect: 'reception/SALES_RETURN/id/',
+        getDataByFilter: getDataByFilter,
+    };
+
+    return <WrappedComponent {...listProps} />;
 };
