@@ -3,12 +3,6 @@ import services from '@services/api-services';
 import { documentSearchFields, documentFilters } from '@constants/options';
 
 export const withSalesReturnReceptionList = (WrappedComponent) => (props) => {
-    // const endpoint = {
-    //     redirect: 'reception/SALES_RETURN/id',
-    //     search: process.env.NEXT_PUBLIC_SR_RECEPTIONS_SEARCH,
-    //     suggestions: process.env.NEXT_PUBLIC_SR_RECEPTIONS_SUGGESTIONS,
-    // };
-
     const getDataAsPage = async () => {
         const result = await services.findAllReceptionDocumentAsPage(DOCUMENT_TYPES.SALES_RETURN);
         return result;
