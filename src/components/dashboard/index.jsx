@@ -1,6 +1,5 @@
 import { useRouter } from 'next/router';
 import { useSession } from 'next-auth/react';
-import { setSession } from '@services/api-services';
 //custom components
 import { Navbar } from '@components/navbar';
 import { Userbar } from '@components/userbar';
@@ -22,18 +21,15 @@ export const Dashboard = ({ children }) => {
         return;
     }
 
-    if (status == 'authenticated') {
-        setSession(session);
-        return (
-            <div className="grid">
-                <div className="col-12">
-                    <Userbar />
-                </div>
-                <div className="col-2">
-                    <Navbar />
-                </div>
-                <div className="col-10">{children}</div>
+    return (
+        <div className="grid">
+            <div className="col-12">
+                <Userbar />
             </div>
-        );
-    }
+            <div className="col-2">
+                <Navbar />
+            </div>
+            <div className="col-10">{children}</div>
+        </div>
+    );
 };
