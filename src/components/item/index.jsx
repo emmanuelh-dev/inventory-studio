@@ -1,5 +1,7 @@
 import React from 'react';
 
+import services from '@services/api-services';
+
 //Prime Components
 import { Chip } from 'primereact/chip';
 import { Toast } from 'primereact/toast';
@@ -18,7 +20,6 @@ export const Item = (props) => {
         item,
         fields,
         options,
-        endpoint,
         usedIcon,
         usedLabel,
         showSearch,
@@ -33,6 +34,18 @@ export const Item = (props) => {
 
     const toolbar = () => {
         return <Menubar model={options.toolbar} />;
+    };
+
+    const getDataByPage = async (page) => {
+        const response = await services.findAllItemsByPage(page);
+
+        return response;
+    };
+
+    const getDataAsPage = async () => {
+        const response = await services.findAllItemsAsPage();
+
+        return response;
     };
 
     return (
@@ -91,7 +104,8 @@ export const Item = (props) => {
                 onHide={hideSearch}
                 fields={options.searchFields}
                 selectOption={selectOption}
-                endpoint={endpoint}
+                getDataAsPage={getDataAsPage}
+                getDataByPage={getDataByPage}
             />
         </Panel>
     );
