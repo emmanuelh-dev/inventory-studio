@@ -1,6 +1,6 @@
 import { DOCUMENT_TYPES } from '@constants';
-import { documentSearchFields, documentFilters } from '@constants/options';
 import services from '@services/api-services';
+import { documentSearchFields, documentFilters } from '@constants/options';
 export const withInputReceptionList = (WrappedComponent) => (props) => {
     const getDataAsPage = async () => {
         const result = await services.findAllReceptionDocumentAsPage(DOCUMENT_TYPES.INPUT);
