@@ -1,4 +1,4 @@
-import { isEmpty } from '@utils';
+import { isNullOrUndefinedOrEmptyString } from '@utils';
 import { MESSAGE_TYPES, validationFields } from '@constants';
 
 const fields = validationFields;
@@ -21,7 +21,7 @@ export const validateRepeatedItem = (detail, details, showNotification) => {
 };
 
 export const validateNotEmptyField = (value, fieldLabel, showNotification) => {
-    const isBlankOrEmpty = isEmpty(value) || !value;
+    const isBlankOrEmpty = isNullOrUndefinedOrEmptyString(value);
 
     if (isBlankOrEmpty) {
         const message = `El campo ${fieldLabel} esta vacio`;
