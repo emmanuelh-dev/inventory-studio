@@ -4,68 +4,56 @@ import { usePut } from '@hooks/usePut';
 import { usePost } from '@hooks/usePost';
 import { useDelete } from '@hooks/useDelete';
 
-let session = {};
-export const setOutputDocumentSession = (_session) => {
-    session = { ..._session };
-};
-
 const findAllDispatchOutputDocumentAsPage = async () => {
-    console.log('findAllDispatchOutputDocumentsAsPage sesssion ====>', session);
     const endpoint = process.env.NEXT_PUBLIC_DISPATCHES_OUTPUT_SUGGESTIONS_AS_PAGE;
-    const response = await useGet(endpoint, session);
+    const response = await useGet(endpoint);
 
     return response;
 };
 
 const findAllDispatchOutputDocumentByPage = async (page) => {
-    console.log('findAllDispatchOutputDocumentsByPage sesssion ====>', session);
     const endpoint = process.env.NEXT_PUBLIC_DISPATCHES_OUTPUT_SUGGESTIONS_BY_PAGE;
     const url = replaceParams(endpoint, { page });
-    const response = await useGet(url, session);
+    const response = await useGet(url);
 
     return response;
 };
 
 const findDispatchOutputDocumentById = async (id) => {
-    console.log('findDispatchOutputDocumentById sesssion ====>', session);
     const endpoint = process.env.NEXT_PUBLIC_DISPATCHES_OUTPUT_BY_ID;
     const url = replaceParams(endpoint, { id });
-    const response = await useGet(url, session);
+    const response = await useGet(url);
 
     return response;
 };
 
 const postDispatchOutputDocument = async (document) => {
-    console.log('postDispatchOutputDocument sesssion ====>', session);
     const endpoint = process.env.NEXT_PUBLIC_DISPATCHES_OUTPUT_POST;
-    const response = await usePost(endpoint, session, document);
+    const response = await usePost(endpoint, document);
 
     return response;
 };
 
 const putDispatchOutputDocument = async (document) => {
-    console.log('putDispatchOutputDocument sesssion ====>', session);
     const endpoint = process.env.NEXT_PUBLIC_DISPATCHES_OUTPUT_PUT;
     const url = replaceParams(endpoint, { id: document.id });
-    const response = await usePut(url, session, document);
+    const response = await usePut(url, document);
 
     return response;
 };
 
 const releaseDispatchOutputDocument = async (id) => {
-    console.log('releaseDispatchOutputDocument sesssion ====>', session);
     const endpoint = process.env.NEXT_PUBLIC_DISPATCHES_OUTPUT_RELEASE;
     const url = replaceParams(endpoint, { id });
-    const response = await usePut(url, session, {});
+    const response = await usePut(url, {});
 
     return response;
 };
 
 const deleteDispatchOutputDocument = async (id) => {
-    console.log('deleteDispatchOutputDocument sesssion ====>', session);
     const endpoint = process.env.NEXT_PUBLIC_DISPATCHES_OUTPUT_BY_ID;
     const url = replaceParams(endpoint, { id });
-    const response = await useDelete(url, session);
+    const response = await useDelete(url);
     return response;
 };
 

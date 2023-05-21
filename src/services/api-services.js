@@ -1,21 +1,10 @@
-import itemServices, { setItemSession } from './item-api-services';
-import inputServices, { setInputDocumentSession } from './input-api-service';
+import itemServices from './item-api-services';
+import inputServices from './input-api-service';
+import outputServices from './output-api-service';
+import warehouseServices from './warehouse-api-service';
+import salesReturnServices from './sales-return-api-service';
+import purchaseReturnServices from './purchase-return-api-service';
 import { isInputDocument, isOutputDocument, isDispatchDocument } from '@utils';
-import outputServices, { setOutputDocumentSession } from './output-api-service';
-import warehouseServices, { setWarehouseSession } from './warehouse-api-service';
-import purchaseReturnServices, {
-    setPurchaseReturnDocumentSession,
-} from './purchase-return-api-service';
-import salesReturnServices, { setSalesReturnDocumentSession } from './sales-return-api-service';
-
-export const setSession = (session) => {
-    setItemSession(session);
-    setWarehouseSession(session);
-    setInputDocumentSession(session);
-    setOutputDocumentSession(session);
-    setSalesReturnDocumentSession(session);
-    setPurchaseReturnDocumentSession(session);
-};
 
 const findDispatchDocumentById = async (type, id) => {
     const response = isOutputDocument(type)
@@ -164,6 +153,8 @@ const services = {
     findAllDispatchDocumentByPage,
     findAllReceptionDocumentAsPage,
     findAllReceptionDocumentByPage,
+    findAllItemsByPage: itemServices.findAllItemsByPage,
+    findAllItemsAsPage: itemServices.findAllItemsAsPage,
     findAllWarehousesAsOption: warehouseServices.findAllWarehousesAsOption,
 };
 
