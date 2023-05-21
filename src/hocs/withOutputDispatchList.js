@@ -14,7 +14,7 @@ export const withOutputDispatchList = (WrappedComponent) => (props) => {
     };
 
     const getDataByFilter = async (filter) => {
-        const result = await services.findReceptionDocumentByFilter(DOCUMENT_TYPES.INPUT, filter);
+        const result = await services.findDispatchDocumentByFilter(DOCUMENT_TYPES.OUTPUT, filter);
         return result;
     };
 
