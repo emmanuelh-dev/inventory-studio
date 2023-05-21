@@ -41,21 +41,11 @@ export const List = (props) => {
     };
 
     useEffect(() => {
-        // useGet(`${endpoint.suggestions}?page=0&size=10`).then((data) => {
-        //     setFirst(0);
-        //     setData(data);
-        //     setLoading(false);
-        // });
         fetchDataAsPage();
     }, []);
 
     const onPage = (event) => {
         if (event.first !== first) {
-            // useGet(`${endpoint.suggestions}?page=${event.page}&size=10`).then((data) => {
-            //     setData(data);
-            //     setFirst(event.first);
-            //     setLoading(false);
-            // });
             fetchDataByPage(event);
         }
     };
@@ -63,20 +53,8 @@ export const List = (props) => {
     const onFilter = (event) => {
         const filter = transformFilter(event.filters);
         if (!isEmpty(filter)) {
-            // const url = replaceParams(endpoint.search, filter);
-            // useGet(url).then((data) => {
-            //     setFirst(0);
-            //     setData(data);
-            //     setLoading(false);
-            // });
             fetchDataByFilter(filter);
         } else {
-            // useGet(`${endpoint.suggestions}?page=0&size=10`).then((data) => {
-            //     setFirst(0);
-            //     setData(data);
-            //     setLoading(false);
-            // });
-
             fetchDataAsPage();
         }
     };
