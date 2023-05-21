@@ -31,6 +31,14 @@ const findReceptionInputDocumentById = async (id) => {
     const endpoint = process.env.NEXT_PUBLIC_RECEPTIONS_INPUT_BY_ID;
     const url = replaceParams(endpoint, { id });
     const response = await useGet(url, session);
+    return response;
+};
+
+const findReceptionInputDocumentFilteredBy = async (filter) => {
+    console.log('findReceptionInputDocumentFilteredBy sesssion ====>', session);
+    const endpoint = process.env.NEXT_PUBLIC_RECEPTIONS_INPUT_FILTER;
+    const url = replaceParams(endpoint, filter);
+    const response = await useGet(url, session);
 
     return response;
 };
@@ -77,5 +85,6 @@ const inputServices = {
     findReceptionInputDocumentById,
     findAllReceptionInputDocumentByPage,
     findAllReceptionInputDocumentAsPage,
+    findReceptionInputDocumentFilteredBy,
 };
 export default inputServices;
