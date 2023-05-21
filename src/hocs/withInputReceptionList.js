@@ -19,7 +19,7 @@ export const withInputReceptionList = (WrappedComponent) => (props) => {
     };
 
     const getDataByFilter = async (filter) => {
-        const result = await services.findReceptionDocumentFilteredBy(DOCUMENT_TYPES.INPUT, filter);
+        const result = await services.findReceptionDocumentByFilter(DOCUMENT_TYPES.INPUT, filter);
         return result;
     };
 
