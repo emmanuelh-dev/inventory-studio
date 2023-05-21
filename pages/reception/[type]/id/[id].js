@@ -1,5 +1,7 @@
 import { useRouter } from 'next/router';
 import React, { useState, useEffect } from 'react';
+
+import { stringToDate } from '@utils';
 import services from '@services/api-services';
 import { withReception } from '@hocs/withReception';
 import { MessageDialog } from '@components/messagedialog';
@@ -25,8 +27,9 @@ export default () => {
     const fetchData = async () => {
         if (type && id) {
             try {
-                const result = await services.findReceptionDocumentById(type, id);
-                setDocument(result);
+                const response = await services.findReceptionDocumentById(type, id);
+                const data = stringToDate(response);
+                setDocument(data);
             } catch (error) {
                 setShowDialog(true);
             }

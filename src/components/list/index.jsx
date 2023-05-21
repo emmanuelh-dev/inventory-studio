@@ -1,9 +1,6 @@
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import { isEmpty, replaceParams, transformFilter } from '@utils';
-
-//hooks
-import { useGet } from '@hooks/useGet';
 //custom components
 import { Dashboard } from '@components/dashboard';
 
@@ -18,41 +15,69 @@ export const List = (props) => {
     const [loading, setLoading] = useState(true);
 
     const router = useRouter();
-    const { fields, endpoint, filters } = { ...props };
+    const { type, filters, fields, redirect, getDataByPage, getDataAsPage, getDataByFilter } = {
+        ...props,
+    };
+
+    const fetchDataAsPage = async () => {
+        const result = await getDataAsPage(type);
+        setFirst(0);
+        setData(result);
+        setLoading(false);
+    };
+
+    const fetchDataByPage = async (event) => {
+        const result = await getDataByPage(event.page);
+        setData(result);
+        setFirst(event.first);
+        setLoading(false);
+    };
+
+    const fetchDataByFilter = async (filter) => {
+        const result = await getDataByFilter(filter);
+        setFirst(0);
+        setData(result);
+        setLoading(false);
+    };
 
     useEffect(() => {
-        useGet(`${endpoint.suggestions}?page=0&size=10`).then((data) => {
-            setFirst(0);
-            setData(data);
-            setLoading(false);
-        });
+        // useGet(`${endpoint.suggestions}?page=0&size=10`).then((data) => {
+        //     setFirst(0);
+        //     setData(data);
+        //     setLoading(false);
+        // });
+        fetchDataAsPage();
     }, []);
 
     const onPage = (event) => {
         if (event.first !== first) {
-            useGet(`${endpoint.suggestions}?page=${event.page}&size=10`).then((data) => {
-                setData(data);
-                setFirst(event.first);
-                setLoading(false);
-            });
+            // useGet(`${endpoint.suggestions}?page=${event.page}&size=10`).then((data) => {
+            //     setData(data);
+            //     setFirst(event.first);
+            //     setLoading(false);
+            // });
+            fetchDataByPage(event);
         }
     };
 
     const onFilter = (event) => {
         const filter = transformFilter(event.filters);
         if (!isEmpty(filter)) {
-            const url = replaceParams(endpoint.search, filter);
-            useGet(url).then((data) => {
-                setFirst(0);
-                setData(data);
-                setLoading(false);
-            });
+            // const url = replaceParams(endpoint.search, filter);
+            // useGet(url).then((data) => {
+            //     setFirst(0);
+            //     setData(data);
+            //     setLoading(false);
+            // });
+            fetchDataByFilter(filter);
         } else {
-            useGet(`${endpoint.suggestions}?page=0&size=10`).then((data) => {
-                setFirst(0);
-                setData(data);
-                setLoading(false);
-            });
+            // useGet(`${endpoint.suggestions}?page=0&size=10`).then((data) => {
+            //     setFirst(0);
+            //     setData(data);
+            //     setLoading(false);
+            // });
+
+            fetchDataAsPage();
         }
     };
 
@@ -63,7 +88,7 @@ export const List = (props) => {
                     icon="pi pi-pencil"
                     className="p-button-rounded p-button-success mr-2"
                     onClick={() => {
-                        router.push(`${endpoint.redirect}/${row.id}`);
+                        router.push(`${redirect}${row.id}`);
                     }}
                 />
                 <Button
