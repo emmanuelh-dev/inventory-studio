@@ -1,5 +1,7 @@
 import { replaceParams } from '@utils';
 import { useGet } from '@hooks/useGet';
+import { usePut } from '@hooks/usePut';
+import { usePost } from '@hooks/usePost';
 
 const findAllItemsAsOptionForDistpatchDocument = async (id) => {
     const endpoint = process.env.NEXT_PUBLIC_WAREHOUSES_ITESM_BY_ID;
@@ -28,7 +30,33 @@ const findAllItemsByPage = async (page) => {
     return response;
 };
 
+const findItemById = async (id) => {
+    const endpoint = process.env.NEXT_PUBLIC_ITEMS_BY_ID;
+    const url = replaceParams(endpoint, { id });
+    const response = await useGet(url);
+
+    return response;
+};
+
+const postItem = async (item) => {
+    const endpoint = process.env.NEXT_PUBLIC_ITEMS_POST;
+    const response = await usePost(endpoint, item);
+
+    return response;
+};
+
+const putItem = async (item) => {
+    const endpoint = process.env.NEXT_PUBLIC_ITEMS_PUT;
+    const url = replaceParams(endpoint, { id: item.id });
+    const response = await usePut(url, item);
+
+    return response;
+};
+
 const itemServices = {
+    putItem,
+    postItem,
+    findItemById,
     findAllItemsAsPage,
     findAllItemsByPage,
     findAllItemsAsOptionForReceptionDocument,
