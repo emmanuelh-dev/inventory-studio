@@ -3,7 +3,7 @@ import services from '@services/api-services';
 //utils
 import { MESSAGES } from '@messages';
 import { validateNotEmptyField } from '@utils/validations';
-import { isEmpty, isArrayEmpty, dateToString } from '@utils';
+import { isObjectEmpty, isArrayEmpty, dateToString } from '@utils';
 import { MESSAGE_TYPES, inputDocumentState, receptionFields } from '@constants';
 import { toolbar, detailColumns, receptionTypes, documentSearchFields } from '@constants/options';
 //components
@@ -20,10 +20,10 @@ import { ReceptionForm } from '@components/receptionform';
 //hooks
 import { useSearch } from '@hooks/useSearch';
 import { useSelection } from '@hooks/useSelection';
-import { useForm, useDetail } from '@hooks/useFormState';
 import { useNotification } from '@hooks/useNotification';
 import { useControlField } from '@hooks/useControlField';
 import { useSumarizeField } from '@hooks/useSumarizeField';
+import { useDocumentForm, useDetail } from '@hooks/useFormState';
 
 export const withReception = (props) => {
     const fields = { ...receptionFields };
@@ -47,7 +47,7 @@ export const withReception = (props) => {
         updateDocumentFromService,
         deleteButtonStatusDisabled,
         releaseButtonStatusDisabled,
-    } = useForm(initialState, inputDocumentState);
+    } = useDocumentForm(initialState, inputDocumentState);
     const { createRow, removeRows, updateRows } = useDetail();
     const { selection, clearSelection, updateSelection } = useSelection();
 
@@ -94,7 +94,7 @@ export const withReception = (props) => {
 
             if (validation) {
                 const body = dateToString(document);
-                if (isEmpty(document[fields.ID])) {
+                if (isObjectEmpty(document[fields.ID])) {
                     try {
                         const response = await services.postReceptionDocument(body);
                         updateDocumentFromService(response);
@@ -106,7 +106,7 @@ export const withReception = (props) => {
                     try {
                         const response = await services.putReceptionDocument(body);
                         updateDocumentFromService(response);
-                        showNotification(MESSAGE_TYPES.SUCCESS, MESSAGES.SUCCESS_UPDATED);
+                        showNotification(MESSAGE_TYPES.SUCCESS, MESSAGES.SUCCESS_RECORD_UPDATED);
                     } catch (error) {
                         showNotification(MESSAGE_TYPES.ERROR, error.message);
                     }
@@ -122,7 +122,7 @@ export const withReception = (props) => {
 
     const onCancel = () => {
         const onCancelDocument = async () => {
-            if (!isEmpty(document[fields.ID])) {
+            if (!isObjectEmpty(document[fields.ID])) {
                 const response = await services.findReceptionDocumentById(
                     document[fields.TYPE],
                     document[fields.ID]

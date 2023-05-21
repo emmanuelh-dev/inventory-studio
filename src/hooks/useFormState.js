@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import {
-    isEmpty,
+    isObjectEmpty,
     getValue,
     stringToDate,
     isInputDocument,
@@ -21,7 +21,7 @@ import {
 let fields = {};
 
 export const useFormState = (initialState, defaultInitialState) => {
-    initialState = isEmpty(initialState) ? defaultInitialState : initialState;
+    initialState = isObjectEmpty(initialState) ? defaultInitialState : initialState;
     const [state, setState] = useState(initialState);
 
     const updateField = (field, event) => {
@@ -39,7 +39,58 @@ export const useFormState = (initialState, defaultInitialState) => {
 };
 
 export const useForm = (initialState, defaultInitialState) => {
-    initialState = isEmpty(initialState) ? defaultInitialState : initialState;
+    initialState = isObjectEmpty(initialState) ? defaultInitialState : initialState;
+    const [form, setForm] = useState(initialState);
+    const [formCopy, setFormCopy] = useState(initialState);
+    const [initialForm, setInitialForm] = useState(initialState);
+
+    const updateFormField = (field, fieldValue) => {
+        const value = getValue(fieldValue);
+        const state = { ...form };
+        state[field] = value;
+        updateForm(state);
+    };
+
+    const updateForm = (value) => {
+        setForm(value);
+    };
+
+    const updateFormCopy = (value) => {
+        setFormCopy(value);
+    };
+
+    const clearForm = () => {
+        updateForm(initialForm);
+        updateFormCopy(initialForm);
+    };
+
+    const updateSaveButtonStatus = () => {
+        const original = JSON.stringify(form);
+        const copy = JSON.stringify(formCopy);
+        const defaultState = JSON.stringify(initialForm);
+        const result = original === copy || original === defaultState;
+        return result;
+    };
+
+    const updateFormFromService = (response) => {
+        const data = stringToDate(response);
+        updateForm(data);
+        updateFormCopy(data);
+    };
+
+    return {
+        form,
+        clearForm,
+        updateForm,
+        updateFormCopy,
+        updateFormField,
+        updateFormFromService,
+        updateSaveButtonStatus,
+    };
+};
+
+export const useDocumentForm = (initialState, defaultInitialState) => {
+    initialState = isObjectEmpty(initialState) ? defaultInitialState : initialState;
     fields = isDispatchDocument(initialState) ? { ...dispatchFields } : { ...receptionFields };
     const [document, setDocument] = useState(initialState);
     const [documentCopy, setDocumentCopy] = useState(initialState);
@@ -97,7 +148,7 @@ export const useForm = (initialState, defaultInitialState) => {
     };
 
     const addButtonStatusDisabled = () => {
-        return isReleased() || isEmpty(document[fields.WAREHOUSE]);
+        return isReleased() || isObjectEmpty(document[fields.WAREHOUSE]);
     };
 
     const releaseButtonStatusDisabled = () => {
@@ -109,7 +160,7 @@ export const useForm = (initialState, defaultInitialState) => {
     };
 
     const releasedOrEmpty = () => {
-        return isEmpty(document[fields.ID]) || isReleased();
+        return isObjectEmpty(document[fields.ID]) || isReleased();
     };
 
     const isReleased = () => {
@@ -155,9 +206,9 @@ export const useDetail = () => {
                 element[fields.LINE_NUMBER]
             );
 
-            if (isEmpty(deletedRows)) {
+            if (isObjectEmpty(deletedRows)) {
                 accumulator.unshift(element);
-            } else if (!isEmpty(deletedRows) && deletedRows[fields.ID]) {
+            } else if (!isObjectEmpty(deletedRows) && deletedRows[fields.ID]) {
                 element[fields.DELETED] = true;
                 accumulator.unshift(element);
             }

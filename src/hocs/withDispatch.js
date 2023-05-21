@@ -3,7 +3,7 @@ import services from '@services/api-services';
 //utils
 import { MESSAGES } from '@messages';
 import { validateNotEmptyField } from '@utils/validations';
-import { isEmpty, isArrayEmpty, dateToString } from '@utils';
+import { isObjectEmpty, isArrayEmpty, dateToString } from '@utils';
 import { MESSAGE_TYPES, outputDocumentState, dispatchFields } from '@constants';
 import { toolbar, detailColumns, dispatchTypes, documentSearchFields } from '@constants/options';
 //components
@@ -19,10 +19,10 @@ import { InputBarcodeReader } from '@components/inputbarcodereader';
 //hooks
 import { useSearch } from '@hooks/useSearch';
 import { useSelection } from '@hooks/useSelection';
-import { useForm, useDetail } from '@hooks/useFormState';
 import { useNotification } from '@hooks/useNotification';
 import { useControlField } from '@hooks/useControlField';
 import { useSumarizeField } from '@hooks/useSumarizeField';
+import { useDocumentForm, useDetail } from '@hooks/useFormState';
 
 export const withDispatch = (props) => {
     const fields = { ...dispatchFields };
@@ -41,7 +41,7 @@ export const withDispatch = (props) => {
         updateDocumentFromService,
         deleteButtonStatusDisabled,
         releaseButtonStatusDisabled,
-    } = useForm(initialState, outputDocumentState);
+    } = useDocumentForm(initialState, outputDocumentState);
 
     const { createRow, removeRows, updateRows } = useDetail();
     const { selection, clearSelection, updateSelection } = useSelection();
@@ -81,7 +81,7 @@ export const withDispatch = (props) => {
 
             if (validation) {
                 const body = dateToString(document);
-                if (isEmpty(document[fields.ID])) {
+                if (isObjectEmpty(document[fields.ID])) {
                     try {
                         const response = await services.postDispatchDocument(body);
                         updateDocumentFromService(response);
@@ -109,7 +109,7 @@ export const withDispatch = (props) => {
 
     const onCancel = () => {
         const onCancelDocument = async () => {
-            if (!isEmpty(document[fields.ID])) {
+            if (!isObjectEmpty(document[fields.ID])) {
                 const response = await services.findDispatchDocumentById(
                     document[fields.TYPE],
                     document[fields.ID]
@@ -270,7 +270,7 @@ export const withDispatch = (props) => {
         showNotification,
         processBarcode: updateDetails,
         documentType: document[fields.TYPE],
-        disabled: isEmpty(document[fields.WAREHOUSE]),
+        disabled: isObjectEmpty(document[fields.WAREHOUSE]),
         warehouse: document[fields.WAREHOUSE][fields.ID],
     };
 
