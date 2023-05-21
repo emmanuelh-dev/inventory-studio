@@ -34,7 +34,7 @@ const findReceptionInputDocumentById = async (id) => {
     return response;
 };
 
-const findReceptionInputDocumentFilteredBy = async (filter) => {
+const findReceptionInputDocumentByFilter = async (filter) => {
     console.log('findReceptionInputDocumentFilteredBy sesssion ====>', session);
     const endpoint = process.env.NEXT_PUBLIC_RECEPTIONS_INPUT_FILTER;
     const url = replaceParams(endpoint, filter);
@@ -83,8 +83,8 @@ const inputServices = {
     deleteReceptionInputDocument,
     releaseReceptionInputDocument,
     findReceptionInputDocumentById,
+    findReceptionInputDocumentByFilter,
     findAllReceptionInputDocumentByPage,
     findAllReceptionInputDocumentAsPage,
-    findReceptionInputDocumentFilteredBy,
 };
 export default inputServices;

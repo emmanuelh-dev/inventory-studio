@@ -35,6 +35,15 @@ const findReceptionSalesReturnDocumentById = async (id) => {
     return response;
 };
 
+const findReceptionSalesReturnDocumentByFilter = async (filter) => {
+    console.log('findReceptionSalesReturnDocumentByFilter sesssion ====>', session);
+    const endpoint = process.env.NEXT_PUBLIC_RECEPTIONS_SALES_RETURN_FILTER;
+    const url = replaceParams(endpoint, filter);
+    const response = await useGet(url, session);
+
+    return response;
+};
+
 const postReceptionSalesReturnDocument = async (document) => {
     console.log('postReceptionSalesReturnDocument sesssion ====>', session);
     const endpoint = process.env.NEXT_PUBLIC_RECEPTIONS_SALES_RETURN_POST;
@@ -75,6 +84,7 @@ const salesReturnServices = {
     deleteReceptionSalesReturnDocument,
     releaseReceptionSalesReturnDocument,
     findReceptionSalesReturnDocumentById,
+    findReceptionSalesReturnDocumentByFilter,
     findAllReceptionSalesReturnDocumentByPage,
     findAllReceptionSalesReturnDocumentAsPage,
 };

@@ -107,10 +107,10 @@ const findAllReceptionDocumentAsPage = async (type) => {
     return response;
 };
 
-const findReceptionDocumentFilteredBy = async (type, filter) => {
+const findReceptionDocumentByFilter = async (type, filter) => {
     const response = isInputDocument(type)
-        ? await inputServices.findReceptionInputDocumentFilteredBy(filter)
-        : await salesReturnServices.findReceptionSalesReturnDocumentById(filter);
+        ? await inputServices.findReceptionInputDocumentByFilter(filter)
+        : await salesReturnServices.findReceptionSalesReturnDocumentByFilter(filter);
 
     return response;
 };
@@ -159,11 +159,11 @@ const services = {
     findDispatchDocumentById,
     releaseReceptionDocument,
     findReceptionDocumentById,
+    findReceptionDocumentByFilter,
     findAllDispatchDocumentAsPage,
     findAllDispatchDocumentByPage,
     findAllReceptionDocumentAsPage,
     findAllReceptionDocumentByPage,
-    findReceptionDocumentFilteredBy,
     findAllWarehousesAsOption: warehouseServices.findAllWarehousesAsOption,
 };
 
