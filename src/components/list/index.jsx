@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
-import { isEmpty, replaceParams, transformFilter } from '@utils';
+import { isObjectEmpty, replaceParams, transformFilter } from '@utils';
 //custom components
 import { Dashboard } from '@components/dashboard';
 
@@ -52,7 +52,7 @@ export const List = (props) => {
 
     const onFilter = (event) => {
         const filter = transformFilter(event.filters);
-        if (!isEmpty(filter)) {
+        if (!isObjectEmpty(filter)) {
             fetchDataByFilter(filter);
         } else {
             fetchDataAsPage();

@@ -4,7 +4,7 @@ import { usePut } from '@hooks/usePut';
 import { useGet } from '@hooks/useGet';
 import { usePost } from '@hooks/usePost';
 //utils
-import { isEmpty, buildUrl, dateToString, stringToDate } from '@utils';
+import { isObjectEmpty, buildUrl, dateToString, stringToDate } from '@utils';
 
 export const useNew = (updateState, updateCopy, initialState) => {
     const onNew = () => {
@@ -23,7 +23,7 @@ export const useSave = (field, endpoint, showNotification) => {
     };
 
     const onSave = (state, updateState, updateCopy) => {
-        if (isEmpty(state[field])) {
+        if (isObjectEmpty(state[field])) {
             usePost(buildUrl(endpoint.save, params), dateToString({ ...state })).then((data) => {
                 updateState(stringToDate(data));
                 updateCopy(stringToDate(data));

@@ -1,13 +1,13 @@
 /**
  * @param {object} object
- * Validate if a object is empty
+ * Validate if an object is empty
  */
-export const isEmpty = (object) => {
+export const isObjectEmpty = (object) => {
     return !object || object === undefined || Object.keys(object).length === 0;
 };
 /**
  * @param {object} object
- * Validate if a object is empty
+ * Validate if an Array is empty
  */
 export const isArrayEmpty = (array) => {
     return array == null || array === undefined || array.length === 0;
@@ -177,4 +177,8 @@ export const isInputDocument = (type) => {
 
 export const isDispatchDocument = (type) => {
     return type === 'OUTPUT' || type === 'PURCHASE_RETURN';
+};
+
+export const isNullOrUndefinedOrEmptyString = (value) => {
+    return value === null || value === undefined || value == '';
 };
