@@ -2,12 +2,6 @@ import { DOCUMENT_TYPES } from '@constants';
 import { documentSearchFields, documentFilters } from '@constants/options';
 import services from '@services/api-services';
 export const withInputReceptionList = (WrappedComponent) => (props) => {
-    // const endpoint = {
-    //     redirect: 'reception/INPUT/id/',
-    //     search: process.env.NEXT_PUBLIC_RECEPTIONS_SEARCH,
-    //     suggestions: process.env.NEXT_PUBLIC_IN_RECEPTIONS_SUGGESTIONS,
-    // };
-
     const getDataAsPage = async () => {
         const result = await services.findAllReceptionDocumentAsPage(DOCUMENT_TYPES.INPUT);
         return result;
