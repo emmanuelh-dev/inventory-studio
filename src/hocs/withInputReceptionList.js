@@ -19,7 +19,6 @@ export const withInputReceptionList = (WrappedComponent) => (props) => {
 
     const listProps = {
         filters: documentFilters,
-        type: DOCUMENT_TYPES.INPUT,
         fields: documentSearchFields,
         getDataAsPage: getDataAsPage,
         getDataByPage: getDataByPage,

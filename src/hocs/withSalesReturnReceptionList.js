@@ -26,7 +26,6 @@ export const withSalesReturnReceptionList = (WrappedComponent) => (props) => {
 
     const listProps = {
         filters: documentFilters,
-        type: DOCUMENT_TYPES.INPUT,
         fields: documentSearchFields,
         getDataAsPage: getDataAsPage,
         getDataByPage: getDataByPage,

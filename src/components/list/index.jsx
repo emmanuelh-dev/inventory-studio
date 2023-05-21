@@ -15,12 +15,12 @@ export const List = (props) => {
     const [loading, setLoading] = useState(true);
 
     const router = useRouter();
-    const { type, filters, fields, redirect, getDataByPage, getDataAsPage, getDataByFilter } = {
+    const { filters, fields, redirect, getDataByPage, getDataAsPage, getDataByFilter } = {
         ...props,
     };
 
     const fetchDataAsPage = async () => {
-        const result = await getDataAsPage(type);
+        const result = await getDataAsPage();
         setFirst(0);
         setData(result);
         setLoading(false);

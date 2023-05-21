@@ -26,12 +26,11 @@ export const withPurchaseReturnDispatchList = (WrappedComponent) => (props) => {
 
     const listProps = {
         filters: documentFilters,
-        type: DOCUMENT_TYPES.INPUT,
         fields: documentSearchFields,
         getDataAsPage: getDataAsPage,
         getDataByPage: getDataByPage,
-        redirect: 'dispatch/PURCHASE_RETURN/id/',
         getDataByFilter: getDataByFilter,
+        redirect: 'dispatch/PURCHASE_RETURN/id/',
     };
 
     return <WrappedComponent {...listProps} />;
