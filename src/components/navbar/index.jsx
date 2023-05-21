@@ -63,6 +63,23 @@ export const Navbar = (props) => {
                 },
             ],
         },
+        {
+            label: 'Configuracion',
+            items: [
+                {
+                    label: 'Articulos',
+                    command: () => {
+                        router.push('/item-list');
+                    },
+                },
+                {
+                    label: 'Almacenes',
+                    command: () => {
+                        router.push('/warehouses-list');
+                    },
+                },
+            ],
+        },
     ];
 
     return <Menu model={nav} className="navbar" />;
