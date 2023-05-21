@@ -27,6 +27,14 @@ const findDispatchOutputDocumentById = async (id) => {
     return response;
 };
 
+const findDispatchOutputDocumentByFilter = async (filter) => {
+    const endpoint = process.env.NEXT_PUBLIC_DISPATCHES_OUTPUT_FILTER;
+    const url = replaceParams(endpoint, filter);
+    const response = await useGet(url);
+
+    return response;
+};
+
 const postDispatchOutputDocument = async (document) => {
     const endpoint = process.env.NEXT_PUBLIC_DISPATCHES_OUTPUT_POST;
     const response = await usePost(endpoint, document);
@@ -63,6 +71,7 @@ const outputServices = {
     deleteDispatchOutputDocument,
     releaseDispatchOutputDocument,
     findDispatchOutputDocumentById,
+    findDispatchOutputDocumentByFilter,
     findAllDispatchOutputDocumentByPage,
     findAllDispatchOutputDocumentAsPage,
 };

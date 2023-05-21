@@ -30,6 +30,14 @@ const findAllDispatchDocumentAsPage = async (type) => {
     return response;
 };
 
+const findDispatchDocumentByFilter = async (type, filter) => {
+    const response = isOutputDocument(type)
+        ? await outputServices.findDispatchOutputDocumentByFilter(filter)
+        : await purchaseReturnServices.findDispatcPurchaseReturhDocumentByFilter(filter);
+
+    return response;
+};
+
 const postDispatchDocument = async (document) => {
     const response = isOutputDocument(document.type)
         ? await outputServices.postDispatchOutputDocument(document)
@@ -148,6 +156,7 @@ const services = {
     findDispatchDocumentById,
     releaseReceptionDocument,
     findReceptionDocumentById,
+    findDispatchDocumentByFilter,
     putItem: itemServices.putItem,
     findReceptionDocumentByFilter,
     findAllDispatchDocumentAsPage,
