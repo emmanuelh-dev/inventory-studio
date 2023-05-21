@@ -1,6 +1,8 @@
+import { getSession } from 'next-auth/react';
 import { buildFetchOptions, buildAuthOptions } from '@utils/request';
 
-export const usePost = async (url, session, body) => {
+export const usePost = async (url, body) => {
+    const session = await getSession();
     const options = buildFetchOptions('POST', session, body);
     const response = await fetch(url, options);
     if (!response.ok) {

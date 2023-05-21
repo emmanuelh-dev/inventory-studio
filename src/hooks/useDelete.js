@@ -1,5 +1,7 @@
+import { getSession } from 'next-auth/react';
 import { buildFetchOptions } from '@utils/request';
-export const useDelete = async (url, session) => {
+export const useDelete = async (url) => {
+    const session = await getSession();
     const options = buildFetchOptions('DELETE', session, {});
     const response = await fetch(url, options);
     if (!response.ok) {
@@ -9,7 +11,8 @@ export const useDelete = async (url, session) => {
     return response.status;
 };
 
-export const useAuthDelete = async (url, session) => {
+export const useAuthDelete = async (url) => {
+    const session = await getSession();
     const options = {
         method: 'DELETE',
         redirect: 'manual',
