@@ -165,6 +165,7 @@ const services = {
     findAllReceptionDocumentByPage,
     postItem: itemServices.postItem,
     findItemById: itemServices.findItemById,
+    findItemByFilter: itemServices.findItemByFilter,
     findAllItemsByPage: itemServices.findAllItemsByPage,
     findAllItemsAsPage: itemServices.findAllItemsAsPage,
     findAllWarehousesAsOption: warehouseServices.findAllWarehousesAsOption,

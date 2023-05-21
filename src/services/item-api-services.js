@@ -38,6 +38,14 @@ const findItemById = async (id) => {
     return response;
 };
 
+const findItemByFilter = async (filter) => {
+    const endpoint = process.env.NEXT_PUBLIC_ITEMS_FILTER;
+    const url = replaceParams(endpoint, filter);
+    const response = await useGet(url);
+
+    return response;
+};
+
 const postItem = async (item) => {
     const endpoint = process.env.NEXT_PUBLIC_ITEMS_POST;
     const response = await usePost(endpoint, item);
@@ -57,6 +65,7 @@ const itemServices = {
     putItem,
     postItem,
     findItemById,
+    findItemByFilter,
     findAllItemsAsPage,
     findAllItemsByPage,
     findAllItemsAsOptionForReceptionDocument,
