@@ -1,4 +1,5 @@
 import React from 'react';
+import services from '@services/api-services';
 
 //Prime Components
 import { Chip } from 'primereact/chip';
@@ -14,24 +15,35 @@ import { Dashboard } from '@components/dashboard';
 
 export const Warehouse = (props) => {
     const {
-        warehouse,
-        updateField,
         fields,
         options,
-        endpoint,
-        searchVisible,
-        showSearch,
-        hideSearch,
-        selectOption,
-        notification,
         usedIcon,
         usedLabel,
+        warehouse,
+        showSearch,
+        hideSearch,
+        updateField,
+        selectOption,
+        notification,
+        searchVisible,
     } = {
         ...props,
     };
 
     const toolbar = () => {
         return <Menubar model={options.toolbar} />;
+    };
+
+    const getDataByPage = async (page) => {
+        const response = await services.findAllWarehousesByPage(page);
+
+        return response;
+    };
+
+    const getDataAsPage = async () => {
+        const response = await services.findAllWarehousesAsPage();
+
+        return response;
     };
 
     return (
@@ -65,11 +77,12 @@ export const Warehouse = (props) => {
                 </div>
                 <Toast ref={notification} />
                 <Search
-                    visible={searchVisible}
                     onHide={hideSearch}
-                    fields={options.searchFields}
+                    visible={searchVisible}
                     selectOption={selectOption}
-                    endpoint={endpoint}
+                    fields={options.searchFields}
+                    getDataAsPage={getDataAsPage}
+                    getDataByPage={getDataByPage}
                 />
             </Panel>
         </Dashboard>
