@@ -1,16 +1,30 @@
+import services from '@services/api-services';
 import { warehouseSearchFields, warehouseFilters } from '@constants/options';
 
 export const withWarehouseList = (WrappedComponent) => (props) => {
-    const endpoint = {
-        redirect: 'warehouse',
-        search: process.env.NEXT_PUBLIC_WAREHOUSES_SEARCH,
-        suggestions: process.env.NEXT_PUBLIC_WAREHOUSES_SUGGESTIONS,
+    const getDataAsPage = async () => {
+        const result = await services.findAllWarehousesAsPage();
+        return result;
     };
-    return (
-        <WrappedComponent
-            endpoint={endpoint}
-            filters={warehouseFilters}
-            fields={warehouseSearchFields}
-        />
-    );
+
+    const getDataByPage = async (page) => {
+        const result = await services.findAllWarehousesByPage(page);
+        return result;
+    };
+
+    const getDataByFilter = async (filter) => {
+        const result = await services.findWarehousesByFilter(filter);
+        return result;
+    };
+
+    const listProps = {
+        redirect: 'warehouse/',
+        filters: warehouseFilters,
+        fields: warehouseSearchFields,
+        getDataAsPage: getDataAsPage,
+        getDataByPage: getDataByPage,
+        getDataByFilter: getDataByFilter,
+    };
+
+    return <WrappedComponent {...listProps} />;
 };
