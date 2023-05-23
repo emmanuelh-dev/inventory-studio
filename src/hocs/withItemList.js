@@ -13,7 +13,7 @@ export const withItemList = (WrappedComponent) => (props) => {
     };
 
     const getDataByFilter = async (filter) => {
-        const result = await services.findItemByFilter(filter);
+        const result = await services.findItemsByFilter(filter);
         return result;
     };
 
