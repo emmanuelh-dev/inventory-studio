@@ -102,7 +102,7 @@ export const withItem = (WrappedComponent) => (props) => {
 
     const options = {
         valuation: valuation,
-        toolbar: createItemToobar(onNew(), onSave(), onCancel(), onDelete()),
+        toolbar: createItemToolbar(onNew(), onSave(), onCancel(), onDelete()),
         searchFields: itemSearchFields,
     };
 
@@ -127,7 +127,7 @@ export const withItem = (WrappedComponent) => (props) => {
     return <WrappedComponent {...componentProps} />;
 };
 
-const createItemToobar = (onNew, onSave, onCancel, onDelete) => {
+const createItemToolbar = (onNew, onSave, onCancel, onDelete) => {
     const itemToolbar = [...toolbar];
     itemToolbar[0].command = onNew.command;
     itemToolbar[1].command = onSave.command;
