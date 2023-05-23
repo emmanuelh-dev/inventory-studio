@@ -168,6 +168,9 @@ const services = {
     findItemByFilter: itemServices.findItemByFilter,
     findAllItemsByPage: itemServices.findAllItemsByPage,
     findAllItemsAsPage: itemServices.findAllItemsAsPage,
+    findWarehousesByFilter: warehouseServices.findWarehousesByFilter,
+    findAllWarehousesByPage: warehouseServices.findAllWarehousesByPage,
+    findAllWarehousesAsPage: warehouseServices.findAllWarehousesAsPage,
     findAllWarehousesAsOption: warehouseServices.findAllWarehousesAsOption,
 };
 
