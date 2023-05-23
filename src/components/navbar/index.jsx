@@ -75,7 +75,7 @@ export const Navbar = (props) => {
                 {
                     label: 'Almacenes',
                     command: () => {
-                        router.push('/warehouses-list');
+                        router.push('/warehouse-list');
                     },
                 },
             ],
