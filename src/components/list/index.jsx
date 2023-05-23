@@ -1,12 +1,11 @@
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import { isObjectEmpty, replaceParams, transformFilter } from '@utils';
-//custom components
-import { Dashboard } from '@components/dashboard';
 
 import { Column } from 'primereact/column';
 import { Button } from 'primereact/button';
 import { DataTable } from 'primereact/datatable';
+import { Dashboard } from '@components/dashboard';
 
 export const List = (props) => {
     const [row, setRow] = useState();
