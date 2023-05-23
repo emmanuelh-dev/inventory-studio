@@ -24,6 +24,14 @@ const findAllWarehousesByPage = async (page) => {
     return response;
 };
 
+const findWarehouseById = async (id) => {
+    const endpoint = process.env.NEXT_PUBLIC_WAREHOUSES_BY_ID;
+    const url = replaceParams(endpoint, { id });
+    const response = await useGet(url);
+
+    return response;
+};
+
 const findWarehousesByFilter = async (filter) => {
     const endpoint = process.env.NEXT_PUBLIC_WAREHOUSES_FILTER;
     const url = replaceParams(endpoint, filter);
@@ -32,7 +40,25 @@ const findWarehousesByFilter = async (filter) => {
     return response;
 };
 
+const postWarehouse = async (warehouse) => {
+    const endpoint = process.env.NEXT_PUBLIC_WAREHOUSES_POST;
+    const response = await usePost(endpoint, warehouse);
+
+    return response;
+};
+
+const putWarehouse = async (warehouse) => {
+    const endpoint = process.env.NEXT_PUBLIC_WAREHOUSES_PUT;
+    const url = replaceParams(endpoint, { id: warehouse.id });
+    const response = await usePut(url, warehouse);
+
+    return response;
+};
+
 const warehouseServices = {
+    putWarehouse,
+    postWarehouse,
+    findWarehouseById,
     findWarehousesByFilter,
     findAllWarehousesAsPage,
     findAllWarehousesByPage,
