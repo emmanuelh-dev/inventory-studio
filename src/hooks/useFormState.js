@@ -42,7 +42,7 @@ export const useForm = (initialState, defaultInitialState) => {
     initialState = isObjectEmpty(initialState) ? defaultInitialState : initialState;
     const [form, setForm] = useState(initialState);
     const [formCopy, setFormCopy] = useState(initialState);
-    const [initialForm, setInitialForm] = useState(initialState);
+    const [initialForm, setInitialForm] = useState(defaultInitialState);
 
     const updateFormField = (field, fieldValue) => {
         const value = getValue(fieldValue);
