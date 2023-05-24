@@ -101,7 +101,6 @@ export const withWarehouse = (WrappedComponent) => (props) => {
 
     useEffect(() => {
         updateStateStatus();
-        // updateSaveButton();
     }, [form]);
 
     const componentProps = {
