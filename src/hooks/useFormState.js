@@ -95,7 +95,7 @@ export const useDocumentForm = (initialState, defaultInitialState) => {
     const [document, setDocument] = useState(initialState);
     const [documentCopy, setDocumentCopy] = useState(initialState);
     const [saveButtonDisabled, setSaveButtonDisabled] = useState(false);
-    const [initialDocument, setInitialDocument] = useState(initialState);
+    const [initialDocument, setInitialDocument] = useState(defaultInitialState);
 
     const updateDocumentField = (field, fieldValue) => {
         let value = Array.isArray(fieldValue) ? fieldValue : getValue(fieldValue);
