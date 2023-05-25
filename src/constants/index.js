@@ -93,6 +93,8 @@ export const salesReturnDocumentState = {
 export const validationFields = {
     ID,
     ITEM,
+    DELETED,
+    ITEM_NAME,
     LINE_NUMBER,
 };
 
