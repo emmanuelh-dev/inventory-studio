@@ -2,9 +2,9 @@ import React, { useEffect, useState } from 'react';
 import services from '@services/api-services';
 //utils
 import { MESSAGES } from '@messages';
-import { validateNotEmptyField } from '@utils/validations';
 import { isObjectEmpty, isArrayEmpty, dateToString } from '@utils';
 import { MESSAGE_TYPES, outputDocumentState, dispatchFields } from '@constants';
+import { validateNotEmptyField, validateRepeatedItem } from '@utils/validations';
 import { toolbar, detailColumns, dispatchTypes, documentSearchFields } from '@constants/options';
 //components
 import { Toast } from 'primereact/toast';
@@ -169,10 +169,12 @@ export const withDispatch = (props) => {
     };
 
     const updateDetails = (detail) => {
+        const details = [...document[fields.DETAILS]];
+        if (validateRepeatedItem(detail, details, showNotification)) return;
         if (detail[fields.LINE_NUMBER] == 0) {
-            addDetail([...document[fields.DETAILS]], { ...detail });
+            addDetail(details, detail);
         } else {
-            const rows = updateRows([...document[fields.DETAILS]], { ...detail });
+            const rows = updateRows(details, detail);
             !isArrayEmpty(rows) && updateDocumentField(fields.DETAILS, rows);
         }
     };
