@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { getValue } from '@utils';
+import { useBarcodeSheet } from '@hooks/useBarcode';
 //components
 import { Panel } from 'primereact/panel';
 import { Dialog } from 'primereact/dialog';
@@ -8,57 +8,27 @@ import { Paginator } from 'primereact/paginator';
 import { ToggleButton } from 'primereact/togglebutton';
 
 export const BarcodeSheet = (props) => {
-    const [page, setPage] = useState(0);
-    const [first, setFirst] = useState(0);
-    const [limit, setLimit] = useState(false);
-    const [counter, setCounter] = useState(0);
     const [disabled, setDisabled] = useState(false);
-    const [grid, setGrid] = useState(new Array(30).fill(false));
     const { quantity, visible, onHide, onYes } = { ...props };
 
-    const onButtonClick = (event, index) => {
-        const _grid = [...grid];
-        const value = getValue(event);
-        _grid[index] = value;
-        setGrid(_grid);
-        const _counter = value ? counter + 1 : counter - 1;
-        setCounter(_counter);
-    };
-
-    const addPage = () => {
-        const newGrid = new Array(30).fill(false);
-        const _grid = [...grid, ...newGrid];
-        const nextPage = page + 1;
-        setGrid(_grid);
-        setPage(nextPage);
-        setFirst(30 * nextPage);
-    };
-
-    const removePage = () => {
-        const lastPage = Math.ceil(grid.length / 30) - 1;
-        const previousPage = lastPage - 1;
-        const firstIndex = lastPage * 30;
-        const _grid = [...grid];
-        _grid.splice(firstIndex);
-        setGrid(_grid);
-        setPage(previousPage);
-        setFirst(firstIndex - 30);
-    };
-
-    const resetPage = () => {
-        const _grid = new Array(30).fill(false);
-        setGrid(_grid);
-        setPage(0);
-        setFirst(0);
-        setCounter(0);
-    };
+    const {
+        page,
+        limit,
+        onPage,
+        addPage,
+        removePage,
+        clearLayout,
+        updateLayout,
+        firstRowByPage,
+        labelSheetLayout,
+    } = useBarcodeSheet(quantity);
 
     const ResetPageButton = () => {
         return (
             <Button
-                onClick={resetPage}
+                onClick={clearLayout}
                 icon="pi pi-refresh"
-                label="Reiniciar Pagina"
+                label="Reiniciar Todo"
                 className="p-button-outlined"
             />
         );
@@ -105,7 +75,7 @@ export const BarcodeSheet = (props) => {
     };
 
     const onProcess = () => {
-        const positions = grid.reduce((accumulator, value, index) => {
+        const positions = labelSheetLayout.reduce((accumulator, value, index) => {
             value ? accumulator.push(index) : accumulator;
             return accumulator;
         }, []);
@@ -130,11 +100,6 @@ export const BarcodeSheet = (props) => {
         </div>
     );
 
-    const onPage = (event) => {
-        setPage(event.page);
-        setFirst(event.first);
-    };
-
     const createSheet = () => {
         const sheet = [];
         let button = null;
@@ -143,13 +108,13 @@ export const BarcodeSheet = (props) => {
             button = (
                 <ToggleButton
                     key={counter}
-                    checked={grid[index]}
+                    checked={labelSheetLayout[index]}
                     className="col-4 barcode"
                     onLabel=" |||||||||||||||||||||||||||||||||||||||||||||||||||||| "
                     offLabel={`${index}`}
-                    disabled={limit && !grid[index]}
+                    disabled={limit && !labelSheetLayout[index]}
                     onChange={(event) => {
-                        onButtonClick(event, index);
+                        updateLayout(event, index);
                     }}
                 />
             );
@@ -160,12 +125,8 @@ export const BarcodeSheet = (props) => {
     };
 
     useEffect(() => {
-        setDisabled(grid.length == 30);
-    }, [grid]);
-
-    useEffect(() => {
-        setLimit(counter == quantity);
-    }, [counter, quantity]);
+        setDisabled(labelSheetLayout.length == 30);
+    }, [labelSheetLayout]);
 
     return (
         <Dialog
@@ -178,10 +139,10 @@ export const BarcodeSheet = (props) => {
             <Panel headerTemplate={actionButtons}>
                 <div className="grid">{createSheet()}</div>
                 <Paginator
-                    first={first}
                     rows={30}
-                    totalRecords={grid.length}
                     onPageChange={onPage}
+                    first={firstRowByPage}
+                    totalRecords={labelSheetLayout.length}
                 />
             </Panel>
         </Dialog>
