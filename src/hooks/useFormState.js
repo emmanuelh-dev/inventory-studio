@@ -20,6 +20,14 @@ import {
 
 let fields = {};
 
+const getDocumentState = (type) => {
+    if (isDispatchDocument(type)) {
+        return isOutputDocument(type) ? outputDocumentState : purchaseReturnDocumentState;
+    }
+
+    return isInputDocument(type) ? inputDocumentState : salesReturnDocumentState;
+};
+
 export const useFormState = (initialState, defaultInitialState) => {
     initialState = isObjectEmpty(initialState) ? defaultInitialState : initialState;
     const [state, setState] = useState(initialState);
@@ -89,7 +97,8 @@ export const useForm = (initialState, defaultInitialState) => {
     };
 };
 
-export const useDocumentForm = (initialState, defaultInitialState) => {
+export const useDocumentForm = (initialState) => {
+    const defaultInitialState = getDocumentState(initialState[fields.TYPE]);
     initialState = isObjectEmpty(initialState) ? defaultInitialState : initialState;
     fields = isDispatchDocument(initialState) ? { ...dispatchFields } : { ...receptionFields };
     const [document, setDocument] = useState(initialState);
@@ -137,14 +146,6 @@ export const useDocumentForm = (initialState, defaultInitialState) => {
         setInitialDocument(value);
         updateDocument(value);
         updateDocumentCopy(value);
-    };
-
-    const getDocumentState = (type) => {
-        if (isDispatchDocument(type)) {
-            return isOutputDocument(type) ? outputDocumentState : purchaseReturnDocumentState;
-        }
-
-        return isInputDocument(type) ? inputDocumentState : salesReturnDocumentState;
     };
 
     const addButtonStatusDisabled = () => {
