@@ -1,6 +1,7 @@
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
-import { isObjectEmpty, replaceParams, transformFilter } from '@utils';
+import { isReleasedOrUsed } from '@utils/validations';
+import { isObjectEmpty, transformFilter } from '@utils';
 
 import { Column } from 'primereact/column';
 import { Button } from 'primereact/button';
@@ -70,8 +71,9 @@ export const List = (props) => {
                 />
                 <Button
                     icon="pi pi-trash"
-                    className="p-button-rounded p-button-warning"
                     onClick={() => {}}
+                    disabled={isReleasedOrUsed(row)}
+                    className="p-button-rounded p-button-warning"
                 />
             </React.Fragment>
         );
