@@ -10,6 +10,7 @@ import { toolbar, detailColumns, dispatchTypes, documentSearchFields } from '@co
 import { Toast } from 'primereact/toast';
 import { Panel } from 'primereact/panel';
 import { Menubar } from 'primereact/menubar';
+import { ConfirmDialog, confirmDialog } from 'primereact/confirmdialog';
 //custom components
 import { Search } from '@components/search';
 import { Details } from '@components/details';
@@ -137,31 +138,59 @@ export const withDispatch = (props) => {
             }
         };
 
+        const onConfirm = () => {
+            confirmDialog({
+                reject: () => {},
+                accept: onDeleteDocument,
+                header: 'Eliminar Documento',
+                acceptClassName: 'p-button-danger',
+                icon: 'pi pi-exclamation-triangle',
+                message: `¿Esta seguro que desea borrar el documento?`,
+            });
+        };
+
         return {
             state: deleteButtonStatusDisabled(),
-            command: onDeleteDocument,
+            command: onConfirm,
         };
     };
 
-    const onRelease = async () => {
-        if (releaseValidations()) {
-            try {
-                const response = await services.releaseDispatchDocument(dateToString(document));
-                updateDocumentFromService(response);
-                showNotification(MESSAGE_TYPES.SUCCESS, MESSAGES.SUCESS_RECORD_RELEASED);
-            } catch (error) {
-                showNotification(MESSAGE_TYPES.ERROR, error.message);
-            }
+    const onRelease = () => {
+        const onReleaseDocument = async () => {
+            if (releaseValidations()) {
+                try {
+                    const response = await services.releaseDispatchDocument(dateToString(document));
+                    updateDocumentFromService(response);
+                    showNotification(MESSAGE_TYPES.SUCCESS, MESSAGES.SUCESS_RECORD_RELEASED);
+                } catch (error) {
+                    showNotification(MESSAGE_TYPES.ERROR, error.message);
+                }
 
-            clearControlAmountField();
-            clearControlQuantityField();
-        }
+                clearControlAmountField();
+                clearControlQuantityField();
+            }
+        };
+
+        const onConfirm = () => {
+            confirmDialog({
+                reject: () => {},
+                accept: onReleaseDocument,
+                header: 'Liberar Documento',
+                acceptClassName: 'p-button-warning',
+                icon: 'pi pi-exclamation-triangle',
+                message: `Despues de liberar el documento no sera posible editarlo`,
+            });
+        };
+
+        return {
+            command: onConfirm,
+        };
     };
 
     const actions = () => {
         const release = {
             label: 'Liberar',
-            command: onRelease,
+            command: onRelease().command,
             disabled: releaseButtonStatusDisabled(),
         };
 
@@ -309,6 +338,7 @@ export const withDispatch = (props) => {
                 <Details {...detailProps} />
                 {search ? <Search {...searchProps} /> : <></>}
                 <Toast ref={notification} />
+                <ConfirmDialog />
             </Panel>
         </Dashboard>
     );
