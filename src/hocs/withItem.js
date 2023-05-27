@@ -10,7 +10,6 @@ import { valuation, toolbar, itemSearchFields } from '@constants/options';
 import { useSearch } from '@hooks/useSearch';
 import { useNotification } from '@hooks/useNotification';
 import { useForm, useStateStatus } from '@hooks/useFormState';
-import { validateNotEmptyField } from '../utils/validations';
 
 export const withItem = (WrappedComponent) => (props) => {
     const fields = { ...itemFields };
