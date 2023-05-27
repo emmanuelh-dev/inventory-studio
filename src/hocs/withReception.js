@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import services from '@services/api-services';
 //utils
 import { MESSAGES } from '@messages';
-import { MESSAGE_TYPES, receptionFields } from '@constants';
+import { MESSAGE_TYPES, receptionFields, inputDocumentState } from '@constants';
 import { isObjectEmpty, isArrayEmpty, dateToString } from '@utils';
 import { validateNotEmptyField, validateRepeatedItem } from '@utils/validations';
 import { toolbar, detailColumns, receptionTypes, documentSearchFields } from '@constants/options';
@@ -48,7 +48,7 @@ export const withReception = (props) => {
         updateDocumentFromService,
         deleteButtonStatusDisabled,
         releaseButtonStatusDisabled,
-    } = useDocumentForm(initialState);
+    } = useDocumentForm(initialState, inputDocumentState);
     const { createRow, removeRows, updateRows } = useDetail();
     const { selection, clearSelection, updateSelection } = useSelection();
 

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import services from '@services/api-services';
 //utils
 import { MESSAGES } from '@messages';
-import { MESSAGE_TYPES, dispatchFields } from '@constants';
+import { MESSAGE_TYPES, dispatchFields, outputDocumentState } from '@constants';
 import { isObjectEmpty, isArrayEmpty, dateToString } from '@utils';
 import { validateNotEmptyField, validateRepeatedItem } from '@utils/validations';
 import { toolbar, detailColumns, dispatchTypes, documentSearchFields } from '@constants/options';
@@ -42,7 +42,7 @@ export const withDispatch = (props) => {
         updateDocumentFromService,
         deleteButtonStatusDisabled,
         releaseButtonStatusDisabled,
-    } = useDocumentForm(initialState);
+    } = useDocumentForm(initialState, outputDocumentState);
 
     const { createRow, removeRows, updateRows } = useDetail();
     const { selection, clearSelection, updateSelection } = useSelection();

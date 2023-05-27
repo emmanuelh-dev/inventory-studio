@@ -97,12 +97,16 @@ export const useForm = (initialState, defaultInitialState) => {
     };
 };
 
-export const useDocumentForm = (initialState) => {
-    initialState = isObjectEmpty(initialState) ? defaultInitialState : initialState;
-    fields = isDispatchDocument(initialState) ? { ...dispatchFields } : { ...receptionFields };
-    const defaultInitialState = getDocumentState(initialState[fields.TYPE]);
-    const [document, setDocument] = useState(initialState);
-    const [documentCopy, setDocumentCopy] = useState(initialState);
+export const useDocumentForm = (initialState, defaultInitialState) => {
+    const documentInitialState = isObjectEmpty(initialState) ? defaultInitialState : initialState;
+    fields = isDispatchDocument(documentInitialState)
+        ? { ...dispatchFields }
+        : { ...receptionFields };
+    defaultInitialState = isObjectEmpty(initialState)
+        ? defaultInitialState
+        : getDocumentState(documentInitialState[fields.TYPE]);
+    const [document, setDocument] = useState(documentInitialState);
+    const [documentCopy, setDocumentCopy] = useState(documentInitialState);
     const [saveButtonDisabled, setSaveButtonDisabled] = useState(false);
     const [initialDocument, setInitialDocument] = useState(defaultInitialState);
 
