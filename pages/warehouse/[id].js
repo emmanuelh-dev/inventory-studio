@@ -1,28 +1,30 @@
+import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 
-import { useRouter } from 'next/router';
-//hocs
-import { withWarehouse } from '@hocs/withWarehouse';
-//hooks
-import { useGet } from '@hooks/useGet';
-//components
-import { ProgressSpinner } from 'primereact/progressspinner';
+import services from '@services/api-services';
+import { isNullOrUndefinedOrEmptyString } from '@utils';
 //custom components
 import { Warehouse } from '@components/warehouse';
+//hocs
+import { withWarehouse } from '@hocs/withWarehouse';
+//components
+import { ProgressSpinner } from 'primereact/progressspinner';
 
 const WarehouseForm = withWarehouse(Warehouse);
 export default () => {
     const [warehouse, setWarehouse] = useState(null);
     const router = useRouter();
     const { id } = router.query;
-    const endpoint = process.env.NEXT_PUBLIC_WAREHOUSES_SUGGESTIONS;
+
+    const fetchData = async () => {
+        if (!isNullOrUndefinedOrEmptyString(id)) {
+            const response = await services.findWarehouseById(id);
+            setWarehouse(response);
+        }
+    };
 
     useEffect(() => {
-        if (id !== undefined) {
-            useGet(`${endpoint}/${id}?page=0&size=10`).then((data) => {
-                setWarehouse(data);
-            });
-        }
+        fetchData();
     }, [id]);
 
     if (warehouse == null) {
