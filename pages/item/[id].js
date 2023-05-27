@@ -1,8 +1,8 @@
-import { useState } from 'react';
 import { useRouter } from 'next/router';
-import React, { useEffect } from 'react';
-//hooks
-import { useGet } from '@hooks/useGet';
+import React, { useState, useEffect } from 'react';
+
+import services from '@services/api-services';
+import { isNullOrUndefinedOrEmptyString } from '@utils';
 //components
 import { ProgressSpinner } from 'primereact/progressspinner';
 //custom components
@@ -15,14 +15,16 @@ export default () => {
     const [item, setItem] = useState(null);
     const router = useRouter();
     const { id } = router.query;
-    const endpoint = process.env.NEXT_PUBLIC_ITEMS_SUGGESTIONS;
+
+    const fetchData = async () => {
+        if (!isNullOrUndefinedOrEmptyString(id)) {
+            const response = await services.findItemById(id);
+            setItem(response);
+        }
+    };
 
     useEffect(() => {
-        if (id !== undefined) {
-            useGet(`${endpoint}/${id}?page=0&size=10`).then((data) => {
-                setItem(data);
-            });
-        }
+        fetchData();
     }, [id]);
 
     if (item == null) {
