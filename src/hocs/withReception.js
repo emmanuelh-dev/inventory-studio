@@ -348,16 +348,10 @@ export const withReception = (props) => {
     };
 
     const viewerProps = {
-        endpoint,
+        document,
         body: customSheet,
         visible: showViewer,
         onHide: onHideViewer,
-        params: {
-            id: document[fields.ID],
-            type: document[fields.TYPE],
-            barcodeType: 'CODE128',
-            sheetType: 'OD5160',
-        },
     };
 
     //hooks
