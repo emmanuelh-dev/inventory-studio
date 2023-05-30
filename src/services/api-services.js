@@ -1,3 +1,4 @@
+import { useGet } from '@hooks/useGet';
 import itemServices from './item-api-services';
 import inputServices from './input-api-service';
 import reportServices from './report-api-service';
@@ -5,7 +6,7 @@ import outputServices from './output-api-service';
 import warehouseServices from './warehouse-api-service';
 import salesReturnServices from './sales-return-api-service';
 import purchaseReturnServices from './purchase-return-api-service';
-import { isInputDocument, isOutputDocument, isDispatchDocument } from '@utils';
+import { replaceParams, isInputDocument, isOutputDocument, isDispatchDocument } from '@utils';
 
 const findDispatchDocumentById = async (type, id) => {
     const response = isOutputDocument(type)
@@ -89,6 +90,19 @@ const findReceptionDocumentById = async (type, id) => {
     return response;
 };
 
+const findReceptionDetailReadingBarcode = async (warehouse, barcode) => {
+    const endpoint = process.env.NEXT_PUBLIC_RECEPTIONS_READ_BARCODE;
+    const params = {
+        barcode,
+        warehouse,
+        format: 'CODE128',
+    };
+    const url = replaceParams(endpoint, params);
+    const response = await useGet(url);
+
+    return response;
+};
+
 const findAllReceptionDocumentByPage = async (type, page) => {
     const response = isInputDocument(type)
         ? await inputServices.findAllReceptionInputDocumentByPage(page)
@@ -165,6 +179,7 @@ const services = {
     findAllReceptionDocumentAsPage,
     findAllReceptionDocumentByPage,
     postItem: itemServices.postItem,
+    findReceptionDetailReadingBarcode,
     findItemById: itemServices.findItemById,
     putWarehouse: warehouseServices.putWarehouse,
     postWarehouse: warehouseServices.postWarehouse,
