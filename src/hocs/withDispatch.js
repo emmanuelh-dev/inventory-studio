@@ -300,9 +300,8 @@ export const withDispatch = (props) => {
     const barcodeProps = {
         showNotification,
         processBarcode: updateDetails,
-        documentType: document[fields.TYPE],
-        disabled: isObjectEmpty(document[fields.WAREHOUSE]),
         warehouse: document[fields.WAREHOUSE][fields.ID],
+        disabled: isObjectEmpty(document[fields.WAREHOUSE]),
     };
 
     //hooks
