@@ -52,14 +52,6 @@ export const withReception = (props) => {
     const { createRow, removeRows, updateRows } = useDetail();
     const { selection, clearSelection, updateSelection } = useSelection();
 
-    // //constants
-    const endpoint = {
-        save: process.env.NEXT_PUBLIC_RECEPTIONS_SAVE,
-        barcode: process.env.NEXT_PUBLIC_REPORT_BARCODE,
-        update: process.env.NEXT_PUBLIC_RECEPTIONS_SAVE,
-        suggestions: `${process.env.NEXT_PUBLIC_RECEPTIONS_SUGGESTIONS}${document[fields.TYPE]}`,
-    };
-
     //actions
     useSumarizeField(document, updateDocument, fields);
     const { notification, showNotification } = useNotification();
