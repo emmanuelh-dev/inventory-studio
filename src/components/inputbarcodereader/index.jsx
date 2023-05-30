@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { getValue } from '@utils';
-import { MESSAGE_TYPES } from '@constants';
 import services from '@services/api-services';
+import { MESSAGE_TYPES, detailState } from '@constants';
 import { InputText } from 'primereact/inputtext';
 
 export const InputBarcodeReader = (props) => {
@@ -9,7 +9,7 @@ export const InputBarcodeReader = (props) => {
     const { processBarcode, disabled, warehouse, showNotification } = { ...props };
 
     const readBarcode = async (value) => {
-        const detail = {};
+        const detail = { ...detailState };
         try {
             const response = await services.findDispatchDetailReadingBarcode(warehouse, value);
             detail.quantity = 1;
