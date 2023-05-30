@@ -32,6 +32,19 @@ const findAllDispatchDocumentAsPage = async (type) => {
     return response;
 };
 
+const findDispatchDetailReadingBarcode = async (warehouse, barcode) => {
+    const endpoint = process.env.NEXT_PUBLIC_RECEPTIONS_READ_BARCODE;
+    const params = {
+        barcode,
+        warehouse,
+        format: 'CODE128',
+    };
+    const url = replaceParams(endpoint, params);
+    const response = await useGet(url);
+
+    return response;
+};
+
 const findDispatchDocumentByFilter = async (type, filter) => {
     const response = isOutputDocument(type)
         ? await outputServices.findDispatchOutputDocumentByFilter(filter)
@@ -86,19 +99,6 @@ const findReceptionDocumentById = async (type, id) => {
     const response = isInputDocument(type)
         ? await inputServices.findReceptionInputDocumentById(id)
         : await salesReturnServices.findReceptionSalesReturnDocumentById(id);
-
-    return response;
-};
-
-const findReceptionDetailReadingBarcode = async (warehouse, barcode) => {
-    const endpoint = process.env.NEXT_PUBLIC_RECEPTIONS_READ_BARCODE;
-    const params = {
-        barcode,
-        warehouse,
-        format: 'CODE128',
-    };
-    const url = replaceParams(endpoint, params);
-    const response = await useGet(url);
 
     return response;
 };
@@ -179,7 +179,7 @@ const services = {
     findAllReceptionDocumentAsPage,
     findAllReceptionDocumentByPage,
     postItem: itemServices.postItem,
-    findReceptionDetailReadingBarcode,
+    findDispatchDetailReadingBarcode,
     findItemById: itemServices.findItemById,
     putWarehouse: warehouseServices.putWarehouse,
     postWarehouse: warehouseServices.postWarehouse,
