@@ -1,5 +1,6 @@
 import itemServices from './item-api-services';
 import inputServices from './input-api-service';
+import reportServices from './report-api-service';
 import outputServices from './output-api-service';
 import warehouseServices from './warehouse-api-service';
 import salesReturnServices from './sales-return-api-service';
@@ -168,6 +169,7 @@ const services = {
     putWarehouse: warehouseServices.putWarehouse,
     postWarehouse: warehouseServices.postWarehouse,
     findItemsByFilter: itemServices.findItemsByFilter,
+    postBarcodeReport: reportServices.postBarcodeReport,
     findAllItemsByPage: itemServices.findAllItemsByPage,
     findAllItemsAsPage: itemServices.findAllItemsAsPage,
     findWarehouseById: warehouseServices.findWarehouseById,
