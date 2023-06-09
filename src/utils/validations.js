@@ -1,17 +1,10 @@
-import { isNullOrUndefinedOrEmptyString } from '@utils';
+import { ifItemPresent, isNullOrUndefinedOrEmptyString } from '@utils';
 import { MESSAGE_TYPES, validationFields } from '@constants';
 
 const fields = validationFields;
 
-const ifItemPresent = (element, detail) => {
-    const isSameItem = element[fields.ITEM][fields.ID] == detail[fields.ITEM][fields.ID];
-    const isDeletedRow = element[fields.DELETED];
-
-    return isSameItem && !isDeletedRow;
-};
-
 export const validateRepeatedItem = (detail, details, showNotification) => {
-    const isRepeated = details.find((element) => ifItemPresent(element, detail));
+    const isRepeated = ifItemPresent(fields, details, detail);
 
     isRepeated = isRepeated != undefined;
     if (isRepeated) {

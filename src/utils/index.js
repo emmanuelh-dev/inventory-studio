@@ -182,3 +182,16 @@ export const isDispatchDocument = (type) => {
 export const isNullOrUndefinedOrEmptyString = (value) => {
     return value === null || value === undefined || value == '';
 };
+
+const isSameItem = (fields, element, detail) => {
+    const isDeletedRow = element[fields.DELETED];
+    const isSameLineNumber = element[fields.LINE_NUMBER] == detail[fields.LINE_NUMBER];
+    const isSameItemId = element[fields.ITEM][fields.ID] == detail[fields.ITEM][fields.ID];
+    return isSameItemId && !isSameLineNumber && !isDeletedRow;
+};
+
+export const ifItemPresent = (fields, details, detail) => {
+    const result = details.find((element) => isSameItem(fields, element, detail));
+
+    return result;
+};
