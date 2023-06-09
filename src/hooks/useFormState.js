@@ -226,7 +226,7 @@ export const useDetail = () => {
 
     const updateRows = (details, detail) => {
         const index = details.findIndex(
-            (element) => element[fields.LINE_NUMBER] == detail[fields.LINE_NUMBER]
+            (element) => element[fields.ITEM][fields.ID] == detail[fields.ITEM][fields.ID]
         );
 
         if (index > -1) {
