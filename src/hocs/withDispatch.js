@@ -3,8 +3,8 @@ import services from '@services/api-services';
 //utils
 import { MESSAGES } from '@messages';
 import { MESSAGE_TYPES, dispatchFields, outputDocumentState } from '@constants';
-import { isObjectEmpty, isArrayEmpty, dateToString } from '@utils';
 import { validateNotEmptyField, validateRepeatedItem } from '@utils/validations';
+import { isObjectEmpty, isArrayEmpty, dateToString, ifItemPresent } from '@utils';
 import { toolbar, detailColumns, dispatchTypes, documentSearchFields } from '@constants/options';
 //components
 import { Toast } from 'primereact/toast';
@@ -259,6 +259,26 @@ export const withDispatch = (props) => {
         return response;
     };
 
+    const onBarcodeReading = async (barcode) => {
+        try {
+            const warehouseId = document[fields.WAREHOUSE][fields.ID];
+            const response = await services.findDispatchDetailReadingBarcode(warehouseId, barcode);
+            let detail = createRow(response, 0);
+            const result = ifItemPresent(fields, [...document[fields.DETAILS]], detail);
+            if (isObjectEmpty(result)) {
+                detail[fields.QUANTITY] = 1;
+            } else {
+                result[fields.QUANTITY] = result[fields.QUANTITY] + 1;
+                detail = result;
+            }
+            const totalPrice = detail[fields.QUANTITY] * detail[fields.UNIT_PRICE];
+            detail[fields.TOTAL_PRICE] = totalPrice;
+            updateDetails(detail);
+        } catch (error) {
+            showNotification(MESSAGE_TYPES.ERROR, error.message);
+        }
+    };
+
     //props
     const dispatchProps = {
         fields,
@@ -298,9 +318,7 @@ export const withDispatch = (props) => {
     };
 
     const barcodeProps = {
-        showNotification,
-        processBarcode: updateDetails,
-        warehouse: document[fields.WAREHOUSE][fields.ID],
+        processBarcode: onBarcodeReading,
         disabled: isObjectEmpty(document[fields.WAREHOUSE]),
     };
 
