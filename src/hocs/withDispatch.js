@@ -267,6 +267,7 @@ export const withDispatch = (props) => {
             const result = ifItemPresent(fields, [...document[fields.DETAILS]], detail);
             if (isObjectEmpty(result)) {
                 detail[fields.QUANTITY] = 1;
+                detail[fields.UNIT_PRICE] = 0;
             } else {
                 result[fields.QUANTITY] = result[fields.QUANTITY] + 1;
                 detail = result;
