@@ -1,7 +1,6 @@
 import { useState } from 'react';
-import services from '@services/api-services';
+import { getValue } from '@utils';
 import { InputText } from 'primereact/inputtext';
-import { getValue, ifItemPresent, isObjectEmpty } from '@utils';
 
 export const InputBarcodeReader = (props) => {
     const [barcode, setBarcode] = useState('');
