@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-
+import { isObjectEmpty } from '@utils';
 import { Button } from 'primereact/button';
 import { Dialog } from 'primereact/dialog';
 //custom compontents
@@ -15,7 +15,8 @@ export const DetailDialog = (props) => {
         };
 
     const footer = () => {
-        return <Footer onYes={addDetail} onCancel={hideDialog} />;
+        const disabled = isObjectEmpty(rowData[fields.ITEM]);
+        return <Footer onYes={addDetail} onCancel={hideDialog} disabled={disabled} />;
     };
 
     return (
@@ -73,10 +74,10 @@ export const DetailDialog = (props) => {
 };
 
 const Footer = (props) => {
-    const { onYes, onCancel } = { ...props };
+    const { onYes, onCancel, disabled } = { ...props };
     return (
         <div>
-            <Button label="Aceptar" icon="pi pi-check" onClick={onYes} />
+            <Button label="Aceptar" icon="pi pi-check" onClick={onYes} disabled={disabled} />
             <Button label="Cancelar" icon="pi pi-times" onClick={onCancel} />
         </div>
     );
