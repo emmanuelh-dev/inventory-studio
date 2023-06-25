@@ -11,120 +11,130 @@ import { useSearch } from '@hooks/useSearch';
 import { useNotification } from '@hooks/useNotification';
 import { useForm, useStateStatus } from '@hooks/useFormState';
 
-export const withItem = (WrappedComponent) => (props) => {
-    const fields = { ...itemFields };
-    const { initialState } = { ...props };
-    const {
-        form,
-        clearForm,
-        updateForm,
-        updateFormCopy,
-        updateFormField,
-        updateFormFromService,
-        updateSaveButtonStatus,
-    } = useForm(initialState, itemState);
+export const withItem = (WrappedComponent) => {
+    const WithItem = (props) => {
+        const fields = { ...itemFields };
+        const { initialState } = { ...props };
+        const {
+            form,
+            clearForm,
+            updateForm,
+            updateFormCopy,
+            updateFormField,
+            updateFormFromService,
+            updateSaveButtonStatus,
+        } = useForm(initialState, itemState);
 
-    const { notification, showNotification } = useNotification();
-    const { usedIcon, usedLabel, updateStateStatus } = useStateStatus(form, fields.USED);
-    const { search, showSearch, hideSearch, selectOption } = useSearch(updateForm, updateFormCopy);
+        const { notification, showNotification } = useNotification();
+        const { usedIcon, usedLabel, updateStateStatus } = useStateStatus(form, fields.USED);
+        const { search, showSearch, hideSearch, selectOption } = useSearch(
+            updateForm,
+            updateFormCopy
+        );
 
-    const onNew = () => {
-        return {
-            command: clearForm,
+        const onNew = () => {
+            return {
+                command: clearForm,
+            };
         };
-    };
 
-    const onSave = () => {
-        const onSaveItem = async () => {
-            const validation = saveValidations();
-            if (validation) {
-                try {
-                    const isNew = isNullOrUndefinedOrEmptyString(form[fields.ID]);
-                    const response = isNew
-                        ? await services.postItem(form)
-                        : await services.putItem(form);
-                    updateFormFromService(response);
-                    isNew
-                        ? showNotification(MESSAGE_TYPES.SUCCESS)
-                        : showNotification(MESSAGE_TYPES.SUCCESS, MESSAGES.SUCCESS_RECORD_UPDATED);
-                } catch (error) {
-                    showNotification(MESSAGE_TYPES.ERROR, error.message);
+        const onSave = () => {
+            const onSaveItem = async () => {
+                const validation = saveValidations();
+                if (validation) {
+                    try {
+                        const isNew = isNullOrUndefinedOrEmptyString(form[fields.ID]);
+                        const response = isNew
+                            ? await services.postItem(form)
+                            : await services.putItem(form);
+                        updateFormFromService(response);
+                        isNew
+                            ? showNotification(MESSAGE_TYPES.SUCCESS)
+                            : showNotification(
+                                  MESSAGE_TYPES.SUCCESS,
+                                  MESSAGES.SUCCESS_RECORD_UPDATED
+                              );
+                    } catch (error) {
+                        showNotification(MESSAGE_TYPES.ERROR, error.message);
+                    }
                 }
-            }
+            };
+
+            return {
+                command: onSaveItem,
+                disabled: updateSaveButtonStatus(),
+            };
         };
 
-        return {
-            command: onSaveItem,
-            disabled: updateSaveButtonStatus(),
+        const onCancel = () => {
+            const onCancelItem = async () => {
+                if (!isNullOrUndefinedOrEmptyString(form[fields.ID])) {
+                    const response = await services.findItemById(form[fields.ID]);
+                    updateFormFromService(response);
+                } else {
+                    clearForm();
+                }
+            };
+
+            return {
+                command: onCancelItem,
+                disabled: updateSaveButtonStatus(),
+            };
         };
-    };
 
-    const onCancel = () => {
-        const onCancelItem = async () => {
-            if (!isNullOrUndefinedOrEmptyString(form[fields.ID])) {
-                const response = await services.findItemById(form[fields.ID]);
-                updateFormFromService(response);
-            } else {
-                clearForm();
-            }
+        const onDelete = () => {
+            const onDeleteItem = async () => {};
+
+            return {
+                command: onDeleteItem,
+                disabled: form[fields.USED] || isNullOrUndefinedOrEmptyString(form[fields.ID]),
+            };
         };
 
-        return {
-            command: onCancelItem,
-            disabled: updateSaveButtonStatus(),
+        const saveValidations = () => {
+            const validateNameField = validateNotEmptyField(
+                form[fields.ITEM_NAME],
+                'Nombre',
+                showNotification
+            );
+
+            const validateDescriptionField = validateNotEmptyField(
+                form[fields.DESCRIPTION],
+                'Descripcion',
+                showNotification
+            );
+
+            return validateNameField && validateDescriptionField;
         };
-    };
 
-    const onDelete = () => {
-        const onDeleteItem = async () => {};
-
-        return {
-            command: onDeleteItem,
-            disabled: form[fields.USED] || isNullOrUndefinedOrEmptyString(form[fields.ID]),
+        const options = {
+            valuation: valuation,
+            toolbar: createItemToolbar(onNew(), onSave(), onCancel(), onDelete()),
+            searchFields: itemSearchFields,
         };
+
+        useEffect(() => {
+            updateStateStatus();
+        }, [form]);
+
+        const componentProps = {
+            item: form,
+            fields: fields,
+            options: options,
+            usedIcon: usedIcon,
+            usedLabel: usedLabel,
+            searchVisible: search,
+            showSearch: showSearch,
+            hideSearch: hideSearch,
+            selectOption: selectOption,
+            notification: notification,
+            updateField: updateFormField,
+        };
+
+        return <WrappedComponent {...componentProps} />;
     };
 
-    const saveValidations = () => {
-        const validateNameField = validateNotEmptyField(
-            form[fields.ITEM_NAME],
-            'Nombre',
-            showNotification
-        );
-
-        const validateDescriptionField = validateNotEmptyField(
-            form[fields.DESCRIPTION],
-            'Descripcion',
-            showNotification
-        );
-
-        return validateNameField && validateDescriptionField;
-    };
-
-    const options = {
-        valuation: valuation,
-        toolbar: createItemToolbar(onNew(), onSave(), onCancel(), onDelete()),
-        searchFields: itemSearchFields,
-    };
-
-    useEffect(() => {
-        updateStateStatus();
-    }, [form]);
-
-    const componentProps = {
-        item: form,
-        fields: fields,
-        options: options,
-        usedIcon: usedIcon,
-        usedLabel: usedLabel,
-        searchVisible: search,
-        showSearch: showSearch,
-        hideSearch: hideSearch,
-        selectOption: selectOption,
-        notification: notification,
-        updateField: updateFormField,
-    };
-
-    return <WrappedComponent {...componentProps} />;
+    return WithItem;
 };
 
 const createItemToolbar = (onNew, onSave, onCancel, onDelete) => {
