@@ -1,4 +1,4 @@
-import { useGet } from '@hooks/useGet';
+import request from './api';
 import itemServices from './item-api-services';
 import inputServices from './input-api-service';
 import reportServices from './report-api-service';
@@ -40,7 +40,7 @@ const findDispatchDetailReadingBarcode = async (warehouse, barcode) => {
         format: 'CODE128',
     };
     const url = replaceParams(endpoint, params);
-    const response = await useGet(url);
+    const response = await request.apiGet(url);
 
     return response;
 };

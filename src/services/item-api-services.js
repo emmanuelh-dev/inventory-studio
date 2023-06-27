@@ -1,31 +1,29 @@
+import request from './api';
 import { replaceParams } from '@utils';
-import { useGet } from '@hooks/useGet';
-import { usePut } from '@hooks/usePut';
-import { usePost } from '@hooks/usePost';
 
 const findAllItemsAsOptionForDistpatchDocument = async (id) => {
     const endpoint = process.env.NEXT_PUBLIC_WAREHOUSES_ITESM_BY_ID;
     const url = replaceParams(endpoint, { id });
-    const response = await useGet(url);
+    const response = await request.apiGet(url);
     return response;
 };
 
 const findAllItemsAsOptionForReceptionDocument = async () => {
     const endpoint = process.env.NEXT_PUBLIC_ITEMS_OPTIONS;
-    const response = await useGet(endpoint);
+    const response = await request.apiGet(endpoint);
     return response;
 };
 
 const findAllItemsAsPage = async () => {
     const endpoint = process.env.NEXT_PUBLIC_ITEMS_SUGGESTIONS_AS_PAGE;
-    const response = await useGet(endpoint);
+    const response = await request.apiGet(endpoint);
     return response;
 };
 
 const findAllItemsByPage = async (page) => {
     const endpoint = process.env.NEXT_PUBLIC_ITEMS_SUGGESTIONS_BY_PAGE;
     const url = replaceParams(endpoint, { page });
-    const response = await useGet(url);
+    const response = await request.apiGet(url);
 
     return response;
 };
@@ -33,7 +31,7 @@ const findAllItemsByPage = async (page) => {
 const findItemById = async (id) => {
     const endpoint = process.env.NEXT_PUBLIC_ITEMS_BY_ID;
     const url = replaceParams(endpoint, { id });
-    const response = await useGet(url);
+    const response = await request.apiGet(url);
 
     return response;
 };
@@ -41,14 +39,14 @@ const findItemById = async (id) => {
 const findItemsByFilter = async (filter) => {
     const endpoint = process.env.NEXT_PUBLIC_ITEMS_FILTER;
     const url = replaceParams(endpoint, filter);
-    const response = await useGet(url);
+    const response = await request.apiGet(url);
 
     return response;
 };
 
 const postItem = async (item) => {
     const endpoint = process.env.NEXT_PUBLIC_ITEMS_POST;
-    const response = await usePost(endpoint, item);
+    const response = await request.apiPost(endpoint, item);
 
     return response;
 };
@@ -56,7 +54,7 @@ const postItem = async (item) => {
 const putItem = async (item) => {
     const endpoint = process.env.NEXT_PUBLIC_ITEMS_PUT;
     const url = replaceParams(endpoint, { id: item.id });
-    const response = await usePut(url, item);
+    const response = await request.apiPut(url, item);
 
     return response;
 };
