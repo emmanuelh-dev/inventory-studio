@@ -3,12 +3,12 @@ import { signOut, useSession } from 'next-auth/react';
 import { Button } from 'primereact/button';
 import { Menubar } from 'primereact/menubar';
 //hooks
-import { useAuthDelete } from '@hooks/useDelete';
+import request from '@services/api';
 export const Userbar = (props) => {
     const { data: session } = useSession();
     const handleSignoutClick = async (event) => {
         event.preventDefault();
-        const response = await useAuthDelete(process.env.NEXT_PUBLIC_SIGNOUT, session);
+        const response = await request.apiAuthDelete(process.env.NEXT_PUBLIC_SIGNOUT, session);
         if (response.ok) {
             signOut({ callbackUrl: '/login' });
         }
