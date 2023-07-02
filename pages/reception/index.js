@@ -1,3 +1,3 @@
-import { withReception } from '@hocs/withReception';
+import { Reception } from '@components/reception';
 
-export default withReception;
+export default Reception;
