@@ -3,13 +3,11 @@ import React, { useState, useEffect } from 'react';
 
 import { stringToDate } from '@utils';
 import services from '@services/api-services';
-import { withDispatch } from '@hocs/withDispatch';
+import { Dispatch } from '@components/dispatch';
 import { MessageDialog } from '@components/messagedialog';
 import { ProgressSpinner } from 'primereact/progressspinner';
 
-const Dispatch = withDispatch;
-
-export default () => {
+const DispatchRedirection = () => {
     const [document, setDocument] = useState(null);
     const [showDialog, setShowDialog] = useState(false);
     const router = useRouter();
@@ -55,3 +53,5 @@ export default () => {
         </React.Fragment>
     );
 };
+
+export default DispatchRedirection;
