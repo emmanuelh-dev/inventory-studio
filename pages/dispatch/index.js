@@ -1,3 +1,3 @@
-import { withDispatch } from '@hocs/withDispatch';
+import { Dispatch } from '@components/dispatch';
 
-export default withDispatch;
+export default Dispatch;
