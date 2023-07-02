@@ -3,13 +3,11 @@ import React, { useState, useEffect } from 'react';
 
 import { stringToDate } from '@utils';
 import services from '@services/api-services';
-import { withReception } from '@hocs/withReception';
+import { Reception } from '@components/reception';
 import { MessageDialog } from '@components/messagedialog';
 import { ProgressSpinner } from 'primereact/progressspinner';
 
-const Reception = withReception;
-
-export default () => {
+const ReceptionRedirection = () => {
     const [showDialog, setShowDialog] = useState(false);
     const [document, setDocument] = useState(null);
     const router = useRouter();
@@ -51,3 +49,5 @@ export default () => {
 
     return <Reception initialState={document} />;
 };
+
+export default ReceptionRedirection;
