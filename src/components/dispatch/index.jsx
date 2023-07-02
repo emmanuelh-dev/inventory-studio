@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import services from '@services/api-services';
 //utils
 import { MESSAGES } from '@messages';
@@ -25,7 +25,7 @@ import { useControlField } from '@hooks/useControlField';
 import { useSumarizeField } from '@hooks/useSumarizeField';
 import { useDocumentForm, useDetail } from '@hooks/useFormState';
 
-export const withDispatch = (props) => {
+export const Dispatch = (props) => {
     const fields = { ...dispatchFields };
     const { initialState } = { ...props };
     const {
