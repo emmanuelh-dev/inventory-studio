@@ -92,7 +92,7 @@ const apiAuthDelete = async (url) => {
     return response;
 };
 
-export default request = {
+const request = {
     apiGet,
     apiPut,
     apiPost,
@@ -100,3 +100,5 @@ export default request = {
     apiAuthPost,
     apiAuthDelete,
 };
+
+export default request;
