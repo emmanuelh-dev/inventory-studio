@@ -26,7 +26,7 @@ import { useControlField } from '@hooks/useControlField';
 import { useSumarizeField } from '@hooks/useSumarizeField';
 import { useDocumentForm, useDetail } from '@hooks/useFormState';
 
-export const withReception = (props) => {
+export const Reception = (props) => {
     const fields = { ...receptionFields };
     const [showSheet, setShowSheet] = useState(false);
     const [customSheet, setCustomSheet] = useState([]);
