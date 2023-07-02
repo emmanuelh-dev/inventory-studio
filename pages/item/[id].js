@@ -11,7 +11,8 @@ import { Item } from '@components/item';
 import { withItem } from '@hocs/withItem';
 
 const ItemForm = withItem(Item);
-export default () => {
+
+const RedirectItem = () => {
     const [item, setItem] = useState(null);
     const router = useRouter();
     const { id } = router.query;
