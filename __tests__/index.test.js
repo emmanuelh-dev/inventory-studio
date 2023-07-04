@@ -1,4 +1,4 @@
-import { isObjectEmpty, isArrayEmpty, findObjectByProp } from '@utils';
+import { isObjectEmpty, isArrayEmpty, findObjectByProp, dateToString } from '@utils';
 describe('Utils', () => {
     describe('isObjectEmpty', () => {
         it('returns true if object is empty', () => {
@@ -203,6 +203,35 @@ describe('Utils', () => {
             ];
             const result = findObjectByProp(wizards, 'name', undefined);
             expect(result).toEqual({});
+        });
+    });
+
+    describe('dateToString', () => {
+        it('converts all dates to string format', () => {
+            const today = new Date(2023, 6, 3, 23, 41, 50, 0);
+            const tomorrow = new Date(2023, 6, 4, 12, 30, 10, 12);
+            const document = {
+                id: 100,
+                today,
+                tomorrow,
+            };
+            const result = dateToString(document);
+            expect(result.id).toBe(100);
+            expect(result.today).toEqual('03-07-2023 23:41:50.000');
+            expect(result.tomorrow).toEqual('04-07-2023 12:30:10.012');
+        });
+
+        it('returns original object if there is not a date value', () => {
+            const document = {
+                id: 100,
+                quantity: 20,
+                status: 'OPEN',
+            };
+            const result = dateToString(document);
+            expect(result.id).toBe(100);
+            expect(result.quantity).toBe(20);
+            expect(result.status).toBe('OPEN');
+            expect(result).toEqual(document);
         });
     });
 });
