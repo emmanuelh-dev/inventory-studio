@@ -21,7 +21,9 @@ export const isArrayEmpty = (array) => {
  * @param {any} value
  */
 export const findObjectByProp = (array, property, value) => {
-    return array != undefined ? array.find((element) => element[property] === value) : {};
+    if (isArrayEmpty(array) || !property || !value) return {};
+    const result = array.find((element) => element[property] === value);
+    return result == undefined ? {} : result;
 };
 
 /**
