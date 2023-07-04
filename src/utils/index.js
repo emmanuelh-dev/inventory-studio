@@ -26,24 +26,6 @@ export const findObjectByProp = (array, property, value) => {
     return result == undefined ? {} : result;
 };
 
-/**
- * It returns url with rest params
- * @param {object} params
- * @returns url rest params
- */
-export const buildUrl = (baseUrl, params) => {
-    if (Object.keys(params).length === 0) {
-        return baseUrl;
-    }
-
-    const keys = Object.keys(params);
-    const query = keys.reduce((previous, key) => {
-        return (previous += `/${key}/${params[key]}`);
-    }, '');
-
-    return `${baseUrl}${query}`;
-};
-
 export const dateToString = (data) => {
     const keys = Object.keys(data);
 
