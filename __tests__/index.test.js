@@ -1,4 +1,4 @@
-import { isObjectEmpty, isArrayEmpty, findObjectByProp, dateToString } from '@utils';
+import { isObjectEmpty, isArrayEmpty, findObjectByProp, dateToString, stringToDate } from '@utils';
 describe('Utils', () => {
     describe('isObjectEmpty', () => {
         it('returns true if object is empty', () => {
@@ -228,6 +228,38 @@ describe('Utils', () => {
                 status: 'OPEN',
             };
             const result = dateToString(document);
+            expect(result.id).toBe(100);
+            expect(result.quantity).toBe(20);
+            expect(result.status).toBe('OPEN');
+            expect(result).toEqual(document);
+        });
+    });
+
+    describe('stringToDate', () => {
+        it('converts all string date to date type', () => {
+            const todayDate = '03-07-2023 23:41:50.001';
+            const dateOfTomorrow = '04-07-2023 12:30:10.012';
+            const dateOfYestarday = '02-07-2023 16:21:59.150';
+            const document = {
+                id: 100,
+                todayDate,
+                dateOfTomorrow,
+                dateOfYestarday,
+            };
+            const result = stringToDate(document);
+            expect(result.id).toBe(100);
+            expect(result.todayDate).toEqual(new Date(2023, 6, 3, 23, 41, 50, 1));
+            expect(result.dateOfTomorrow).toEqual(new Date(2023, 6, 4, 12, 30, 10, 12));
+            expect(result.dateOfYestarday).toEqual(new Date(2023, 6, 2, 16, 21, 59, 150));
+        });
+
+        it('returns the original object when there is not any date property', () => {
+            const document = {
+                id: 100,
+                quantity: 20,
+                status: 'OPEN',
+            };
+            const result = stringToDate(document);
             expect(result.id).toBe(100);
             expect(result.quantity).toBe(20);
             expect(result.status).toBe('OPEN');

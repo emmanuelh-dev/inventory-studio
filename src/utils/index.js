@@ -34,7 +34,7 @@ export const dateToString = (data) => {
         return previous;
     }, []);
 
-    if (dateKeys == null || dateKeys == undefined || dateKeys.length === 0) {
+    if (isArrayEmpty(dateKeys)) {
         return data;
     }
 
@@ -56,9 +56,9 @@ export const dateToString = (data) => {
         return previous;
     }, {});
 
-    const _data = { ...data, ...dates };
+    const result = { ...data, ...dates };
 
-    return _data;
+    return result;
 };
 
 export const stringToDate = (data) => {
@@ -70,7 +70,7 @@ export const stringToDate = (data) => {
         return previous;
     }, []);
 
-    if (dateKeys == null || dateKeys == undefined || dateKeys.length === 0) {
+    if (isArrayEmpty(dateKeys)) {
         return data;
     }
 
@@ -84,16 +84,16 @@ export const stringToDate = (data) => {
         const hour = time[0];
         const minute = time[1];
         const seconds = time[2].slice(0, 2);
-        const milliseconds = time[2].slice(2);
-        const _date = new Date();
-        _date.setDate(day);
-        _date.setMonth(month - 1);
-        _date.setFullYear(year);
-        _date.setHours(hour);
-        _date.setMinutes(minute);
-        _date.setSeconds(seconds);
-        _date.setMilliseconds(milliseconds);
-        return _date;
+        const milliseconds = time[2].slice(3);
+        const targetDate = new Date();
+        targetDate.setDate(day);
+        targetDate.setMonth(month - 1);
+        targetDate.setFullYear(year);
+        targetDate.setHours(hour);
+        targetDate.setMinutes(minute);
+        targetDate.setSeconds(seconds);
+        targetDate.setMilliseconds(milliseconds);
+        return targetDate;
     };
 
     const dates = dateKeys.reduce((previous, key) => {
@@ -102,9 +102,9 @@ export const stringToDate = (data) => {
         return previous;
     }, {});
 
-    const _data = { ...data, ...dates };
+    const result = { ...data, ...dates };
 
-    return _data;
+    return result;
 };
 
 export const getValue = (event) => {
