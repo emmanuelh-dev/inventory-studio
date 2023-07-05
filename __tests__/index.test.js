@@ -1,4 +1,5 @@
 import {
+    findKey,
     getValue,
     isArrayEmpty,
     dateToString,
@@ -275,7 +276,7 @@ describe('Utils', () => {
     });
 
     describe('getValue', () => {
-        it('return the value of property value', () => {
+        it('returns the value of property value', () => {
             const event = {
                 value: 'valueOne',
             };
@@ -283,12 +284,38 @@ describe('Utils', () => {
             expect(result).toBe('valueOne');
         });
 
-        it('return the value of property target', () => {
+        it('returns the value of property target', () => {
             const event = {
                 target: { value: 'valueOne' },
             };
             const result = getValue(event);
             expect(result).toBe('valueOne');
+        });
+    });
+
+    describe('findKey', () => {
+        it('returns the first key name that includes a value on its name', () => {
+            const document = {
+                id: 100,
+                customerName: 'Omar',
+                quantity: 1,
+                colorName: 'red',
+            };
+
+            const result = findKey(document, 'Name');
+            expect(result).toBe('customerName');
+        });
+
+        it('returns undefined when the name does not match with any property', () => {
+            const document = {
+                id: 100,
+                customerName: 'Omar',
+                quantity: 1,
+                colorName: 'red',
+            };
+
+            const result = findKey(document, 'amount');
+            expect(result).toBeUndefined();
         });
     });
 });
