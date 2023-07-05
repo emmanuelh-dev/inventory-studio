@@ -4,9 +4,10 @@ import {
     isArrayEmpty,
     dateToString,
     stringToDate,
-    isObjectEmpty,
     replaceParams,
+    isObjectEmpty,
     transformFilter,
+    isOutputDocument,
     findObjectByProp,
 } from '@utils';
 describe('Utils', () => {
@@ -374,6 +375,17 @@ describe('Utils', () => {
             };
             const result = transformFilter(filter);
             expect(result).toEqual(expected);
+        });
+    });
+
+    describe('isOutputDocument', () => {
+        it('returns true if it is output', () => {
+            const result = isOutputDocument('OUTPUT');
+            expect(result).toBe(true);
+        });
+        it('returns false if it is not output', () => {
+            const result = isOutputDocument('INPUT');
+            expect(result).toBe(false);
         });
     });
 });
