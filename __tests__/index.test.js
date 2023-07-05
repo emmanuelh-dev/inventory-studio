@@ -1,4 +1,11 @@
-import { isObjectEmpty, isArrayEmpty, findObjectByProp, dateToString, stringToDate } from '@utils';
+import {
+    getValue,
+    isArrayEmpty,
+    dateToString,
+    stringToDate,
+    isObjectEmpty,
+    findObjectByProp,
+} from '@utils';
 describe('Utils', () => {
     describe('isObjectEmpty', () => {
         it('returns true if object is empty', () => {
@@ -264,6 +271,24 @@ describe('Utils', () => {
             expect(result.quantity).toBe(20);
             expect(result.status).toBe('OPEN');
             expect(result).toEqual(document);
+        });
+    });
+
+    describe('getValue', () => {
+        it('return the value of property value', () => {
+            const event = {
+                value: 'valueOne',
+            };
+            const result = getValue(event);
+            expect(result).toBe('valueOne');
+        });
+
+        it('return the value of property target', () => {
+            const event = {
+                target: { value: 'valueOne' },
+            };
+            const result = getValue(event);
+            expect(result).toBe('valueOne');
         });
     });
 });
