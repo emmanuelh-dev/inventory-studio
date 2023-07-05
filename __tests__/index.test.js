@@ -6,6 +6,7 @@ import {
     stringToDate,
     isObjectEmpty,
     replaceParams,
+    transformFilter,
     findObjectByProp,
 } from '@utils';
 describe('Utils', () => {
@@ -356,6 +357,23 @@ describe('Utils', () => {
             };
             const result = replaceParams(url, params);
             expect(result).toBe(expected);
+        });
+    });
+
+    describe('transformFilter', () => {
+        it('gets a object of filter and returns non-null/non-empty object', () => {
+            const filter = {
+                age: { value: 16 },
+                active: { value: true },
+                name: { value: 'Batman' },
+            };
+            const expected = {
+                age: 16,
+                active: true,
+                name: 'Batman',
+            };
+            const result = transformFilter(filter);
+            expect(result).toEqual(expected);
         });
     });
 });
