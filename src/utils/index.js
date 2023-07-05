@@ -121,11 +121,9 @@ export const findKey = (object, keyName) => {
 };
 
 export const replaceParams = (baseUrl, params) => {
-    if (Object.keys(params).length === 0) {
-        return baseUrl;
-    }
-
     const keys = Object.keys(params);
+
+    if (isArrayEmpty(keys)) return baseUrl;
 
     const url = keys.reduce((previous, key) => {
         previous = previous.replace(`{${key}}`, params[key]);

@@ -5,6 +5,7 @@ import {
     dateToString,
     stringToDate,
     isObjectEmpty,
+    replaceParams,
     findObjectByProp,
 } from '@utils';
 describe('Utils', () => {
@@ -316,6 +317,45 @@ describe('Utils', () => {
 
             const result = findKey(document, 'amount');
             expect(result).toBeUndefined();
+        });
+    });
+
+    describe('replaceParams', () => {
+        it('replaces url params with the values from object', () => {
+            const url = 'https://localhost:8080/api/v1/{type}/id/{id}';
+            const expected = 'https://localhost:8080/api/v1/OUTPUT/id/OUT00000000001';
+            const params = {
+                id: 'OUT00000000001',
+                type: 'OUTPUT',
+                quantity: 100,
+                status: 'OPEN',
+            };
+            const result = replaceParams(url, params);
+            expect(result).toBe(expected);
+        });
+
+        it('replaces the values that it found', () => {
+            const url = 'https://localhost:8080/api/v1/{type}/id/{total}';
+            const expected = 'https://localhost:8080/api/v1/OUTPUT/id/{total}';
+            const params = {
+                id: 'OUT00000000001',
+                type: 'OUTPUT',
+                quantity: 100,
+                status: 'OPEN',
+            };
+            const result = replaceParams(url, params);
+            expect(result).toBe(expected);
+        });
+
+        it('returns the original url if the object params is empty', () => {
+            const url = 'https://localhost:8080/api/v1/{type}/id/{id}';
+            const expected = 'https://localhost:8080/api/v1/{type}/id/{id}';
+            const params = {
+                quantity: 100,
+                status: 'OPEN',
+            };
+            const result = replaceParams(url, params);
+            expect(result).toBe(expected);
         });
     });
 });
