@@ -361,7 +361,7 @@ describe('Utils', () => {
     });
 
     describe('transformFilter', () => {
-        it('gets a object of filter and returns non-null/non-empty object', () => {
+        it('gets filter object and returns basic object', () => {
             const filter = {
                 age: { value: 16 },
                 active: { value: true },
