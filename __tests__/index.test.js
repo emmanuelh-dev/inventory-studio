@@ -6,6 +6,7 @@ import {
     stringToDate,
     replaceParams,
     isObjectEmpty,
+    itemEvaluator,
     transformFilter,
     isInputDocument,
     isOutputDocument,
@@ -446,6 +447,58 @@ describe('Utils', () => {
         it('returns true if it is empty space string', () => {
             const result = isNullOrUndefinedOrEmptyString(' ');
             expect(result).toBe(true);
+        });
+    });
+
+    describe('itemEvaluator', () => {
+        const fields = {
+            ID: 'id',
+            ITEM: 'item',
+            DELETED: 'deleted',
+            LINE_NUMBER: 'lineNumber',
+        };
+
+        const detail = {
+            id: 10,
+            lineNumber: 3,
+            item: { id: 200 },
+            deleted: false,
+        };
+
+        it('returns true if both objects dont have the same line number, they have the same item id and it is not marked as deleted', () => {
+            const element = {
+                id: null,
+                lineNumber: 4,
+                item: { id: 200 },
+                deleted: false,
+            };
+
+            const result = itemEvaluator(fields, element, detail);
+            expect(result).toBe(true);
+        });
+
+        it('returns false it the element is deleted', () => {
+            const element = {
+                id: null,
+                lineNumber: 4,
+                item: { id: 200 },
+                deleted: true,
+            };
+
+            const result = itemEvaluator(fields, element, detail);
+            expect(result).toBe(false);
+        });
+
+        it('returns false if they dont have the same item id', () => {
+            const element = {
+                id: null,
+                lineNumber: 4,
+                item: { id: 300 },
+                deleted: false,
+            };
+
+            const result = itemEvaluator(fields, element, detail);
+            expect(result).toBe(false);
         });
     });
 });
