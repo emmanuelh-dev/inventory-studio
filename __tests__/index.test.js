@@ -10,6 +10,7 @@ import {
     isInputDocument,
     isOutputDocument,
     findObjectByProp,
+    isDispatchDocument,
 } from '@utils';
 describe('Utils', () => {
     describe('isObjectEmpty', () => {
@@ -399,6 +400,28 @@ describe('Utils', () => {
 
         it('returns fals if it is not input', () => {
             const result = isInputDocument('OUTPUT');
+            expect(result).toBe(false);
+        });
+    });
+
+    describe('isDispatchDocument', () => {
+        it('returns true if it is an output document', () => {
+            const result = isDispatchDocument('OUTPUT');
+            expect(result).toBe(true);
+        });
+
+        it('returns true if it is a purchase return document', () => {
+            const result = isDispatchDocument('PURCHASE_RETURN');
+            expect(result).toBe(true);
+        });
+
+        it('returns false if it is a input document', () => {
+            const result = isDispatchDocument('INPUT');
+            expect(result).toBe(false);
+        });
+
+        it('returns false if it is a sales return document', () => {
+            const result = isDispatchDocument('SALES_RETURN');
             expect(result).toBe(false);
         });
     });
