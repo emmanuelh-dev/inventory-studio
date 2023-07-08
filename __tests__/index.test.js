@@ -11,6 +11,7 @@ import {
     isOutputDocument,
     findObjectByProp,
     isDispatchDocument,
+    isNullOrUndefinedOrEmptyString,
 } from '@utils';
 describe('Utils', () => {
     describe('isObjectEmpty', () => {
@@ -423,6 +424,28 @@ describe('Utils', () => {
         it('returns false if it is a sales return document', () => {
             const result = isDispatchDocument('SALES_RETURN');
             expect(result).toBe(false);
+        });
+    });
+
+    describe('isNullOrUndefinedOrEmptyString', () => {
+        it('returns true if it is null', () => {
+            const result = isNullOrUndefinedOrEmptyString(null);
+            expect(result).toBe(true);
+        });
+
+        it('returns true if it is undefined', () => {
+            const result = isNullOrUndefinedOrEmptyString(undefined);
+            expect(result).toBe(true);
+        });
+
+        it('returns true if it is empty string', () => {
+            const result = isNullOrUndefinedOrEmptyString('');
+            expect(result).toBe(true);
+        });
+
+        it('returns true if it is empty space string', () => {
+            const result = isNullOrUndefinedOrEmptyString(' ');
+            expect(result).toBe(true);
         });
     });
 });

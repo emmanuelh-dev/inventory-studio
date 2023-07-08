@@ -162,7 +162,7 @@ export const isDispatchDocument = (type) => {
 };
 
 export const isNullOrUndefinedOrEmptyString = (value) => {
-    return value === null || value === undefined || value == '';
+    return value === null || value === undefined || value.trim() == '';
 };
 
 const isSameItem = (fields, element, detail) => {
