@@ -175,5 +175,5 @@ export const itemEvaluator = (fields, element, detail) => {
 export const ifItemPresent = (fields, details, detail) => {
     const result = details.find((element) => itemEvaluator(fields, element, detail));
 
-    return result;
+    return isObjectEmpty(result) ? {} : result;
 };

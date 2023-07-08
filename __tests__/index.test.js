@@ -4,6 +4,7 @@ import {
     isArrayEmpty,
     dateToString,
     stringToDate,
+    ifItemPresent,
     replaceParams,
     isObjectEmpty,
     itemEvaluator,
@@ -499,6 +500,85 @@ describe('Utils', () => {
 
             const result = itemEvaluator(fields, element, detail);
             expect(result).toBe(false);
+        });
+    });
+
+    describe('ifItemPresent', () => {
+        const fields = {
+            ID: 'id',
+            ITEM: 'item',
+            DELETED: 'deleted',
+            LINE_NUMBER: 'lineNumber',
+        };
+
+        const details = [
+            {
+                id: 10,
+                lineNumber: 3,
+                item: { id: 200 },
+                deleted: false,
+            },
+            {
+                id: 11,
+                lineNumber: 1,
+                item: { id: 100 },
+                deleted: false,
+            },
+            {
+                id: 12,
+                lineNumber: 2,
+                item: { id: 300 },
+                deleted: false,
+            },
+        ];
+
+        it('it returns the object if the item already exist in the array but with different line number and not deleted', () => {
+            const element = {
+                id: null,
+                lineNumber: 5,
+                item: { id: 100 },
+                deleted: false,
+            };
+
+            const expected = {
+                id: 11,
+                lineNumber: 1,
+                item: { id: 100 },
+                deleted: false,
+            };
+
+            const result = ifItemPresent(fields, details, element);
+            expect(result).toEqual(expected);
+        });
+
+        it('it returns an empty object if the item already exist in the array with same line number and not deleted', () => {
+            const element = {
+                id: null,
+                lineNumber: 1,
+                item: { id: 100 },
+                deleted: false,
+            };
+            const result = ifItemPresent(fields, details, element);
+            expect(result).toEqual({});
+        });
+
+        it('it returns an empty object if the item already exist in the array with same line number and deleted', () => {
+            const element = {
+                id: null,
+                lineNumber: 5,
+                item: { id: 100 },
+                deleted: false,
+            };
+
+            details[1] = {
+                id: 11,
+                lineNumber: 1,
+                item: { id: 100 },
+                deleted: true,
+            };
+
+            const result = ifItemPresent(fields, details, element);
+            expect(result).toEqual({});
         });
     });
 });
