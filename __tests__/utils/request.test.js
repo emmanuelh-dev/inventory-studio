@@ -1,4 +1,4 @@
-import { buildFetchOptions } from '@utils/request';
+import { buildFetchOptions, buildAuthOptions } from '@utils/request';
 describe('Request', () => {
     describe('buildFetchOptions', () => {
         const session = {
@@ -83,6 +83,42 @@ describe('Request', () => {
             };
 
             const result = buildFetchOptions('DELETE', session, {});
+            expect(result).toEqual(expected);
+        });
+    });
+
+    describe('buildAuthOptions', () => {
+        const credentials = {
+            client: 'cliente',
+            secret: 'supersecreto',
+        };
+
+        const data = {
+            username: 'usuario@ejemplo.com',
+            password: 'password123',
+        };
+
+        it('creates post options for authentication', () => {
+            const { client, secret } = { ...credentials };
+            const authorization = `Basic ${Buffer.from(`${client}:${secret}`).toString('base64')}`;
+            const expected = {
+                mode: 'cors',
+                method: 'POST',
+                cache: 'default',
+                redirect: 'manual',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+                    Authorization: authorization,
+                },
+                body: new URLSearchParams({
+                    username: data.username,
+                    password: data.password,
+                    grant_type: 'password',
+                    scopes: 'read write',
+                }),
+            };
+
+            const result = buildAuthOptions(credentials, data);
             expect(result).toEqual(expected);
         });
     });
