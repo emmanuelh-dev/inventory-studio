@@ -7,6 +7,7 @@ import {
     replaceParams,
     isObjectEmpty,
     transformFilter,
+    isInputDocument,
     isOutputDocument,
     findObjectByProp,
 } from '@utils';
@@ -383,8 +384,21 @@ describe('Utils', () => {
             const result = isOutputDocument('OUTPUT');
             expect(result).toBe(true);
         });
+
         it('returns false if it is not output', () => {
             const result = isOutputDocument('INPUT');
+            expect(result).toBe(false);
+        });
+    });
+
+    describe('isInputDocument', () => {
+        it('returns true if it is input', () => {
+            const result = isInputDocument('INPUT');
+            expect(result).toBe(true);
+        });
+
+        it('returns fals if it is not input', () => {
+            const result = isInputDocument('OUTPUT');
             expect(result).toBe(false);
         });
     });
