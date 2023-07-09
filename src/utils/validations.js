@@ -25,5 +25,5 @@ export const validateNotEmptyField = (value, fieldLabel, showNotification) => {
 };
 
 export const isReleasedOrUsed = (row) => {
-    return row[fields.STATUS] === 'RELEASED' || row[fields.USED];
+    return row[fields.USED] || row[fields.STATUS] === 'RELEASED';
 };

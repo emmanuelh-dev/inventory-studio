@@ -102,13 +102,31 @@ describe('Validations', () => {
             expect(result).toBe(true);
         });
 
-        it('returns true if row uses is true', () => {
+        it('returns true if row used is true', () => {
             const row = {
                 used: true,
             };
 
             const result = isReleasedOrUsed(row);
             expect(result).toBe(true);
+        });
+
+        it('returns false if row is not used', () => {
+            const row = {
+                used: false,
+            };
+
+            const result = isReleasedOrUsed(row);
+            expect(result).toBe(false);
+        });
+
+        it('returns false if row is different to released', () => {
+            const row = {
+                status: 'OPEN',
+            };
+
+            const result = isReleasedOrUsed(row);
+            expect(result).toBe(false);
         });
     });
 });
