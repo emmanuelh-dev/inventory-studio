@@ -1,12 +1,10 @@
-import { ifItemPresent, isNullOrUndefinedOrEmptyString } from '@utils';
+import { ifItemPresent, isObjectEmpty, isNullOrUndefinedOrEmptyString } from '@utils';
 import { MESSAGE_TYPES, validationFields } from '@constants';
 
 const fields = validationFields;
 
 export const validateRepeatedItem = (detail, details, showNotification) => {
-    const isRepeated = ifItemPresent(fields, details, detail);
-
-    isRepeated = isRepeated != undefined;
+    const isRepeated = !isObjectEmpty(ifItemPresent(fields, details, detail));
     if (isRepeated) {
         const itemName = detail[fields.ITEM][fields.ITEM_NAME];
         const message = `El articulo ${itemName} ya se encuentra en este documento`;
