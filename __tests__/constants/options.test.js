@@ -1,4 +1,4 @@
-import { valuation, receptionTypes } from '@constants/options';
+import { valuation, receptionTypes, dispatchTypes } from '@constants/options';
 describe('Options', () => {
     describe('valuation', () => {
         it('has only average valuation type as object', () => {
@@ -24,6 +24,24 @@ describe('Options', () => {
             const result = receptionTypes[1];
             expect(result.label).toBe('Devolucion por venta');
             expect(result.value).toBe('SALES_RETURN');
+        });
+    });
+
+    describe('dispatchTypes', () => {
+        it('has two element in the array', () => {
+            expect(dispatchTypes.length).toBe(2);
+        });
+
+        it('object of type output on the first place', () => {
+            const result = dispatchTypes[0];
+            expect(result.label).toBe('Salida');
+            expect(result.value).toBe('OUTPUT');
+        });
+
+        it('object of type purchase return on the second place', () => {
+            const result = dispatchTypes[1];
+            expect(result.label).toBe('Devolucion por compra');
+            expect(result.value).toBe('PURCHASE_RETURN');
         });
     });
 });
