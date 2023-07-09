@@ -1,4 +1,4 @@
-import { validateRepeatedItem, validateNotEmptyField } from '@utils/validations';
+import { validateRepeatedItem, validateNotEmptyField, isReleasedOrUsed } from '@utils/validations';
 describe('Validations', () => {
     describe('validateRepeatedItem', () => {
         const details = [
@@ -88,6 +88,26 @@ describe('Validations', () => {
 
         it('returns true if the value has any valid string', () => {
             const result = validateNotEmptyField('valid string', 'name', () => {});
+            expect(result).toBe(true);
+        });
+    });
+
+    describe('isReleasedOrUsed', () => {
+        it('returns true if row status is released', () => {
+            const row = {
+                status: 'RELEASED',
+            };
+
+            const result = isReleasedOrUsed(row);
+            expect(result).toBe(true);
+        });
+
+        it('returns true if row uses is true', () => {
+            const row = {
+                used: true,
+            };
+
+            const result = isReleasedOrUsed(row);
             expect(result).toBe(true);
         });
     });
