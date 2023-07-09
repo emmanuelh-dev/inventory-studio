@@ -14,8 +14,9 @@ const config = {
     testEnvironment: 'jest-environment-jsdom',
     moduleNameMapper: {
         '^@utils(.*)$': '<rootDir>/src/utils$1',
-        '^@constants(.*)$': '<rootDir>/src/constants$1',
         '^@messages(.*)$': '<rootDir>/src/messages$1',
+        '^@constants(.*)$': '<rootDir>/src/constants$1',
+        '^@components(.*)$': '<rootDir>/src/components$1',
     },
 };
 
