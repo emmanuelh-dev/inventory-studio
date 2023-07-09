@@ -1,4 +1,4 @@
-import { validateRepeatedItem } from '@utils/validations';
+import { validateRepeatedItem, validateNotEmptyField } from '@utils/validations';
 describe('Validations', () => {
     describe('validateRepeatedItem', () => {
         const details = [
@@ -62,6 +62,33 @@ describe('Validations', () => {
 
             const result = validateRepeatedItem(element, details, () => {});
             expect(result).toBe(false);
+        });
+    });
+
+    describe('validateNotEmptyField', () => {
+        it('returns false if the value is empty', () => {
+            const result = validateNotEmptyField('', 'name', () => {});
+            expect(result).toBe(false);
+        });
+
+        it('returns false if the value is white space', () => {
+            const result = validateNotEmptyField('   ', 'name', () => {});
+            expect(result).toBe(false);
+        });
+
+        it('returns false if the value is null', () => {
+            const result = validateNotEmptyField(null, 'name', () => {});
+            expect(result).toBe(false);
+        });
+
+        it('returns false if the value is undefined', () => {
+            const result = validateNotEmptyField(undefined, 'name', () => {});
+            expect(result).toBe(false);
+        });
+
+        it('returns true if the value has any valid string', () => {
+            const result = validateNotEmptyField('valid string', 'name', () => {});
+            expect(result).toBe(true);
         });
     });
 });
