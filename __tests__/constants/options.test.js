@@ -1,9 +1,10 @@
 import {
+    toolbar,
     valuation,
-    receptionTypes,
     dispatchTypes,
     documentTypes,
-    toolbar,
+    receptionTypes,
+    detailsToolbar,
 } from '@constants/options';
 describe('Options', () => {
     describe('valuation', () => {
@@ -93,6 +94,25 @@ describe('Options', () => {
             const result = toolbar[4];
             expect(result.label).toBe('Acciones');
             expect(result.items).toEqual([]);
+        });
+    });
+
+    describe('detailsToolbar', () => {
+        it('should have two elements', () => {
+            expect(Array.isArray(detailsToolbar)).toBe(true);
+            expect(detailsToolbar.length).toBe(2);
+        });
+
+        it('should have correct label and icon for Agregar element', () => {
+            const result = detailsToolbar[0];
+            expect(result.label).toBe('Agregar');
+            expect(result.icon).toBe('pi pi-fw pi-plus-circle');
+        });
+
+        it('should have correct label and icon for Eliminar element', () => {
+            const result = detailsToolbar[1];
+            expect(result.label).toBe('Eliminar');
+            expect(result.icon).toBe('pi pi-fw pi-minus-circle');
         });
     });
 });
