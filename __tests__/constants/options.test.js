@@ -6,6 +6,7 @@ import {
     documentTypes,
     receptionTypes,
     detailsToolbar,
+    itemSearchFields,
 } from '@constants/options';
 describe('Options', () => {
     describe('valuation', () => {
@@ -191,6 +192,20 @@ describe('Options', () => {
             expect(result.field).toBe('totalPrice');
             expect(result.header).toBe('Precio Total');
             expect(result.body(row, result.field)).toBe('$239,546.00');
+        });
+    });
+
+    describe('itemSearchFields', () => {
+        it('should have three elements', () => {
+            expect(Array.isArray(itemSearchFields)).toBe(true);
+            expect(itemSearchFields.length).toBe(3);
+        });
+
+        it('should have correct objeect for itme name', () => {
+            const result = itemSearchFields[0];
+            expect(result.field).toBe('itemName');
+            expect(result.header).toBe('Articulo');
+            expect(result.filter).toBe(true);
         });
     });
 });
