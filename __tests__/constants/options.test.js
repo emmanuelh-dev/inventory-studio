@@ -2,6 +2,7 @@ import {
     toolbar,
     valuation,
     dispatchTypes,
+    detailColumns,
     documentTypes,
     receptionTypes,
     detailsToolbar,
@@ -113,6 +114,83 @@ describe('Options', () => {
             const result = detailsToolbar[1];
             expect(result.label).toBe('Eliminar');
             expect(result.icon).toBe('pi pi-fw pi-minus-circle');
+        });
+    });
+
+    describe('detailColumns', () => {
+        it('shoud have 5 elements in the array', () => {
+            expect(Array.isArray(detailColumns)).toBe(true);
+            expect(detailColumns.length).toBe(5);
+        });
+
+        it('shoud have correct field, header and body for the first element', () => {
+            const result = detailColumns[0];
+            const row = {
+                item: {
+                    itemName: 'Item One',
+                },
+            };
+            expect(result.field).toBe('item');
+            expect(result.header).toBe('Articulos');
+            expect(result.body(row, result.field)).toBe('Item One');
+        });
+
+        it('shoud have correct field, header and body for the second element', () => {
+            const result = detailColumns[1];
+            const row = {
+                item: {
+                    itemName: 'Item One',
+                },
+                description: 'item descripion one',
+            };
+            expect(result.field).toBe('description');
+            expect(result.header).toBe('Descripcion');
+            expect(result.body(row, result.field)).toBe('item descripion one');
+        });
+
+        it('shoud have correct field, header and body for the third element', () => {
+            const result = detailColumns[2];
+            const row = {
+                item: {
+                    itemName: 'Item One',
+                },
+                description: 'item descripion one',
+                quantity: 11987,
+            };
+            expect(result.field).toBe('quantity');
+            expect(result.header).toBe('Cantidad');
+            expect(result.body(row, result.field)).toBe('11,987');
+        });
+
+        it('shoud have correct field, header and body for the fourth element', () => {
+            const result = detailColumns[3];
+            const row = {
+                item: {
+                    itemName: 'Item One',
+                },
+                description: 'item descripion one',
+                quantity: 11987,
+                unitPrice: 63345,
+            };
+            expect(result.field).toBe('unitPrice');
+            expect(result.header).toBe('Precio Unitario');
+            expect(result.body(row, result.field)).toBe('$63,345.00');
+        });
+
+        it('shoud have correct field, header and body for the fifth element', () => {
+            const result = detailColumns[4];
+            const row = {
+                item: {
+                    itemName: 'Item One',
+                },
+                description: 'item descripion one',
+                quantity: 11987,
+                unitPrice: 63345,
+                totalPrice: 239546,
+            };
+            expect(result.field).toBe('totalPrice');
+            expect(result.header).toBe('Precio Total');
+            expect(result.body(row, result.field)).toBe('$239,546.00');
         });
     });
 });
