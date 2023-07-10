@@ -1,4 +1,4 @@
-import { valuation, receptionTypes, dispatchTypes } from '@constants/options';
+import { valuation, receptionTypes, dispatchTypes, documentTypes } from '@constants/options';
 describe('Options', () => {
     describe('valuation', () => {
         it('has only average valuation type as object', () => {
@@ -42,6 +42,15 @@ describe('Options', () => {
             const result = dispatchTypes[1];
             expect(result.label).toBe('Devolucion por compra');
             expect(result.value).toBe('PURCHASE_RETURN');
+        });
+    });
+
+    describe('documentTypes', () => {
+        it('has ingreso, salida, devolucion por venta and devolucion por compra value for its keys', () => {
+            expect(documentTypes.INPUT).toBe('Ingreso');
+            expect(documentTypes.OUTPUT).toBe('Salida');
+            expect(documentTypes.SALE_RETURN).toBe('Devolucion por venta');
+            expect(documentTypes.PURCHASE_RETURN).toBe('Devolucion por compra');
         });
     });
 });
