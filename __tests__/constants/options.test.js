@@ -201,11 +201,24 @@ describe('Options', () => {
             expect(itemSearchFields.length).toBe(3);
         });
 
-        it('should have correct objeect for itme name', () => {
+        it('should have correct objeect for item name', () => {
             const result = itemSearchFields[0];
             expect(result.field).toBe('itemName');
             expect(result.header).toBe('Articulo');
             expect(result.filter).toBe(true);
+        });
+
+        it('should have correct objeect for description', () => {
+            const result = itemSearchFields[1];
+            expect(result.field).toBe('description');
+            expect(result.header).toBe('Descripcion');
+            expect(result.filter).toBe(false);
+        });
+
+        it('should have correct objeect for valuationType', () => {
+            const result = itemSearchFields[2];
+            expect(result.field).toBe('valuationType');
+            expect(result.header).toBe('Metodo de Valuacion');
         });
     });
 });
