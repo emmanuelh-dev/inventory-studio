@@ -9,6 +9,7 @@ import {
     receptionTypes,
     detailsToolbar,
     itemSearchFields,
+    warehouseSearchFields,
 } from '@constants/options';
 describe('Options', () => {
     describe('valuation', () => {
@@ -229,6 +230,25 @@ describe('Options', () => {
             const result = itemFilters.itemName;
             expect(result.value).toBe('');
             expect(result.matchMode).toBe(FilterMatchMode.CONTAINS);
+        });
+    });
+
+    describe('warehouseSearchFields', () => {
+        it('should have two elements', () => {
+            expect(warehouseSearchFields.length).toBe(2);
+        });
+
+        it('should have correct object for warehouse name filter', () => {
+            const result = warehouseSearchFields[0];
+            expect(result.field).toBe('warehouseName');
+            expect(result.header).toBe('Almacen');
+            expect(result.filter).toBe(true);
+        });
+
+        it('should have correct object for warehouse used field filter', () => {
+            const result = warehouseSearchFields[1];
+            expect(result.field).toBe('used');
+            expect(result.header).toBe('Estado');
         });
     });
 });
