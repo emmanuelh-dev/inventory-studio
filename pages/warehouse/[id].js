@@ -11,7 +11,7 @@ import { withWarehouse } from '@hocs/withWarehouse';
 import { ProgressSpinner } from 'primereact/progressspinner';
 
 const WarehouseForm = withWarehouse(Warehouse);
-export default () => {
+const RedirectWarehouse = () => {
     const [warehouse, setWarehouse] = useState(null);
     const router = useRouter();
     const { id } = router.query;
@@ -36,3 +36,5 @@ export default () => {
     }
     return <WarehouseForm initialState={warehouse} />;
 };
+
+export default RedirectWarehouse;

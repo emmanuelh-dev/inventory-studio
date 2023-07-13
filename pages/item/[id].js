@@ -37,3 +37,5 @@ const RedirectItem = () => {
     }
     return <ItemForm initialState={item} />;
 };
+
+export default RedirectItem;
