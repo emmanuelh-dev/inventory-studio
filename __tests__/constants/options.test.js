@@ -9,6 +9,7 @@ import {
     receptionTypes,
     detailsToolbar,
     itemSearchFields,
+    warehouseFilters,
     warehouseSearchFields,
 } from '@constants/options';
 describe('Options', () => {
@@ -249,6 +250,14 @@ describe('Options', () => {
             const result = warehouseSearchFields[1];
             expect(result.field).toBe('used');
             expect(result.header).toBe('Estado');
+        });
+    });
+
+    describe('warehouseFilters', () => {
+        it('should have filter by warehouse name', () => {
+            const result = warehouseFilters.warehouseName;
+            expect(result.value).toBe('');
+            expect(result.matchMode).toBe(FilterMatchMode.CONTAINS);
         });
     });
 });
