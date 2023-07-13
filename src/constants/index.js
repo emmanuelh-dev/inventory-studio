@@ -30,6 +30,7 @@ export const DOCUMENT_TYPES = {
     SALES_RETURN: 'SALES_RETURN',
     PURCHASE_RETURN: 'PURCHASE_RETURN',
 };
+
 export const itemState = {
     id: null,
     itemName: '',
