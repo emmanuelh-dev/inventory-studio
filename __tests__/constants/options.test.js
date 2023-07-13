@@ -276,8 +276,14 @@ describe('Options', () => {
             expect(result.matchMode).toBe(FilterMatchMode.CONTAINS);
         });
 
-        it('should have filter by document da', () => {
+        it('should have filter by document date', () => {
             const result = documentFilters.date;
+            expect(result.value).toBe('');
+            expect(result.matchMode).toBe(FilterMatchMode.CONTAINS);
+        });
+
+        it('should have filter by document status', () => {
+            const result = documentFilters.status;
             expect(result.value).toBe('');
             expect(result.matchMode).toBe(FilterMatchMode.CONTAINS);
         });
