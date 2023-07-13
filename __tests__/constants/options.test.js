@@ -8,6 +8,7 @@ import {
     documentTypes,
     receptionTypes,
     detailsToolbar,
+    documentFilters,
     itemSearchFields,
     warehouseFilters,
     dropdownLabelOptions,
@@ -265,6 +266,14 @@ describe('Options', () => {
     describe('dropdownLabelOptions', () => {
         it('should have the label option for warehousee', () => {
             expect(dropdownLabelOptions.warehouse).toBe('warehouseName');
+        });
+    });
+
+    describe('documentFilters', () => {
+        it('should have filter by document id', () => {
+            const result = documentFilters.id;
+            expect(result.value).toBe('');
+            expect(result.matchMode).toBe(FilterMatchMode.CONTAINS);
         });
     });
 });
