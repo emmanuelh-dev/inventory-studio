@@ -8,6 +8,7 @@ import {
 } from '@components/templates';
 
 export const valuation = [{ label: 'Promedio Ponderado', value: 'AVERAGE' }];
+
 export const receptionTypes = [
     { label: 'Ingreso', value: 'INPUT' },
     { label: 'Devolucion por venta', value: 'SALES_RETURN' },
