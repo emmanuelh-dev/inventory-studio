@@ -12,6 +12,7 @@ import {
     itemSearchFields,
     warehouseFilters,
     dropdownLabelOptions,
+    documentSearchFields,
     warehouseSearchFields,
 } from '@constants/options';
 describe('Options', () => {
@@ -286,6 +287,52 @@ describe('Options', () => {
             const result = documentFilters.status;
             expect(result.value).toBe('');
             expect(result.matchMode).toBe(FilterMatchMode.CONTAINS);
+        });
+    });
+
+    describe('documentSearchFields', () => {
+        it('should have the right object for filter document by id', () => {
+            const result = documentSearchFields[0];
+            expect(result.field).toBe('id');
+            expect(result.header).toBe('Folio');
+            expect(result.filter).toBe(true);
+        });
+
+        it('should have the right object for filter document by date', () => {
+            const result = documentSearchFields[1];
+            expect(result.field).toBe('date');
+            expect(result.header).toBe('Fecha');
+            expect(result.filter).toBe(true);
+        });
+
+        it('should have the right object for filter document by status', () => {
+            const result = documentSearchFields[2];
+            expect(result.field).toBe('status');
+            expect(result.header).toBe('Estado');
+            expect(result.filter).toBe(true);
+        });
+
+        it('should have the right object for filter document by warehouse', () => {
+            const row = {
+                warehouseName: 'WarehouseOne',
+            };
+            const result = documentSearchFields[3];
+            expect(result.field).toBe('warehouse');
+            expect(result.header).toBe('Almacen');
+            expect(result.filter).toBe(true);
+            expect(result.template(row)).toBe('WarehouseOne');
+        });
+
+        it('should have the right object for filter document by totalQuantity', () => {
+            const result = documentSearchFields[4];
+            expect(result.field).toBe('totalQuantity');
+            expect(result.header).toBe('Cantidad total');
+        });
+
+        it('should have the right object for filter document by totalAmount', () => {
+            const result = documentSearchFields[5];
+            expect(result.field).toBe('totalAmount');
+            expect(result.header).toBe('Monto total');
         });
     });
 });
