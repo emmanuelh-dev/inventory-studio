@@ -1,6 +1,8 @@
+import { FilterMatchMode } from 'primereact/api';
 import {
     toolbar,
     valuation,
+    itemFilters,
     dispatchTypes,
     detailColumns,
     documentTypes,
@@ -219,6 +221,14 @@ describe('Options', () => {
             const result = itemSearchFields[2];
             expect(result.field).toBe('valuationType');
             expect(result.header).toBe('Metodo de Valuacion');
+        });
+    });
+
+    describe('itemFilters', () => {
+        it('should have filter by item name', () => {
+            const result = itemFilters.itemName;
+            expect(result.value).toBe('');
+            expect(result.matchMode).toBe(FilterMatchMode.CONTAINS);
         });
     });
 });
