@@ -275,5 +275,11 @@ describe('Options', () => {
             expect(result.value).toBe('');
             expect(result.matchMode).toBe(FilterMatchMode.CONTAINS);
         });
+
+        it('should have filter by document da', () => {
+            const result = documentFilters.date;
+            expect(result.value).toBe('');
+            expect(result.matchMode).toBe(FilterMatchMode.CONTAINS);
+        });
     });
 });
