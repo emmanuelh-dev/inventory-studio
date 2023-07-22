@@ -130,7 +130,7 @@ describe('useFormState', () => {
                 expect(result.current.document.warehouse).toBe(warehouseUpdated);
             });
 
-            it('should be able to add document detail field', () => {
+            it('should be able to add document detail element', () => {
                 const detailThree = {
                     id: 3,
                     lineNumber: 3,
@@ -156,12 +156,30 @@ describe('useFormState', () => {
                 });
 
                 const details = [...result.current.document.details, detailThree];
+
                 act(() => {
                     result.current.updateDocumentField('details', details);
                 });
 
-                expect(result.current.document.details).toBe(details);
+                expect(result.current.document.details).toEqual(details);
                 expect(result.current.document.details.length).toBe(3);
+            });
+
+            it('should be able to remove deocument detail element', () => {
+                const { result } = renderHook(useDocumentForm, {
+                    initialProps: {
+                        initialState: initialDocument,
+                        defaultInitialState: outputDocumentState,
+                    },
+                });
+
+                const details = result.current.document.details.pop();
+                act(() => {
+                    result.current.updateDocumentField('details', [details]);
+                });
+
+                expect(result.current.document.details).toEqual([detailTwo]);
+                expect(result.current.document.details.length).toBe(1);
             });
         });
     });
