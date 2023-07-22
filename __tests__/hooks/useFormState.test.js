@@ -1,6 +1,7 @@
 import { renderHook, act } from '@testing-library/react';
 import { useDocumentForm } from '@hooks/useFormState';
 import { outputDocumentState } from '@constants';
+import _ from 'lodash';
 
 describe('useFormState', () => {
     describe('useDocumentForm', () => {
@@ -77,7 +78,7 @@ describe('useFormState', () => {
             it('should be able to init the hook with initial state value for output document', () => {
                 const { result } = renderHook(useDocumentForm, {
                     initialProps: {
-                        initialState: initialDocument,
+                        initialState: _.cloneDeep(initialDocument),
                         defaultInitialState: outputDocumentState,
                     },
                 });
@@ -98,7 +99,7 @@ describe('useFormState', () => {
 
                 const { result } = renderHook(useDocumentForm, {
                     initialProps: {
-                        initialState: initialDocument,
+                        initialState: _.cloneDeep(initialDocument),
                         defaultInitialState: outputDocumentState,
                     },
                 });
@@ -150,7 +151,7 @@ describe('useFormState', () => {
 
                 const { result } = renderHook(useDocumentForm, {
                     initialProps: {
-                        initialState: initialDocument,
+                        initialState: _.cloneDeep(initialDocument),
                         defaultInitialState: outputDocumentState,
                     },
                 });
@@ -165,10 +166,10 @@ describe('useFormState', () => {
                 expect(result.current.document.details.length).toBe(3);
             });
 
-            it('should be able to remove deocument detail element', () => {
+            it('should be able to remove document detail element', () => {
                 const { result } = renderHook(useDocumentForm, {
                     initialProps: {
-                        initialState: initialDocument,
+                        initialState: _.cloneDeep(initialDocument),
                         defaultInitialState: outputDocumentState,
                     },
                 });
@@ -180,6 +181,39 @@ describe('useFormState', () => {
 
                 expect(result.current.document.details).toEqual([detailTwo]);
                 expect(result.current.document.details.length).toBe(1);
+            });
+
+            it('should be able to update document detail element', () => {
+                const detailOneUpdated = {
+                    ...detailOne,
+                    item: {
+                        id: 3,
+                        itemName: 'item three',
+                        description: 'item description three',
+                        valuationType: 'AVERAGE',
+                        used: false,
+                    },
+                    description: 'detail item one updated',
+                    quantity: 3,
+                    unitPrice: 8,
+                    totalPrice: 24,
+                };
+
+                const { result } = renderHook(useDocumentForm, {
+                    initialProps: {
+                        initialState: _.cloneDeep(initialDocument),
+                        defaultInitialState: outputDocumentState,
+                    },
+                });
+                const details = [...result.current.document.details];
+
+                details[0] = detailOneUpdated;
+                act(() => {
+                    result.current.updateDocumentField('details', details);
+                });
+
+                expect(result.current.document.details).toEqual([detailOneUpdated, detailTwo]);
+                expect(result.current.document.details.length).toBe(2);
             });
         });
     });
