@@ -205,6 +205,7 @@ describe('useFormState', () => {
                         defaultInitialState: outputDocumentState,
                     },
                 });
+
                 const details = [...result.current.document.details];
 
                 details[0] = detailOneUpdated;
@@ -214,6 +215,35 @@ describe('useFormState', () => {
 
                 expect(result.current.document.details).toEqual([detailOneUpdated, detailTwo]);
                 expect(result.current.document.details.length).toBe(2);
+            });
+
+            it('should be able to update the document', () => {
+                const document = {
+                    id: 22072023,
+                    type: 'OUTPUT',
+                    date: new Date(),
+                    status: 'RELEASED',
+                    warehouse: warehouse,
+                    description: 'output document description one',
+                    totalQuantity: 10,
+                    totalAmount: 1000,
+                    counter: 6,
+                    deleted: false,
+                    details: [detailOne],
+                };
+
+                const { result } = renderHook(useDocumentForm, {
+                    initialProps: {
+                        initialState: _.cloneDeep(initialDocument),
+                        defaultInitialState: outputDocumentState,
+                    },
+                });
+
+                act(() => {
+                    result.current.updateDocument(document);
+                });
+
+                expect(result.current.document).toBe(document);
             });
         });
     });
