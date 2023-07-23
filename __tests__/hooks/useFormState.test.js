@@ -70,9 +70,9 @@ describe('useFormState', () => {
                         defaultInitialState: outputDocumentState,
                     },
                 });
+                expect(result.current.saveButtonDisabled).toBe(true);
                 expect(result.current.document).toEqual(outputDocumentState);
                 expect(result.current.documentCopy).toEqual(outputDocumentState);
-                expect(result.current.saveButtonDisabled).toBe(false);
                 expect(result.current.initialDocument).toEqual(outputDocumentState);
             });
 
@@ -83,9 +83,9 @@ describe('useFormState', () => {
                         defaultInitialState: outputDocumentState,
                     },
                 });
+                expect(result.current.saveButtonDisabled).toBe(true);
                 expect(result.current.document).toEqual(initialDocument);
                 expect(result.current.documentCopy).toEqual(initialDocument);
-                expect(result.current.saveButtonDisabled).toBe(false);
                 expect(result.current.initialDocument).toEqual(outputDocumentState);
             });
 
@@ -270,10 +270,6 @@ describe('useFormState', () => {
                     result.current.updateDocumentField('description', 'output description changed');
                 });
 
-                act(() => {
-                    result.current.updateSaveButtonStatus();
-                });
-
                 expect(result.current.saveButtonDisabled).toBe(false);
             });
 
@@ -326,10 +322,23 @@ describe('useFormState', () => {
                 act(() => {
                     result.current.updateInitialDocument(DOCUMENT_TYPES.PURCHASE_RETURN);
                 });
+
                 const expected = _.cloneDeep(purchaseReturnDocumentState);
+
                 expect(result.current.document).toEqual(expected);
                 expect(result.current.documentCopy).toEqual(expected);
                 expect(result.current.initialDocument).toEqual(expected);
+            });
+
+            it('should be abe to get the status of add button', () => {
+                const { result } = renderHook(useDocumentForm, {
+                    initialProps: {
+                        initialState: _.cloneDeep(initialDocument),
+                        defaultInitialState: outputDocumentState,
+                    },
+                });
+
+                expect(result.current.addButtonDisabled).toBe(false);
             });
         });
     });
