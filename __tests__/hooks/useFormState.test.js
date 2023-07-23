@@ -256,6 +256,25 @@ describe('useFormState', () => {
 
                 expect(result.current.documentCopy).toBe(purchaseReturnDocumentState);
             });
+
+            it('should be able to update save button status', () => {
+                const { result } = renderHook(useDocumentForm, {
+                    initialProps: {
+                        initialState: _.cloneDeep(initialDocument),
+                        defaultInitialState: outputDocumentState,
+                    },
+                });
+
+                act(() => {
+                    result.current.updateDocumentField('description', 'output description changed');
+                });
+
+                act(() => {
+                    result.current.updateSaveButtonStatus();
+                });
+
+                expect(result.current.saveButtonDisabled).toBe(false);
+            });
         });
     });
 });
