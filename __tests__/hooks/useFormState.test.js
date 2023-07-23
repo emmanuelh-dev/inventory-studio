@@ -2,7 +2,7 @@ import _ from 'lodash';
 import { stringToDate } from '@utils';
 import { useDocumentForm } from '@hooks/useFormState';
 import { renderHook, act } from '@testing-library/react';
-import { outputDocumentState, purchaseReturnDocumentState } from '@constants';
+import { outputDocumentState, purchaseReturnDocumentState, DOCUMENT_TYPES } from '@constants';
 
 describe('useFormState', () => {
     describe('useDocumentForm', () => {
@@ -313,6 +313,23 @@ describe('useFormState', () => {
 
                 const documentResult = stringToDate(_.cloneDeep(documentFromService));
                 expect(result.current.document).toEqual(_.cloneDeep(documentResult));
+            });
+
+            it('should be able to update initial document', () => {
+                const { result } = renderHook(useDocumentForm, {
+                    initialProps: {
+                        initialState: _.cloneDeep(initialDocument),
+                        defaultInitialState: outputDocumentState,
+                    },
+                });
+
+                act(() => {
+                    result.current.updateInitialDocument(DOCUMENT_TYPES.PURCHASE_RETURN);
+                });
+                const expected = _.cloneDeep(purchaseReturnDocumentState);
+                expect(result.current.document).toEqual(expected);
+                expect(result.current.documentCopy).toEqual(expected);
+                expect(result.current.initialDocument).toEqual(expected);
             });
         });
     });
