@@ -1,7 +1,7 @@
-import { renderHook, act } from '@testing-library/react';
-import { useDocumentForm } from '@hooks/useFormState';
-import { outputDocumentState } from '@constants';
 import _ from 'lodash';
+import { useDocumentForm } from '@hooks/useFormState';
+import { renderHook, act } from '@testing-library/react';
+import { outputDocumentState, purchaseReturnDocumentState } from '@constants';
 
 describe('useFormState', () => {
     describe('useDocumentForm', () => {
@@ -185,7 +185,7 @@ describe('useFormState', () => {
 
             it('should be able to update document detail element', () => {
                 const detailOneUpdated = {
-                    ...detailOne,
+                    ..._.cloneDeep(detailOne),
                     item: {
                         id: 3,
                         itemName: 'item three',
@@ -219,16 +219,12 @@ describe('useFormState', () => {
 
             it('should be able to update the document', () => {
                 const document = {
-                    id: 22072023,
-                    type: 'OUTPUT',
-                    date: new Date(),
+                    ..._.cloneDeep(initialDocument),
                     status: 'RELEASED',
-                    warehouse: warehouse,
                     description: 'output document description one',
                     totalQuantity: 10,
                     totalAmount: 1000,
                     counter: 6,
-                    deleted: false,
                     details: [detailOne],
                 };
 
@@ -244,6 +240,21 @@ describe('useFormState', () => {
                 });
 
                 expect(result.current.document).toBe(document);
+            });
+
+            it('should be able to update document copy', () => {
+                const { result } = renderHook(useDocumentForm, {
+                    initialProps: {
+                        initialState: _.cloneDeep(initialDocument),
+                        defaultInitialState: outputDocumentState,
+                    },
+                });
+
+                act(() => {
+                    result.current.updateDocumentCopy(purchaseReturnDocumentState);
+                });
+
+                expect(result.current.documentCopy).toBe(purchaseReturnDocumentState);
             });
         });
     });
