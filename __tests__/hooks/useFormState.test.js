@@ -275,6 +275,26 @@ describe('useFormState', () => {
 
                 expect(result.current.saveButtonDisabled).toBe(false);
             });
+
+            it('should be able to clear document', () => {
+                const { result } = renderHook(useDocumentForm, {
+                    initialProps: {
+                        initialState: _.cloneDeep(initialDocument),
+                        defaultInitialState: outputDocumentState,
+                    },
+                });
+
+                act(() => {
+                    result.current.updateDocumentField('description', 'output description changed');
+                });
+
+                act(() => {
+                    result.current.clearDocument();
+                });
+
+                expect(result.current.document).toEqual(_.cloneDeep(outputDocumentState));
+                expect(result.current.documentCopy).toEqual(_.cloneDeep(outputDocumentState));
+            });
         });
     });
 });
