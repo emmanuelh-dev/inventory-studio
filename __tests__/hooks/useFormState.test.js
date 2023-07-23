@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import { stringToDate } from '@utils';
 import { useDocumentForm } from '@hooks/useFormState';
 import { renderHook, act } from '@testing-library/react';
 import { outputDocumentState, purchaseReturnDocumentState } from '@constants';
@@ -294,6 +295,24 @@ describe('useFormState', () => {
 
                 expect(result.current.document).toEqual(_.cloneDeep(outputDocumentState));
                 expect(result.current.documentCopy).toEqual(_.cloneDeep(outputDocumentState));
+            });
+
+            it('should be able to update document when get an updating from service', () => {
+                const documentFromService = _.cloneDeep(initialDocument);
+                documentFromService.date = '03-07-2023 23:41:50.000';
+                const { result } = renderHook(useDocumentForm, {
+                    initialProps: {
+                        initialState: _.cloneDeep(initialDocument),
+                        defaultInitialState: outputDocumentState,
+                    },
+                });
+
+                act(() => {
+                    result.current.updateDocumentFromService(documentFromService);
+                });
+
+                const documentResult = stringToDate(_.cloneDeep(documentFromService));
+                expect(result.current.document).toEqual(_.cloneDeep(documentResult));
             });
         });
     });
