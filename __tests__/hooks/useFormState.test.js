@@ -420,6 +420,21 @@ describe('useFormState', () => {
 
                 expect(result.current.releaseButtonDisabled).toBe(true);
             });
+
+            it('should disable release button when document type is changed', () => {
+                const { result } = renderHook(useDocumentForm, {
+                    initialProps: {
+                        initialState: _.cloneDeep(initialDocument),
+                        defaultInitialState: outputDocumentState,
+                    },
+                });
+
+                act(() => {
+                    result.current.updateInitialDocument(DOCUMENT_TYPES.PURCHASE_RETURN);
+                });
+
+                expect(result.current.releaseButtonDisabled).toBe(true);
+            });
         });
     });
 });
