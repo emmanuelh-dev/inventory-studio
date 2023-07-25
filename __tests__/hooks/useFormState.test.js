@@ -365,7 +365,7 @@ describe('useFormState', () => {
                 expect(result.current.deleteButtonDisabled).toBe(false);
             });
 
-            it('should disable delete button when document if any field is updated', () => {
+            it('should disable delete button when any field of document is updated', () => {
                 const { result } = renderHook(useDocumentForm, {
                     initialProps: {
                         initialState: _.cloneDeep(initialDocument),
@@ -404,6 +404,21 @@ describe('useFormState', () => {
                 });
 
                 expect(result.current.releaseButtonDisabled).toBe(false);
+            });
+
+            it('should disable release button when any field of document is updated', () => {
+                const { result } = renderHook(useDocumentForm, {
+                    initialProps: {
+                        initialState: _.cloneDeep(initialDocument),
+                        defaultInitialState: outputDocumentState,
+                    },
+                });
+
+                act(() => {
+                    result.current.updateDocumentField('description', 'output description changed');
+                });
+
+                expect(result.current.releaseButtonDisabled).toBe(true);
             });
         });
     });
