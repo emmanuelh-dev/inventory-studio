@@ -50,7 +50,7 @@ describe('useFormState', () => {
             };
 
             const initialDocument = {
-                id: 22072023,
+                id: 'OU0000000001',
                 type: 'OUTPUT',
                 date: new Date(),
                 status: 'OPEN',
@@ -70,7 +70,11 @@ describe('useFormState', () => {
                         defaultInitialState: outputDocumentState,
                     },
                 });
+
+                expect(result.current.addButtonDisabled).toBe(true);
                 expect(result.current.saveButtonDisabled).toBe(true);
+                expect(result.current.deleteButtonDisabled).toBe(true);
+                expect(result.current.releaseButtonDisabled).toBe(true);
                 expect(result.current.document).toEqual(outputDocumentState);
                 expect(result.current.documentCopy).toEqual(outputDocumentState);
                 expect(result.current.initialDocument).toEqual(outputDocumentState);
@@ -83,7 +87,11 @@ describe('useFormState', () => {
                         defaultInitialState: outputDocumentState,
                     },
                 });
+
+                expect(result.current.addButtonDisabled).toBe(false);
                 expect(result.current.saveButtonDisabled).toBe(true);
+                expect(result.current.deleteButtonDisabled).toBe(false);
+                expect(result.current.releaseButtonDisabled).toBe(false);
                 expect(result.current.document).toEqual(initialDocument);
                 expect(result.current.documentCopy).toEqual(initialDocument);
                 expect(result.current.initialDocument).toEqual(outputDocumentState);
@@ -258,21 +266,6 @@ describe('useFormState', () => {
                 expect(result.current.documentCopy).toBe(purchaseReturnDocumentState);
             });
 
-            it('should be able to update save button status', () => {
-                const { result } = renderHook(useDocumentForm, {
-                    initialProps: {
-                        initialState: _.cloneDeep(initialDocument),
-                        defaultInitialState: outputDocumentState,
-                    },
-                });
-
-                act(() => {
-                    result.current.updateDocumentField('description', 'output description changed');
-                });
-
-                expect(result.current.saveButtonDisabled).toBe(false);
-            });
-
             it('should be able to clear document', () => {
                 const { result } = renderHook(useDocumentForm, {
                     initialProps: {
@@ -330,7 +323,23 @@ describe('useFormState', () => {
                 expect(result.current.initialDocument).toEqual(expected);
             });
 
-            it('should be abe to get the status of add button', () => {
+            it('should enable add button', () => {
+                const { result } = renderHook(useDocumentForm, {
+                    initialProps: {
+                        initialState: undefined,
+                        defaultInitialState: outputDocumentState,
+                    },
+                });
+
+                act(() => {
+                    result.current.updateDocumentField('warehouse', warehouse);
+                });
+
+                expect(result.current.addButtonDisabled).toBe(false);
+                expect(result.current.document.warehouse).toEqual(warehouse);
+            });
+
+            it('should enable save button', () => {
                 const { result } = renderHook(useDocumentForm, {
                     initialProps: {
                         initialState: _.cloneDeep(initialDocument),
@@ -338,7 +347,63 @@ describe('useFormState', () => {
                     },
                 });
 
-                expect(result.current.addButtonDisabled).toBe(false);
+                act(() => {
+                    result.current.updateDocumentField('description', 'output description changed');
+                });
+
+                expect(result.current.saveButtonDisabled).toBe(false);
+            });
+
+            it('should enable delete button', () => {
+                const { result } = renderHook(useDocumentForm, {
+                    initialProps: {
+                        initialState: _.cloneDeep(initialDocument),
+                        defaultInitialState: outputDocumentState,
+                    },
+                });
+
+                expect(result.current.deleteButtonDisabled).toBe(false);
+            });
+
+            it('should disable delete button when document if any field is updated', () => {
+                const { result } = renderHook(useDocumentForm, {
+                    initialProps: {
+                        initialState: _.cloneDeep(initialDocument),
+                        defaultInitialState: outputDocumentState,
+                    },
+                });
+
+                act(() => {
+                    result.current.updateDocumentField('description', 'output description changed');
+                });
+
+                expect(result.current.deleteButtonDisabled).toBe(true);
+            });
+
+            it('should disable delete button when document type is changed', () => {
+                const { result } = renderHook(useDocumentForm, {
+                    initialProps: {
+                        initialState: _.cloneDeep(initialDocument),
+                        defaultInitialState: outputDocumentState,
+                    },
+                });
+
+                act(() => {
+                    result.current.updateInitialDocument(DOCUMENT_TYPES.PURCHASE_RETURN);
+                });
+
+                expect(result.current.deleteButtonDisabled).toBe(true);
+            });
+
+            it('should enable release button', () => {
+                const { result } = renderHook(useDocumentForm, {
+                    initialProps: {
+                        initialState: _.cloneDeep(initialDocument),
+                        defaultInitialState: outputDocumentState,
+                    },
+                });
+
+                expect(result.current.releaseButtonDisabled).toBe(false);
             });
         });
     });
