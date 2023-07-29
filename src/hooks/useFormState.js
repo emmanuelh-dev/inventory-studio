@@ -1,12 +1,15 @@
+import _ from 'lodash';
 import { useState, useEffect } from 'react';
+import { isReleased } from '@utils/validations';
 import {
-    isObjectEmpty,
     getValue,
     stringToDate,
+    isObjectEmpty,
     isInputDocument,
     isOutputDocument,
     findObjectByProp,
     isDispatchDocument,
+    isNullOrUndefinedOrEmptyString,
 } from '@utils';
 import {
     detailState,
@@ -97,7 +100,7 @@ export const useForm = (initialState, defaultInitialState) => {
     };
 };
 
-export const useDocumentForm = (initialState, defaultInitialState) => {
+export const useDocumentForm = ({ initialState, defaultInitialState }) => {
     const documentInitialState = isObjectEmpty(initialState) ? defaultInitialState : initialState;
     fields = isDispatchDocument(documentInitialState)
         ? { ...dispatchFields }
@@ -106,13 +109,17 @@ export const useDocumentForm = (initialState, defaultInitialState) => {
         ? defaultInitialState
         : getDocumentState(documentInitialState[fields.TYPE]);
     const [document, setDocument] = useState(documentInitialState);
-    const [documentCopy, setDocumentCopy] = useState(documentInitialState);
-    const [saveButtonDisabled, setSaveButtonDisabled] = useState(false);
-    const [initialDocument, setInitialDocument] = useState(defaultInitialState);
+    const [documentCopy, setDocumentCopy] = useState(_.cloneDeep(documentInitialState));
+    const [initialDocument, setInitialDocument] = useState(_.cloneDeep(defaultInitialState));
+
+    const [addButtonDisabled, setAddButtonDisabled] = useState(true);
+    const [saveButtonDisabled, setSaveButtonDisabled] = useState(true);
+    const [deleteButtonDisabled, setDeleteButtonDisabled] = useState(true);
+    const [releaseButtonDisabled, setReleaseButtonDisabled] = useState(true);
 
     const updateDocumentField = (field, fieldValue) => {
         let value = Array.isArray(fieldValue) ? fieldValue : getValue(fieldValue);
-        const state = { ...document };
+        const state = _.cloneDeep(document);
         state[field] = value;
         updateDocument(state);
     };
@@ -125,81 +132,99 @@ export const useDocumentForm = (initialState, defaultInitialState) => {
         setDocumentCopy(value);
     };
 
-    const updateSaveButtonStatus = () => {
-        const original = JSON.stringify(document);
-        const copy = JSON.stringify(documentCopy);
-        const defaultState = JSON.stringify(initialDocument);
-        const result = original === copy || original === defaultState;
-        setSaveButtonDisabled(result);
-    };
-
-    const clearDocument = () => {
+    function clearDocument() {
         updateDocument(initialDocument);
         updateDocumentCopy(initialDocument);
-    };
+    }
 
     const updateDocumentFromService = (response) => {
-        const data = stringToDate(response);
+        const data = _.cloneDeep(stringToDate(response));
         updateDocument(data);
         updateDocumentCopy(data);
     };
 
     const updateInitialDocument = (type) => {
         if (type === initialDocument.type) return;
-        const value = getDocumentState(type);
+        const value = _.cloneDeep(getDocumentState(type));
         setInitialDocument(value);
         updateDocument(value);
         updateDocumentCopy(value);
     };
 
-    const addButtonStatusDisabled = () => {
-        return isReleased() || isObjectEmpty(document[fields.WAREHOUSE]);
-    };
+    useEffect(() => {
+        const compareDocumentStates = () => {
+            const original = JSON.stringify(document);
+            const copy = JSON.stringify(documentCopy);
+            const defaultState = JSON.stringify(initialDocument);
+            const result = original === copy || original === defaultState;
+            return result;
+        };
 
-    const releaseButtonStatusDisabled = () => {
-        return !saveButtonDisabled || releasedOrEmpty();
-    };
+        const isReleasedOrEmpty = () => {
+            return isNullOrUndefinedOrEmptyString(document.id) || isReleased(document.status);
+        };
 
-    const deleteButtonStatusDisabled = () => {
-        return releasedOrEmpty();
-    };
+        const updateSaveButtonStatus = () => {
+            setSaveButtonDisabled(compareDocumentStates());
+        };
 
-    const releasedOrEmpty = () => {
-        return isObjectEmpty(document[fields.ID]) || isReleased();
-    };
+        const updateReleaseButtonStatusDisabled = () => {
+            const result = !compareDocumentStates() || isReleasedOrEmpty();
+            setReleaseButtonDisabled(result);
+        };
 
-    const isReleased = () => {
-        return document[fields.STATUS] == 'RELEASED';
-    };
+        const updateDeleteButtonStatusDisabled = () => {
+            const result = !compareDocumentStates() || isReleasedOrEmpty();
+            setDeleteButtonDisabled(result);
+        };
+
+        updateSaveButtonStatus();
+        updateDeleteButtonStatusDisabled();
+        updateReleaseButtonStatusDisabled();
+    }, [document, documentCopy, initialDocument]);
+
+    useEffect(() => {
+        const updateAddButtonStatusDisabled = () => {
+            const result = isReleased(document.status) || isObjectEmpty(document.warehouse);
+            setAddButtonDisabled(result);
+        };
+
+        updateAddButtonStatusDisabled();
+    }, [document.status, document.warehouse]);
 
     return {
         document,
-        isReleased,
         documentCopy,
         clearDocument,
         updateDocument,
+        initialDocument,
+        addButtonDisabled,
         saveButtonDisabled,
         updateDocumentCopy,
         updateDocumentField,
+        deleteButtonDisabled,
+        releaseButtonDisabled,
         updateInitialDocument,
-        updateSaveButtonStatus,
-        addButtonStatusDisabled,
         updateDocumentFromService,
-        deleteButtonStatusDisabled,
-        releaseButtonStatusDisabled,
     };
 };
 
-export const useDetail = () => {
-    const createRow = (detail, counter) => {
-        const row = { ...detailState };
-        row[fields.LINE_NUMBER] = counter;
+export const useDetail = ({ initialCounter = 0 }) => {
+    const [lineCounter, setLineCounter] = useState(initialCounter);
+
+    const incrementLineCounter = () => {
+        setLineCounter(lineCounter + 1);
+    };
+
+    const createRow = (detail) => {
+        const row = _.cloneDeep(detailState);
+        row[fields.LINE_NUMBER] = lineCounter;
         row[fields.ITEM] = detail[fields.ITEM];
         row[fields.QUANTITY] = detail[fields.QUANTITY];
         row[fields.UNIT_PRICE] = detail[fields.UNIT_PRICE];
         row[fields.TOTAL_PRICE] = detail[fields.TOTAL_PRICE];
         row[fields.DESCRIPTION] = detail[fields.DESCRIPTION];
-
+        incrementLineCounter();
         return row;
     };
 
@@ -246,7 +271,7 @@ export const useDetail = () => {
         return details;
     };
 
-    return { createRow, removeRows, updateRows };
+    return { createRow, removeRows, updateRows, lineCounter, incrementLineCounter };
 };
 
 export const useRowData = () => {

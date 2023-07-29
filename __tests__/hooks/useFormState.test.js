@@ -1,12 +1,12 @@
 import _ from 'lodash';
 import { stringToDate } from '@utils';
-import { useDocumentForm } from '@hooks/useFormState';
+import { useDetail, useDocumentForm } from '@hooks/useFormState';
 import { renderHook, act } from '@testing-library/react';
 import { outputDocumentState, purchaseReturnDocumentState, DOCUMENT_TYPES } from '@constants';
 
 describe('useFormState', () => {
     describe('useDocumentForm', () => {
-        describe('output document', () => {
+        describe('dispatch document', () => {
             const warehouse = {
                 id: 1,
                 warehouseName: 'warehouse one',
@@ -435,6 +435,18 @@ describe('useFormState', () => {
 
                 expect(result.current.releaseButtonDisabled).toBe(true);
             });
+        });
+    });
+
+    describe('useDetail', () => {
+        it('should initialize line counter by default', () => {
+            const { result } = renderHook(useDetail, {
+                initialProps: {
+                    initialCounter: undefined,
+                },
+            });
+
+            expect(result.current.lineCounter).toBe(0);
         });
     });
 });
