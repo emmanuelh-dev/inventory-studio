@@ -439,14 +439,14 @@ describe('useFormState', () => {
     });
 
     describe('useDetail', () => {
-        it('should initialize line counter by default', () => {
+        it('should initialize line counter by default with one', () => {
             const { result } = renderHook(useDetail, {
                 initialProps: {
                     initialCounter: undefined,
                 },
             });
 
-            expect(result.current.lineCounter).toBe(0);
+            expect(result.current.lineCounter).toBe(1);
         });
 
         it('should initialize line counter with a value', () => {
@@ -457,6 +457,20 @@ describe('useFormState', () => {
             });
 
             expect(result.current.lineCounter).toBe(10);
+        });
+
+        it('should increment line counter by one', () => {
+            const { result } = renderHook(useDetail, {
+                initialProps: {
+                    initialCounter: undefined,
+                },
+            });
+
+            act(() => {
+                result.current.incrementLineCounter();
+            });
+
+            expect(result.current.lineCounter).toBe(2);
         });
     });
 });

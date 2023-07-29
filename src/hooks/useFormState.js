@@ -209,7 +209,7 @@ export const useDocumentForm = ({ initialState, defaultInitialState }) => {
     };
 };
 
-export const useDetail = ({ initialCounter = 0 }) => {
+export const useDetail = ({ initialCounter = 1 }) => {
     const [lineCounter, setLineCounter] = useState(initialCounter);
 
     const incrementLineCounter = () => {
