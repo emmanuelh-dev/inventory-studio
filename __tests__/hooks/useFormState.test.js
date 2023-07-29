@@ -448,5 +448,15 @@ describe('useFormState', () => {
 
             expect(result.current.lineCounter).toBe(0);
         });
+
+        it('should initialize line counter with a value', () => {
+            const { result } = renderHook(useDetail, {
+                initialProps: {
+                    initialCounter: 10,
+                },
+            });
+
+            expect(result.current.lineCounter).toBe(10);
+        });
     });
 });
