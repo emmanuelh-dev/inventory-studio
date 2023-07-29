@@ -219,13 +219,27 @@ export const useDetail = ({ initialCounter = 1 }) => {
     const createRow = (detail) => {
         const row = _.cloneDeep(detailState);
         row[fields.LINE_NUMBER] = lineCounter;
-        row[fields.ITEM] = detail[fields.ITEM];
+        row[fields.ITEM] = _.cloneDeep(detail[fields.ITEM]);
         row[fields.QUANTITY] = detail[fields.QUANTITY];
         row[fields.UNIT_PRICE] = detail[fields.UNIT_PRICE];
         row[fields.TOTAL_PRICE] = detail[fields.TOTAL_PRICE];
         row[fields.DESCRIPTION] = detail[fields.DESCRIPTION];
         incrementLineCounter();
         return row;
+    };
+
+    const updateRows = (details, detail) => {
+        const index = details.findIndex(
+            (element) => element[fields.ITEM][fields.ID] == detail[fields.ITEM][fields.ID]
+        );
+
+        if (index > -1) {
+            details[index] = detail;
+
+            return details;
+        }
+
+        return [];
     };
 
     const removeRows = (details, selection) => {
@@ -247,20 +261,6 @@ export const useDetail = ({ initialCounter = 1 }) => {
         }, []);
 
         return sortRow(result);
-    };
-
-    const updateRows = (details, detail) => {
-        const index = details.findIndex(
-            (element) => element[fields.ITEM][fields.ID] == detail[fields.ITEM][fields.ID]
-        );
-
-        if (index > -1) {
-            details[index] = detail;
-
-            return details;
-        }
-
-        return [];
     };
 
     const sortRow = (details) => {

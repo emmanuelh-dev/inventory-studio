@@ -472,5 +472,42 @@ describe('useFormState', () => {
 
             expect(result.current.lineCounter).toBe(2);
         });
+
+        it('should create a new row start with one', () => {
+            const detailOne = {
+                id: null,
+                lineNumber: 0,
+                item: {
+                    id: 1,
+                    itemName: 'item one',
+                    description: 'item description one',
+                    valuationType: 'AVERAGE',
+                    used: false,
+                },
+                description: 'detail item one',
+                quantity: 5,
+                unitPrice: 10,
+                totalPrice: 50,
+                deleted: false,
+            };
+
+            const detailTwo = _.cloneDeep(detailOne);
+            detailTwo.lineNumber = 1;
+
+            let row = null;
+
+            const { result } = renderHook(useDetail, {
+                initialProps: {
+                    initialCounter: undefined,
+                },
+            });
+
+            act(() => {
+                row = result.current.createRow(detailOne);
+            });
+
+            expect(row).toEqual(detailTwo);
+            expect(result.current.lineCounter).toBe(2);
+        });
     });
 });
