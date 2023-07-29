@@ -13,11 +13,11 @@ const config = {
 
     testEnvironment: 'jest-environment-jsdom',
     moduleNameMapper: {
+        '^@hooks(.*)$': '<rootDir>/src/hooks$1',
         '^@utils(.*)$': '<rootDir>/src/utils$1',
         '^@messages(.*)$': '<rootDir>/src/messages$1',
         '^@constants(.*)$': '<rootDir>/src/constants$1',
         '^@components(.*)$': '<rootDir>/src/components$1',
-        '^@hooks(.*)$': '<rootDir>/src/hooks$1',
     },
 };
 
