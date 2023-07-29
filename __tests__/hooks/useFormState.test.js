@@ -509,5 +509,93 @@ describe('useFormState', () => {
             expect(row).toEqual(detailTwo);
             expect(result.current.lineCounter).toBe(2);
         });
+
+        it('should update rows', () => {
+            const detailOne = {
+                id: 1,
+                lineNumber: 1,
+                item: {
+                    id: 1,
+                    itemName: 'item one',
+                    description: 'item description one',
+                    valuationType: 'AVERAGE',
+                    used: false,
+                },
+                description: 'detail item one',
+                quantity: 5,
+                unitPrice: 10,
+                totalPrice: 50,
+                deleted: false,
+            };
+
+            const detailTwo = {
+                id: 2,
+                lineNumber: 2,
+                item: {
+                    id: 2,
+                    itemName: 'item two',
+                    description: 'item description two',
+                    valuationType: 'AVERAGE',
+                    used: false,
+                },
+                description: 'detail item two',
+                quantity: 2,
+                unitPrice: 25,
+                totalPrice: 50,
+                deleted: false,
+            };
+
+            const detailThree = {
+                id: 3,
+                lineNumber: 3,
+                item: {
+                    id: 3,
+                    itemName: 'item three',
+                    description: 'item description three',
+                    valuationType: 'AVERAGE',
+                    used: false,
+                },
+                description: 'detail item two',
+                quantity: 4,
+                unitPrice: 5,
+                totalPrice: 20,
+                deleted: false,
+            };
+
+            const detailFour = {
+                id: 2,
+                lineNumber: 2,
+                item: {
+                    id: 2,
+                    itemName: 'item two',
+                    description: 'item description two',
+                    valuationType: 'AVERAGE',
+                    used: false,
+                },
+                description: 'detail item two updated',
+                quantity: 10,
+                unitPrice: 10,
+                totalPrice: 100,
+                deleted: false,
+            };
+
+            const details = [detailOne, detailTwo, detailThree];
+            const expectedDetails = [detailOne, detailFour, detailThree];
+
+            const { result } = renderHook(useDetail, {
+                initialProps: {
+                    initialCounter: 3,
+                },
+            });
+
+            let rows = null;
+
+            act(() => {
+                rows = result.current.updateRows(details, detailFour);
+            });
+
+            expect(rows).toEqual(expectedDetails);
+            expect(rows[1]).toEqual(detailFour);
+        });
     });
 });
