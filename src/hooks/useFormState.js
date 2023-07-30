@@ -265,13 +265,13 @@ export const useDetail = ({ initialCounter = 1 }) => {
 
     const sortRow = (details) => {
         details.sort((first, second) => {
-            return first[fields.LINE_NUMBER] - second[fields.LINE_NUMBER];
+            return second[fields.LINE_NUMBER] - first[fields.LINE_NUMBER];
         });
 
         return details;
     };
 
-    return { createRow, removeRows, updateRows, lineCounter, incrementLineCounter };
+    return { createRow, sortRow, removeRows, updateRows, lineCounter, incrementLineCounter };
 };
 
 export const useRowData = () => {
