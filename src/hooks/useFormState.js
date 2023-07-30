@@ -265,7 +265,7 @@ export const useDetail = ({ initialCounter = 1 }) => {
 
     const sortRow = (details) => {
         details.sort((first, second) => {
-            return second[fields.LINE_NUMBER] - first[fields.LINE_NUMBER];
+            return first[fields.LINE_NUMBER] - second[fields.LINE_NUMBER];
         });
 
         return details;
