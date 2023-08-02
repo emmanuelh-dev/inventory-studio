@@ -109,6 +109,9 @@ export const stringToDate = (data) => {
 
 export const getValue = (event) => {
     if (event.target == undefined) {
+        if (event.value == undefined) {
+            return event;
+        }
         return event.value;
     }
     return event.target.value;
