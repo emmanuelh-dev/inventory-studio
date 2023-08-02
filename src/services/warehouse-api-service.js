@@ -53,6 +53,22 @@ const putWarehouse = async (warehouse) => {
     return response;
 };
 
+const findAllItemSummaryByIdAsPage = async (id) => {
+    const endpoint = process.env.NEXT_PUBLIC_WAREHOUSES_ITEM_SUMMARY_BY_ID;
+    const url = replaceParams(endpoint, { id, page: 0 });
+    const response = await request.apiGet(url);
+
+    return response;
+};
+
+const findAllItemSummaryByIdByPage = async (id, page) => {
+    const endpoint = process.env.NEXT_PUBLIC_WAREHOUSES_ITEM_SUMMARY_BY_ID;
+    const url = replaceParams(endpoint, { id, page });
+    const response = await request.apiGet(url);
+
+    return response;
+};
+
 const warehouseServices = {
     putWarehouse,
     postWarehouse,
@@ -61,6 +77,8 @@ const warehouseServices = {
     findAllWarehousesAsPage,
     findAllWarehousesByPage,
     findAllWarehousesAsOption,
+    findAllItemSummaryByIdAsPage,
+    findAllItemSummaryByIdByPage,
 };
 
 export default warehouseServices;

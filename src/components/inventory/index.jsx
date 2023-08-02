@@ -1,4 +1,5 @@
 import React from 'react';
+import services from '@services/api-services';
 //Prime Components
 import { Chip } from 'primereact/chip';
 import { Panel } from 'primereact/panel';
@@ -14,7 +15,6 @@ export const Inventory = (props) => {
         fields,
         options,
         usedIcon,
-        endpoint,
         warehouse,
         usedLabel,
         showSearch,
@@ -22,6 +22,25 @@ export const Inventory = (props) => {
         selectOption,
         searchVisible,
     } = { ...props };
+
+    const getDataAsPage = async () => {
+        const result = await services.findAllWarehousesAsPage();
+        return result;
+    };
+
+    const getDataByPage = async (page) => {
+        const result = await services.findAllWarehousesByPage(page);
+        return result;
+    };
+
+    const searchProps = {
+        selectOption,
+        getDataByPage,
+        getDataAsPage,
+        onHide: hideSearch,
+        visible: searchVisible,
+        fields: options.searchFields,
+    };
 
     return (
         <Panel>
@@ -41,13 +60,7 @@ export const Inventory = (props) => {
                 </div>
             </div>
             <ItemSummary warehouseId={warehouse[fields.ID]} />
-            <Search
-                endpoint={endpoint}
-                onHide={hideSearch}
-                visible={searchVisible}
-                selectOption={selectOption}
-                fields={options.searchFields}
-            />
+            <Search {...searchProps} />
         </Panel>
     );
 };

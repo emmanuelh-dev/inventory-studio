@@ -192,6 +192,8 @@ const services = {
     findAllWarehousesByPage: warehouseServices.findAllWarehousesByPage,
     findAllWarehousesAsPage: warehouseServices.findAllWarehousesAsPage,
     findAllWarehousesAsOption: warehouseServices.findAllWarehousesAsOption,
+    findAllItemSummaryByIdAsPage: warehouseServices.findAllItemSummaryByIdAsPage,
+    findAllItemSummaryByIdByPage: warehouseServices.findAllItemSummaryByIdByPage,
 };
 
 export default services;
