@@ -1,8 +1,13 @@
 import _ from 'lodash';
 import { stringToDate } from '@utils';
-import { useDetail, useDocumentForm } from '@hooks/useFormState';
 import { renderHook, act } from '@testing-library/react';
-import { outputDocumentState, purchaseReturnDocumentState, DOCUMENT_TYPES } from '@constants';
+import { useDetail, useDocumentForm } from '@hooks/useFormState';
+import {
+    inputDocumentState,
+    outputDocumentState,
+    purchaseReturnDocumentState,
+    DOCUMENT_TYPES,
+} from '@constants';
 
 describe('useFormState', () => {
     describe('useDocumentForm', () => {
@@ -812,6 +817,74 @@ describe('useFormState', () => {
 
             expect(rows.length).toBe(3);
             expect(rows).toEqual([detailThree, detailTwo, detailOne]);
+        });
+    });
+
+    describe('dispatch and reception forms', () => {
+        const warehouse = {
+            id: 1,
+            warehouseName: 'warehouse one',
+            itemSummary: [],
+            used: false,
+            deleted: false,
+        };
+
+        it('should be able to initialize an empty document', () => {
+            const { result: document } = renderHook(useDocumentForm, {
+                initialProps: {
+                    initialState: undefined,
+                    defaultInitialState: inputDocumentState,
+                },
+            });
+
+            const { result: details } = renderHook(useDetail, {
+                initialProps: {
+                    initialCounter: undefined,
+                },
+            });
+
+            expect(details.current.lineCounter).toBe(1);
+
+            expect(document.current.document.details).toEqual([]);
+            expect(document.current.document).toEqual(inputDocumentState);
+            expect(document.current.documentCopy).toEqual(inputDocumentState);
+            expect(document.current.initialDocument).toEqual(inputDocumentState);
+        });
+
+        it('should be able to change any field except details', () => {
+            const { result: document } = renderHook(useDocumentForm, {
+                initialProps: {
+                    initialState: undefined,
+                    defaultInitialState: inputDocumentState,
+                },
+            });
+
+            const { result: details } = renderHook(useDetail, {
+                initialProps: {
+                    initialCounter: undefined,
+                },
+            });
+
+            act(() => {
+                document.current.updateDocumentField(
+                    'description',
+                    'input document one description'
+                );
+            });
+
+            act(() => {
+                const today = new Date(2023, 7, 18, 23, 41, 50, 0);
+                document.current.updateDocumentField('date', today);
+            });
+
+            act(() => {
+                document.current.updateDocumentField('warehouse', warehouse);
+            });
+
+            //check for button status
+            expect(document.current.document.counter).toBe(0);
+            expect(document.current.documentCopy).toEqual(inputDocumentState);
+            expect(document.current.initialDocument).toEqual(inputDocumentState);
         });
     });
 });
