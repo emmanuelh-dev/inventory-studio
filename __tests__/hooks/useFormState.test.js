@@ -522,11 +522,11 @@ describe('useFormState', () => {
             });
 
             act(() => {
-                row = result.current.createRow(detailOne);
+                row = result.current.createDetail(detailOne);
             });
 
             expect(row).toEqual(detailTwo);
-            expect(result.current.lineCounter).toBe(2);
+            expect(result.current.lineCounter).toBe(1);
         });
 
         it('should update rows', () => {

@@ -225,7 +225,6 @@ export const useDetail = ({ initialCounter = 1, initialDetails = [] }) => {
         row[fields.UNIT_PRICE] = detail[fields.UNIT_PRICE];
         row[fields.TOTAL_PRICE] = detail[fields.TOTAL_PRICE];
         row[fields.DESCRIPTION] = detail[fields.DESCRIPTION];
-        incrementLineCounter();
         return row;
     };
 
@@ -233,6 +232,7 @@ export const useDetail = ({ initialCounter = 1, initialDetails = [] }) => {
         const details = _.cloneDeep(rows);
         details.unshift(detail);
         updateRows(details);
+        incrementLineCounter();
     };
 
     const updateRows = (details) => {
