@@ -448,9 +448,11 @@ describe('useFormState', () => {
             const { result } = renderHook(useDetail, {
                 initialProps: {
                     initialCounter: undefined,
+                    initialDetails: undefined,
                 },
             });
 
+            expect(result.current.rows).toEqual([]);
             expect(result.current.lineCounter).toBe(1);
         });
 
@@ -462,6 +464,18 @@ describe('useFormState', () => {
             });
 
             expect(result.current.lineCounter).toBe(10);
+        });
+
+        it('should initialize rows with a value', () => {
+            const { result } = renderHook(useDetail, {
+                initialProps: {
+                    initialCounter: 10,
+                    initialDetails: [1, 2, 3],
+                },
+            });
+
+            expect(result.current.lineCounter).toBe(10);
+            expect(result.current.rows).toEqual([1, 2, 3]);
         });
 
         it('should increment line counter by one', () => {
