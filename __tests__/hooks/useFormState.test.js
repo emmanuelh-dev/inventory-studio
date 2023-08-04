@@ -713,25 +713,23 @@ describe('useFormState', () => {
                 deleted: false,
             };
 
-            const details = [detailOne, detailTwo, detailThree];
             const selection = [detailOne, detailThree];
 
             const { result } = renderHook(useDetail, {
                 initialProps: {
                     initialCounter: 3,
+                    initialDetails: [detailOne, detailTwo, detailThree],
                 },
             });
 
-            let rows = null;
-
             act(() => {
-                rows = result.current.removeRows(details, selection);
+                result.current.removeDetails(selection);
             });
 
-            expect(rows.length).toBe(3);
-            expect(rows[0].deleted).toBe(true);
-            expect(rows[1].deleted).toBe(false);
-            expect(rows[2].deleted).toBe(true);
+            expect(result.current.rows.length).toBe(3);
+            expect(result.current.rows[0].deleted).toBe(true);
+            expect(result.current.rows[1].deleted).toBe(false);
+            expect(result.current.rows[2].deleted).toBe(true);
         });
 
         it('should mark nonone element as deleted', () => {

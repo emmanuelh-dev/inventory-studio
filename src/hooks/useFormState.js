@@ -256,7 +256,7 @@ export const useDetail = ({ initialCounter = 1, initialDetails = [] }) => {
         }
     };
 
-    const removeRows = (selection) => {
+    const removeDetails = (selection) => {
         const result = rows.reduce((accumulator, element) => {
             const deletedRows = findObjectByProp(
                 selection,
@@ -290,9 +290,9 @@ export const useDetail = ({ initialCounter = 1, initialDetails = [] }) => {
         rows,
         sortRow,
         addDetail,
-        removeRows,
         lineCounter,
         createDetail,
+        removeDetails,
         updateDetails,
         incrementLineCounter,
     };
