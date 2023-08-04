@@ -460,6 +460,7 @@ describe('useFormState', () => {
             const { result } = renderHook(useDetail, {
                 initialProps: {
                     initialCounter: 10,
+                    initialDetails: undefined,
                 },
             });
 
@@ -482,6 +483,7 @@ describe('useFormState', () => {
             const { result } = renderHook(useDetail, {
                 initialProps: {
                     initialCounter: undefined,
+                    initialDetails: undefined,
                 },
             });
 
@@ -518,6 +520,7 @@ describe('useFormState', () => {
             const { result } = renderHook(useDetail, {
                 initialProps: {
                     initialCounter: undefined,
+                    initialDetails: undefined,
                 },
             });
 
@@ -528,6 +531,8 @@ describe('useFormState', () => {
             expect(row).toEqual(detailTwo);
             expect(result.current.lineCounter).toBe(1);
         });
+
+        it('should add new detail', () => {});
 
         it('should update rows', () => {
             const detailOne = {
