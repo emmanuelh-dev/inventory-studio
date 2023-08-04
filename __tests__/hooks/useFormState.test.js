@@ -784,25 +784,22 @@ describe('useFormState', () => {
                 deleted: false,
             };
 
-            const details = [detailOne, detailTwo, detailThree];
-
             const { result } = renderHook(useDetail, {
                 initialProps: {
                     initialCounter: 3,
+                    initialDetails: [detailOne, detailTwo, detailThree],
                 },
             });
 
-            let rows = null;
-
             act(() => {
-                rows = result.current.removeRows(details, []);
+                result.current.removeDetails([]);
             });
 
-            expect(rows.length).toBe(3);
-            expect(rows).toEqual([detailThree, detailTwo, detailOne]);
-            expect(rows[0].deleted).toBe(false);
-            expect(rows[1].deleted).toBe(false);
-            expect(rows[2].deleted).toBe(false);
+            expect(result.current.rows.length).toBe(3);
+            expect(result.current.rows[0].deleted).toBe(false);
+            expect(result.current.rows[1].deleted).toBe(false);
+            expect(result.current.rows[2].deleted).toBe(false);
+            expect(result.current.rows).toEqual([detailThree, detailTwo, detailOne]);
         });
 
         it('should sort desc all details by line number', () => {
@@ -864,6 +861,7 @@ describe('useFormState', () => {
             const { result } = renderHook(useDetail, {
                 initialProps: {
                     initialCounter: 3,
+                    initialDetails: details,
                 },
             });
 
