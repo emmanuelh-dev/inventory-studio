@@ -209,14 +209,15 @@ export const useDocumentForm = ({ initialState, defaultInitialState }) => {
     };
 };
 
-export const useDetail = ({ initialCounter = 1 }) => {
+export const useDetail = ({ initialCounter = 1, initialDetails = [] }) => {
+    const [rows, setRows] = useState(initialDetails);
     const [lineCounter, setLineCounter] = useState(initialCounter);
 
     const incrementLineCounter = () => {
         setLineCounter(lineCounter + 1);
     };
 
-    const createRow = (detail) => {
+    const createDetail = (detail) => {
         const row = _.cloneDeep(detailState);
         row[fields.LINE_NUMBER] = lineCounter;
         row[fields.ITEM] = _.cloneDeep(detail[fields.ITEM]);
@@ -228,22 +229,35 @@ export const useDetail = ({ initialCounter = 1 }) => {
         return row;
     };
 
-    const updateRows = (details, detail) => {
-        const index = details.findIndex(
+    const addDetail = (detail) => {
+        const details = _.cloneDeep(rows);
+        details.unshift(detail);
+        updateRows(details);
+    };
+
+    const updateRows = (details) => {
+        const result = _.cloneDeep(details);
+        setRows(result);
+    };
+
+    const updateRowByIndex = (index, detail) => {
+        const details = _.cloneDeep(rows);
+        details[index] = _.cloneDeep(detail);
+        updateRows(details);
+    };
+
+    const updateDetails = (detail) => {
+        const index = rows.findIndex(
             (element) => element[fields.ITEM][fields.ID] == detail[fields.ITEM][fields.ID]
         );
 
         if (index > -1) {
-            details[index] = detail;
-
-            return details;
+            updateRowByIndex(index, detail);
         }
-
-        return [];
     };
 
-    const removeRows = (details, selection) => {
-        const result = details.reduce((accumulator, element) => {
+    const removeRows = (selection) => {
+        const result = rows.reduce((accumulator, element) => {
             const deletedRows = findObjectByProp(
                 selection,
                 fields.LINE_NUMBER,
@@ -260,7 +274,8 @@ export const useDetail = ({ initialCounter = 1 }) => {
             return accumulator;
         }, []);
 
-        return sortRow(result);
+        const details = sortRow(result);
+        updateRows(details);
     };
 
     const sortRow = (details) => {
@@ -271,7 +286,16 @@ export const useDetail = ({ initialCounter = 1 }) => {
         return details;
     };
 
-    return { createRow, sortRow, removeRows, updateRows, lineCounter, incrementLineCounter };
+    return {
+        rows,
+        sortRow,
+        addDetail,
+        removeRows,
+        lineCounter,
+        createDetail,
+        updateDetails,
+        incrementLineCounter,
+    };
 };
 
 export const useRowData = () => {
