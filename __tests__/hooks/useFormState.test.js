@@ -532,9 +532,49 @@ describe('useFormState', () => {
             expect(result.current.lineCounter).toBe(1);
         });
 
-        it('should add new detail', () => {});
+        it('should add new detail', () => {
+            const detailOne = {
+                id: null,
+                lineNumber: 0,
+                item: {
+                    id: 1,
+                    itemName: 'item one',
+                    description: 'item description one',
+                    valuationType: 'AVERAGE',
+                    used: false,
+                },
+                description: 'detail item one',
+                quantity: 5,
+                unitPrice: 10,
+                totalPrice: 50,
+                deleted: false,
+            };
 
-        it('should update rows', () => {
+            const detailTwo = _.cloneDeep(detailOne);
+            detailTwo.lineNumber = 1;
+
+            let detail = null;
+
+            const { result } = renderHook(useDetail, {
+                initialProps: {
+                    initialCounter: undefined,
+                    initialDetails: undefined,
+                },
+            });
+
+            act(() => {
+                detail = result.current.createDetail(detailOne);
+            });
+
+            act(() => {
+                result.current.addDetail(detail);
+            });
+
+            expect(result.current.lineCounter).toBe(2);
+            expect(result.current.rows).toEqual([detailTwo]);
+        });
+
+        it('should update details', () => {
             const detailOne = {
                 id: 1,
                 lineNumber: 1,
@@ -603,23 +643,22 @@ describe('useFormState', () => {
                 deleted: false,
             };
 
-            const details = [detailOne, detailTwo, detailThree];
-            const expectedDetails = [detailOne, detailFour, detailThree];
+            const details = [detailOne, detailFour, detailThree];
 
             const { result } = renderHook(useDetail, {
                 initialProps: {
                     initialCounter: 3,
+                    initialDetails: [detailOne, detailTwo, detailThree],
                 },
             });
 
-            let rows = null;
-
             act(() => {
-                rows = result.current.updateRows(details, detailFour);
+                result.current.updateDetails(detailFour);
             });
 
-            expect(rows).toEqual(expectedDetails);
-            expect(rows[1]).toEqual(detailFour);
+            expect(result.current.lineCounter).toBe(3);
+            expect(result.current.rows).toEqual(details);
+            expect(result.current.rows[1]).toEqual(detailFour);
         });
 
         it('should mark two elements as deleted', () => {
