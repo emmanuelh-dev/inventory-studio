@@ -881,7 +881,11 @@ describe('useFormState', () => {
                 document.current.updateDocumentField('warehouse', warehouse);
             });
 
-            //check for button status
+            expect(document.current.addButtonDisabled).toBe(false);
+            expect(document.current.saveButtonDisabled).toBe(false);
+            expect(document.current.deleteButtonDisabled).toBe(true);
+            expect(document.current.releaseButtonDisabled).toBe(true);
+
             expect(document.current.document.counter).toBe(0);
             expect(document.current.documentCopy).toEqual(inputDocumentState);
             expect(document.current.initialDocument).toEqual(inputDocumentState);
