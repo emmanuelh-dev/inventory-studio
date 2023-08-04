@@ -916,6 +916,7 @@ describe('useFormState', () => {
             const { result: details } = renderHook(useDetail, {
                 initialProps: {
                     initialCounter: undefined,
+                    initialDetails: undefined,
                 },
             });
 
