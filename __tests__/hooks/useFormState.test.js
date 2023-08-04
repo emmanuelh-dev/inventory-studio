@@ -889,6 +889,71 @@ describe('useFormState', () => {
             expect(document.current.document.counter).toBe(0);
             expect(document.current.documentCopy).toEqual(inputDocumentState);
             expect(document.current.initialDocument).toEqual(inputDocumentState);
+
+            expect(details.current.lineCounter).toBe(1);
+        });
+
+        it('should be able to change details', () => {
+            const detailOne = {
+                id: null,
+                lineNumber: 0,
+                item: {
+                    id: 1,
+                    itemName: 'item one',
+                    description: 'item description one',
+                    valuationType: 'AVERAGE',
+                    used: false,
+                },
+                description: 'detail item one',
+                quantity: 5,
+                unitPrice: 10,
+                totalPrice: 50,
+                deleted: false,
+            };
+
+            const { result: document } = renderHook(useDocumentForm, {
+                initialProps: {
+                    initialState: undefined,
+                    defaultInitialState: inputDocumentState,
+                },
+            });
+
+            const { result: details } = renderHook(useDetail, {
+                initialProps: {
+                    initialCounter: undefined,
+                },
+            });
+
+            act(() => {
+                document.current.updateDocumentField(
+                    'description',
+                    'input document one description'
+                );
+            });
+
+            act(() => {
+                const today = new Date(2023, 7, 18, 23, 41, 50, 0);
+                document.current.updateDocumentField('date', today);
+            });
+
+            act(() => {
+                document.current.updateDocumentField('warehouse', warehouse);
+            });
+
+            act(() => {
+                details.current.createRow(detailOne);
+            });
+
+            expect(document.current.addButtonDisabled).toBe(false);
+            expect(document.current.saveButtonDisabled).toBe(false);
+            expect(document.current.deleteButtonDisabled).toBe(true);
+            expect(document.current.releaseButtonDisabled).toBe(true);
+
+            expect(document.current.document.counter).toBe(0);
+            expect(document.current.documentCopy).toEqual(inputDocumentState);
+            expect(document.current.initialDocument).toEqual(inputDocumentState);
+
+            expect(details.current.lineCounter).toBe(2);
         });
     });
 });
