@@ -976,6 +976,7 @@ describe('useFormState', () => {
             const { result: details } = renderHook(useDetail, {
                 initialProps: {
                     initialCounter: undefined,
+                    initialDetails: undefined,
                 },
             });
 
@@ -996,7 +997,7 @@ describe('useFormState', () => {
             });
 
             act(() => {
-                details.current.createRow(detailOne);
+                details.current.createDetail(detailOne);
             });
 
             expect(document.current.addButtonDisabled).toBe(false);
@@ -1008,7 +1009,7 @@ describe('useFormState', () => {
             expect(document.current.documentCopy).toEqual(inputDocumentState);
             expect(document.current.initialDocument).toEqual(inputDocumentState);
 
-            expect(details.current.lineCounter).toBe(2);
+            expect(details.current.lineCounter).toBe(1);
         });
     });
 });
