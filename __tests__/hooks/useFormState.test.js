@@ -3,10 +3,10 @@ import { stringToDate } from '@utils';
 import { renderHook, act } from '@testing-library/react';
 import { useDetail, useDocumentForm } from '@hooks/useFormState';
 import {
+    DOCUMENT_TYPES,
     inputDocumentState,
     outputDocumentState,
     purchaseReturnDocumentState,
-    DOCUMENT_TYPES,
 } from '@constants';
 
 describe('useFormState', () => {
@@ -966,6 +966,23 @@ describe('useFormState', () => {
                 deleted: false,
             };
 
+            const detailTwo = {
+                id: null,
+                lineNumber: 0,
+                item: {
+                    id: 2,
+                    itemName: 'item two',
+                    description: 'item description two',
+                    valuationType: 'AVERAGE',
+                    used: false,
+                },
+                description: 'detail item two',
+                quantity: 3,
+                unitPrice: 8,
+                totalPrice: 24,
+                deleted: false,
+            };
+
             const { result: document } = renderHook(useDocumentForm, {
                 initialProps: {
                     initialState: undefined,
@@ -1001,6 +1018,11 @@ describe('useFormState', () => {
                 details.current.addDetail(detail);
             });
 
+            act(() => {
+                const detail = details.current.createDetail(detailTwo);
+                details.current.addDetail(detail);
+            });
+
             expect(document.current.addButtonDisabled).toBe(false);
             expect(document.current.saveButtonDisabled).toBe(false);
             expect(document.current.deleteButtonDisabled).toBe(true);
@@ -1010,16 +1032,26 @@ describe('useFormState', () => {
             expect(document.current.documentCopy).toEqual(inputDocumentState);
             expect(document.current.initialDocument).toEqual(inputDocumentState);
 
-            expect(details.current.lineCounter).toBe(2);
-            expect(details.current.rows.length).toBe(1);
+            expect(details.current.rows[1].id).toBeNull();
+            expect(details.current.rows[1].lineNumber).toBe(1);
+            expect(details.current.rows[1].item).toEqual(detailOne.item);
+            expect(details.current.rows[1].deleted).toEqual(detailOne.deleted);
+            expect(details.current.rows[1].quantity).toEqual(detailOne.quantity);
+            expect(details.current.rows[1].unitPrice).toEqual(detailOne.unitPrice);
+            expect(details.current.rows[1].totalPrice).toEqual(detailOne.totalPrice);
+            expect(details.current.rows[1].description).toEqual(detailOne.description);
+
             expect(details.current.rows[0].id).toBeNull();
-            expect(details.current.rows[0].lineNumber).toBe(1);
-            expect(details.current.rows[0].item).toEqual(detailOne.item);
-            expect(details.current.rows[0].deleted).toEqual(detailOne.deleted);
-            expect(details.current.rows[0].quantity).toEqual(detailOne.quantity);
-            expect(details.current.rows[0].unitPrice).toEqual(detailOne.unitPrice);
-            expect(details.current.rows[0].totalPrice).toEqual(detailOne.totalPrice);
-            expect(details.current.rows[0].description).toEqual(detailOne.description);
+            expect(details.current.rows[0].lineNumber).toBe(2);
+            expect(details.current.rows[0].item).toEqual(detailTwo.item);
+            expect(details.current.rows[0].deleted).toEqual(detailTwo.deleted);
+            expect(details.current.rows[0].quantity).toEqual(detailTwo.quantity);
+            expect(details.current.rows[0].unitPrice).toEqual(detailTwo.unitPrice);
+            expect(details.current.rows[0].totalPrice).toEqual(detailTwo.totalPrice);
+            expect(details.current.rows[0].description).toEqual(detailTwo.description);
+
+            expect(details.current.lineCounter).toBe(3);
+            expect(details.current.rows.length).toBe(2);
         });
     });
 });
