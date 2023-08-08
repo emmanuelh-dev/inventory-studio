@@ -209,9 +209,16 @@ export const useDocumentForm = ({ initialState, defaultInitialState }) => {
     };
 };
 
-export const useDetail = ({ initialCounter = 1, initialDetails = [] }) => {
+export const useDetail = ({
+    initialAmount = 0,
+    initialCounter = 1,
+    initialDetails = [],
+    initialQuantity = 0,
+}) => {
     const [rows, setRows] = useState(initialDetails);
+    const [totalAmount, setTotalAmount] = useState(initialAmount);
     const [lineCounter, setLineCounter] = useState(initialCounter);
+    const [totalQuantity, setTotalQuantity] = useState(initialAmount);
 
     const incrementLineCounter = () => {
         setLineCounter(lineCounter + 1);
@@ -231,8 +238,14 @@ export const useDetail = ({ initialCounter = 1, initialDetails = [] }) => {
     const addDetail = (detail) => {
         const details = _.cloneDeep(rows);
         details.unshift(detail);
+
+        const resultTotalAmount = totalAmount + detail.totalPrice;
+        const resultTotalQuantity = totalQuantity + detail.quantity;
+
         updateRows(details);
         incrementLineCounter();
+        setTotalAmount(resultTotalAmount);
+        setTotalQuantity(resultTotalQuantity);
     };
 
     const updateRows = (details) => {
@@ -242,6 +255,7 @@ export const useDetail = ({ initialCounter = 1, initialDetails = [] }) => {
 
     const updateRowByIndex = (index, detail) => {
         const details = _.cloneDeep(rows);
+
         details[index] = _.cloneDeep(detail);
         updateRows(details);
     };
@@ -291,7 +305,9 @@ export const useDetail = ({ initialCounter = 1, initialDetails = [] }) => {
         sortRow,
         addDetail,
         lineCounter,
+        totalAmount,
         createDetail,
+        totalQuantity,
         removeDetails,
         updateDetails,
         incrementLineCounter,
