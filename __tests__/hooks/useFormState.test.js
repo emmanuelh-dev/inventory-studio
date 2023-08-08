@@ -447,13 +447,17 @@ describe('useFormState', () => {
         it('should initialize line counter by default with one', () => {
             const { result } = renderHook(useDetail, {
                 initialProps: {
+                    initialAmount: undefined,
                     initialCounter: undefined,
                     initialDetails: undefined,
+                    initialQuantity: undefined,
                 },
             });
 
             expect(result.current.rows).toEqual([]);
             expect(result.current.lineCounter).toBe(1);
+            expect(result.current.totalAmount).toBe(0);
+            expect(result.current.totalQuantity).toBe(0);
         });
 
         it('should initialize line counter with a value', () => {

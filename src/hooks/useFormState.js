@@ -238,14 +238,8 @@ export const useDetail = ({
     const addDetail = (detail) => {
         const details = _.cloneDeep(rows);
         details.unshift(detail);
-
-        const resultTotalAmount = totalAmount + detail.totalPrice;
-        const resultTotalQuantity = totalQuantity + detail.quantity;
-
         updateRows(details);
         incrementLineCounter();
-        setTotalAmount(resultTotalAmount);
-        setTotalQuantity(resultTotalQuantity);
     };
 
     const updateRows = (details) => {
@@ -255,7 +249,6 @@ export const useDetail = ({
 
     const updateRowByIndex = (index, detail) => {
         const details = _.cloneDeep(rows);
-
         details[index] = _.cloneDeep(detail);
         updateRows(details);
     };
@@ -299,6 +292,25 @@ export const useDetail = ({
 
         return details;
     };
+
+    useEffect(() => {
+        const resultTotalAmount = rows.reduce((previousValue, element) => {
+            if (element[fields.DELETED]) {
+                return previousValue + 0;
+            }
+            return previousValue + element[fields.TOTAL_PRICE];
+        }, 0);
+
+        const resultTotalQuantity = rows.reduce((previousValue, element) => {
+            if (element[fields.DELETED]) {
+                return previousValue + 0;
+            }
+            return previousValue + element[fields.QUANTITY];
+        }, 0);
+
+        setTotalAmount(resultTotalAmount);
+        setTotalQuantity(resultTotalQuantity);
+    }, [rows]);
 
     return {
         rows,
