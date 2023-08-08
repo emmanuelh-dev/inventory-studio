@@ -997,7 +997,8 @@ describe('useFormState', () => {
             });
 
             act(() => {
-                details.current.createDetail(detailOne);
+                const detail = details.current.createDetail(detailOne);
+                details.current.addDetail(detail);
             });
 
             expect(document.current.addButtonDisabled).toBe(false);
@@ -1009,7 +1010,16 @@ describe('useFormState', () => {
             expect(document.current.documentCopy).toEqual(inputDocumentState);
             expect(document.current.initialDocument).toEqual(inputDocumentState);
 
-            expect(details.current.lineCounter).toBe(1);
+            expect(details.current.lineCounter).toBe(2);
+            expect(details.current.rows.length).toBe(1);
+            expect(details.current.rows[0].id).toBeNull();
+            expect(details.current.rows[0].lineNumber).toBe(1);
+            expect(details.current.rows[0].item).toEqual(detailOne.item);
+            expect(details.current.rows[0].deleted).toEqual(detailOne.deleted);
+            expect(details.current.rows[0].quantity).toEqual(detailOne.quantity);
+            expect(details.current.rows[0].unitPrice).toEqual(detailOne.unitPrice);
+            expect(details.current.rows[0].totalPrice).toEqual(detailOne.totalPrice);
+            expect(details.current.rows[0].description).toEqual(detailOne.description);
         });
     });
 });
