@@ -735,6 +735,8 @@ describe('useFormState', () => {
             const { result } = renderHook(useDetail, {
                 initialProps: {
                     initialCounter: 3,
+                    initialAmount: 114,
+                    initialQuantity: 13,
                     initialDetails: details,
                 },
             });
@@ -744,6 +746,8 @@ describe('useFormState', () => {
             });
 
             expect(rows.length).toBe(3);
+            expect(result.current.totalAmount).toBe(114);
+            expect(result.current.totalQuantity).toBe(13);
             expect(rows).toEqual([storedDetailThree, storedDetailTwo, storedDetailOne]);
         });
     });
