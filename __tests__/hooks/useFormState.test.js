@@ -771,11 +771,17 @@ describe('useFormState', () => {
 
             const { result: details } = renderHook(useDetail, {
                 initialProps: {
+                    initialAmount: undefined,
                     initialCounter: undefined,
+                    initialDetails: undefined,
+                    initialQuantity: undefined,
                 },
             });
 
+            expect(details.current.rows).toEqual([]);
             expect(details.current.lineCounter).toBe(1);
+            expect(details.current.totalAmount).toBe(0);
+            expect(details.current.totalQuantity).toBe(0);
 
             expect(document.current.document.details).toEqual([]);
             expect(document.current.document).toEqual(inputDocumentState);
@@ -793,8 +799,10 @@ describe('useFormState', () => {
 
             const { result: details } = renderHook(useDetail, {
                 initialProps: {
+                    initialAmount: undefined,
                     initialCounter: undefined,
                     initialDetails: undefined,
+                    initialQuantity: undefined,
                 },
             });
 
@@ -823,7 +831,10 @@ describe('useFormState', () => {
             expect(document.current.documentCopy).toEqual(inputDocumentState);
             expect(document.current.initialDocument).toEqual(inputDocumentState);
 
+            expect(details.current.rows).toEqual([]);
             expect(details.current.lineCounter).toBe(1);
+            expect(details.current.totalAmount).toBe(0);
+            expect(details.current.totalQuantity).toBe(0);
         });
 
         it('should be able to change details', () => {
