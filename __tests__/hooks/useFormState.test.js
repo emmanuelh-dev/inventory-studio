@@ -703,7 +703,9 @@ describe('useFormState', () => {
             const { result } = renderHook(useDetail, {
                 initialProps: {
                     initialCounter: 3,
-                    initialDetails: [detailOne, detailTwo, detailThree],
+                    initialAmount: 114,
+                    initialQuantity: 13,
+                    initialDetails: [storedDetailOne, storedDetailTwo, storedDetailThree],
                 },
             });
 
@@ -715,10 +717,15 @@ describe('useFormState', () => {
             expect(result.current.lineCounter).toBe(3);
             expect(result.current.totalAmount).toBe(114);
             expect(result.current.totalQuantity).toBe(13);
+
             expect(result.current.rows[0].deleted).toBe(false);
             expect(result.current.rows[1].deleted).toBe(false);
             expect(result.current.rows[2].deleted).toBe(false);
-            expect(result.current.rows).toEqual([detailThree, detailTwo, detailOne]);
+            expect(result.current.rows).toEqual([
+                storedDetailThree,
+                storedDetailTwo,
+                storedDetailOne,
+            ]);
         });
 
         it('should sort desc all details by line number', () => {
