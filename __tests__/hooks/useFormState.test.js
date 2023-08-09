@@ -678,6 +678,9 @@ describe('useFormState', () => {
             });
 
             expect(result.current.rows.length).toBe(3);
+            expect(result.current.lineCounter).toBe(3);
+            expect(result.current.totalAmount).toBe(24);
+            expect(result.current.totalQuantity).toBe(3);
             expect(result.current.rows[0].deleted).toBe(true);
             expect(result.current.rows[1].deleted).toBe(false);
             expect(result.current.rows[2].deleted).toBe(true);
