@@ -687,56 +687,18 @@ describe('useFormState', () => {
         });
 
         it('should mark nonone element as deleted', () => {
-            const detailOne = {
-                id: 1,
-                lineNumber: 1,
-                item: {
-                    id: 1,
-                    itemName: 'item one',
-                    description: 'item description one',
-                    valuationType: 'AVERAGE',
-                    used: false,
-                },
-                description: 'detail item one',
-                quantity: 5,
-                unitPrice: 10,
-                totalPrice: 50,
-                deleted: false,
-            };
+            const storedDetailOne = _.cloneDeep(detailOne);
+            const storedDetailTwo = _.cloneDeep(detailTwo);
+            const storedDetailThree = _.cloneDeep(detailThree);
 
-            const detailTwo = {
-                id: 2,
-                lineNumber: 2,
-                item: {
-                    id: 2,
-                    itemName: 'item two',
-                    description: 'item description two',
-                    valuationType: 'AVERAGE',
-                    used: false,
-                },
-                description: 'detail item two',
-                quantity: 2,
-                unitPrice: 25,
-                totalPrice: 50,
-                deleted: false,
-            };
+            storedDetailOne.id = 1;
+            storedDetailOne.lineNumber = 1;
 
-            const detailThree = {
-                id: 3,
-                lineNumber: 3,
-                item: {
-                    id: 3,
-                    itemName: 'item three',
-                    description: 'item description three',
-                    valuationType: 'AVERAGE',
-                    used: false,
-                },
-                description: 'detail item two',
-                quantity: 4,
-                unitPrice: 5,
-                totalPrice: 20,
-                deleted: false,
-            };
+            storedDetailTwo.id = 2;
+            storedDetailTwo.lineNumber = 2;
+
+            storedDetailThree.id = 3;
+            storedDetailThree.lineNumber = 3;
 
             const { result } = renderHook(useDetail, {
                 initialProps: {
@@ -750,6 +712,9 @@ describe('useFormState', () => {
             });
 
             expect(result.current.rows.length).toBe(3);
+            expect(result.current.lineCounter).toBe(3);
+            expect(result.current.totalAmount).toBe(114);
+            expect(result.current.totalQuantity).toBe(13);
             expect(result.current.rows[0].deleted).toBe(false);
             expect(result.current.rows[1].deleted).toBe(false);
             expect(result.current.rows[2].deleted).toBe(false);
