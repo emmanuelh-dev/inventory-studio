@@ -303,7 +303,7 @@ export const useDetail = ({
             }, 0);
         };
 
-        const calcTotalPrice = () => {
+        const calcTotalQuantity = () => {
             return rows.reduce((previousValue, element) => {
                 if (element.deleted) {
                     return previousValue + 0;
@@ -314,7 +314,7 @@ export const useDetail = ({
 
         if (rows.length > 0) {
             setTotalAmount(calcTotalAmount());
-            setTotalQuantity(calcTotalPrice());
+            setTotalQuantity(calcTotalQuantity());
         } else {
             setTotalAmount(0);
             setTotalQuantity(0);
