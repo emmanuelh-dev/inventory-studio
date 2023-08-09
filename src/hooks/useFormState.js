@@ -13,6 +13,7 @@ import {
 } from '@utils';
 import {
     detailState,
+    detailFields,
     dispatchFields,
     receptionFields,
     inputDocumentState,
@@ -20,8 +21,6 @@ import {
     salesReturnDocumentState,
     purchaseReturnDocumentState,
 } from '@constants';
-
-let fields = {};
 
 const getDocumentState = (type) => {
     if (isDispatchDocument(type)) {
@@ -102,7 +101,7 @@ export const useForm = (initialState, defaultInitialState) => {
 
 export const useDocumentForm = ({ initialState, defaultInitialState }) => {
     const documentInitialState = isObjectEmpty(initialState) ? defaultInitialState : initialState;
-    fields = isDispatchDocument(documentInitialState)
+    const fields = isDispatchDocument(documentInitialState)
         ? { ...dispatchFields }
         : { ...receptionFields };
     defaultInitialState = isObjectEmpty(initialState)
@@ -215,10 +214,11 @@ export const useDetail = ({
     initialDetails = [],
     initialQuantity = 0,
 }) => {
+    const fields = { ...detailFields };
     const [rows, setRows] = useState(initialDetails);
     const [totalAmount, setTotalAmount] = useState(initialAmount);
     const [lineCounter, setLineCounter] = useState(initialCounter);
-    const [totalQuantity, setTotalQuantity] = useState(initialAmount);
+    const [totalQuantity, setTotalQuantity] = useState(initialQuantity);
 
     const incrementLineCounter = () => {
         setLineCounter(lineCounter + 1);
@@ -294,22 +294,31 @@ export const useDetail = ({
     };
 
     useEffect(() => {
-        const resultTotalAmount = rows.reduce((previousValue, element) => {
-            if (element[fields.DELETED]) {
-                return previousValue + 0;
-            }
-            return previousValue + element[fields.TOTAL_PRICE];
-        }, 0);
+        const calcTotalAmount = () => {
+            return rows.reduce((previousValue, element) => {
+                if (element.deleted) {
+                    return previousValue + 0;
+                }
+                return previousValue + element.totalPrice;
+            }, 0);
+        };
 
-        const resultTotalQuantity = rows.reduce((previousValue, element) => {
-            if (element[fields.DELETED]) {
-                return previousValue + 0;
-            }
-            return previousValue + element[fields.QUANTITY];
-        }, 0);
+        const calcTotalPrice = () => {
+            return rows.reduce((previousValue, element) => {
+                if (element.deleted) {
+                    return previousValue + 0;
+                }
+                return previousValue + element.quantity;
+            }, 0);
+        };
 
-        setTotalAmount(resultTotalAmount);
-        setTotalQuantity(resultTotalQuantity);
+        if (rows.length > 0) {
+            setTotalAmount(calcTotalAmount());
+            setTotalQuantity(calcTotalPrice());
+        } else {
+            setTotalAmount(0);
+            setTotalQuantity(0);
+        }
     }, [rows]);
 
     return {

@@ -444,6 +444,57 @@ describe('useFormState', () => {
     });
 
     describe('useDetail', () => {
+        const detailOne = {
+            id: null,
+            lineNumber: 0,
+            item: {
+                id: 1,
+                itemName: 'item one',
+                description: 'item description one',
+                valuationType: 'AVERAGE',
+                used: false,
+            },
+            description: 'detail item one',
+            quantity: 5,
+            unitPrice: 10,
+            totalPrice: 50,
+            deleted: false,
+        };
+
+        const detailTwo = {
+            id: null,
+            lineNumber: 0,
+            item: {
+                id: 2,
+                itemName: 'item two',
+                description: 'item description two',
+                valuationType: 'AVERAGE',
+                used: false,
+            },
+            description: 'detail item two',
+            quantity: 3,
+            unitPrice: 8,
+            totalPrice: 24,
+            deleted: false,
+        };
+
+        const detailThree = {
+            id: null,
+            lineNumber: 0,
+            item: {
+                id: 3,
+                itemName: 'item three',
+                description: 'item description three',
+                valuationType: 'AVERAGE',
+                used: false,
+            },
+            description: 'detail item three',
+            quantity: 5,
+            unitPrice: 8,
+            totalPrice: 40,
+            deleted: false,
+        };
+
         it('should initialize line counter by default with one', () => {
             const { result } = renderHook(useDetail, {
                 initialProps: {
@@ -474,20 +525,30 @@ describe('useFormState', () => {
         it('should initialize rows with a value', () => {
             const { result } = renderHook(useDetail, {
                 initialProps: {
+                    initialAmount: 0,
+                    initialQuantity: 0,
                     initialCounter: 10,
-                    initialDetails: [1, 2, 3],
+                    initialDetails: [
+                        _.cloneDeep(detailOne),
+                        _.cloneDeep(detailTwo),
+                        _.cloneDeep(detailThree),
+                    ],
                 },
             });
 
             expect(result.current.lineCounter).toBe(10);
-            expect(result.current.rows).toEqual([1, 2, 3]);
+            expect(result.current.totalAmount).toBe(114);
+            expect(result.current.totalQuantity).toBe(13);
+            expect(result.current.rows).toEqual([detailOne, detailTwo, detailThree]);
         });
 
         it('should increment line counter by one', () => {
             const { result } = renderHook(useDetail, {
                 initialProps: {
+                    initialAmount: undefined,
                     initialCounter: undefined,
                     initialDetails: undefined,
+                    initialQuantity: undefined,
                 },
             });
 
@@ -499,23 +560,6 @@ describe('useFormState', () => {
         });
 
         it('should create a new row start with one', () => {
-            const detailOne = {
-                id: null,
-                lineNumber: 0,
-                item: {
-                    id: 1,
-                    itemName: 'item one',
-                    description: 'item description one',
-                    valuationType: 'AVERAGE',
-                    used: false,
-                },
-                description: 'detail item one',
-                quantity: 5,
-                unitPrice: 10,
-                totalPrice: 50,
-                deleted: false,
-            };
-
             const detailTwo = _.cloneDeep(detailOne);
             detailTwo.lineNumber = 1;
 
@@ -523,8 +567,10 @@ describe('useFormState', () => {
 
             const { result } = renderHook(useDetail, {
                 initialProps: {
+                    initialAmount: undefined,
                     initialCounter: undefined,
                     initialDetails: undefined,
+                    initialQuantity: undefined,
                 },
             });
 
@@ -537,32 +583,17 @@ describe('useFormState', () => {
         });
 
         it('should add new detail', () => {
-            const detailOne = {
-                id: null,
-                lineNumber: 0,
-                item: {
-                    id: 1,
-                    itemName: 'item one',
-                    description: 'item description one',
-                    valuationType: 'AVERAGE',
-                    used: false,
-                },
-                description: 'detail item one',
-                quantity: 5,
-                unitPrice: 10,
-                totalPrice: 50,
-                deleted: false,
-            };
-
-            const detailTwo = _.cloneDeep(detailOne);
-            detailTwo.lineNumber = 1;
+            const expectedDetail = _.cloneDeep(detailOne);
+            expectedDetail.lineNumber = 1;
 
             let detail = null;
 
             const { result } = renderHook(useDetail, {
                 initialProps: {
+                    initialAmount: undefined,
                     initialCounter: undefined,
                     initialDetails: undefined,
+                    initialQuantity: undefined,
                 },
             });
 
@@ -575,61 +606,10 @@ describe('useFormState', () => {
             });
 
             expect(result.current.lineCounter).toBe(2);
-            expect(result.current.rows).toEqual([detailTwo]);
+            expect(result.current.rows).toEqual([expectedDetail]);
         });
 
         it('should update details', () => {
-            const detailOne = {
-                id: 1,
-                lineNumber: 1,
-                item: {
-                    id: 1,
-                    itemName: 'item one',
-                    description: 'item description one',
-                    valuationType: 'AVERAGE',
-                    used: false,
-                },
-                description: 'detail item one',
-                quantity: 5,
-                unitPrice: 10,
-                totalPrice: 50,
-                deleted: false,
-            };
-
-            const detailTwo = {
-                id: 2,
-                lineNumber: 2,
-                item: {
-                    id: 2,
-                    itemName: 'item two',
-                    description: 'item description two',
-                    valuationType: 'AVERAGE',
-                    used: false,
-                },
-                description: 'detail item two',
-                quantity: 2,
-                unitPrice: 25,
-                totalPrice: 50,
-                deleted: false,
-            };
-
-            const detailThree = {
-                id: 3,
-                lineNumber: 3,
-                item: {
-                    id: 3,
-                    itemName: 'item three',
-                    description: 'item description three',
-                    valuationType: 'AVERAGE',
-                    used: false,
-                },
-                description: 'detail item two',
-                quantity: 4,
-                unitPrice: 5,
-                totalPrice: 20,
-                deleted: false,
-            };
-
             const detailFour = {
                 id: 2,
                 lineNumber: 2,
@@ -661,68 +641,35 @@ describe('useFormState', () => {
             });
 
             expect(result.current.lineCounter).toBe(3);
+            expect(result.current.totalAmount).toBe(190);
+            expect(result.current.totalQuantity).toBe(20);
+
             expect(result.current.rows).toEqual(details);
             expect(result.current.rows[1]).toEqual(detailFour);
         });
 
         it('should mark two elements as deleted', () => {
-            const detailOne = {
-                id: 1,
-                lineNumber: 1,
-                item: {
-                    id: 1,
-                    itemName: 'item one',
-                    description: 'item description one',
-                    valuationType: 'AVERAGE',
-                    used: false,
-                },
-                description: 'detail item one',
-                quantity: 5,
-                unitPrice: 10,
-                totalPrice: 50,
-                deleted: false,
-            };
+            const storedDetailOne = _.cloneDeep(detailOne);
+            const storedDetailTwo = _.cloneDeep(detailTwo);
+            const storedDetailThree = _.cloneDeep(detailThree);
 
-            const detailTwo = {
-                id: 2,
-                lineNumber: 2,
-                item: {
-                    id: 2,
-                    itemName: 'item two',
-                    description: 'item description two',
-                    valuationType: 'AVERAGE',
-                    used: false,
-                },
-                description: 'detail item two',
-                quantity: 2,
-                unitPrice: 25,
-                totalPrice: 50,
-                deleted: false,
-            };
+            storedDetailOne.id = 1;
+            storedDetailOne.lineNumber = 1;
 
-            const detailThree = {
-                id: 3,
-                lineNumber: 3,
-                item: {
-                    id: 3,
-                    itemName: 'item three',
-                    description: 'item description three',
-                    valuationType: 'AVERAGE',
-                    used: false,
-                },
-                description: 'detail item two',
-                quantity: 4,
-                unitPrice: 5,
-                totalPrice: 20,
-                deleted: false,
-            };
+            storedDetailTwo.id = 2;
+            storedDetailTwo.lineNumber = 2;
 
-            const selection = [detailOne, detailThree];
+            storedDetailThree.id = 3;
+            storedDetailThree.lineNumber = 3;
+
+            const selection = [storedDetailOne, storedDetailThree];
 
             const { result } = renderHook(useDetail, {
                 initialProps: {
                     initialCounter: 3,
-                    initialDetails: [detailOne, detailTwo, detailThree],
+                    initialAmount: 114,
+                    initialQuantity: 13,
+                    initialDetails: [storedDetailOne, storedDetailTwo, storedDetailThree],
                 },
             });
 
