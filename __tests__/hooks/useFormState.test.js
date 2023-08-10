@@ -881,8 +881,10 @@ describe('useFormState', () => {
 
             const { result: details } = renderHook(useDetail, {
                 initialProps: {
+                    initialAmount: undefined,
                     initialCounter: undefined,
                     initialDetails: undefined,
+                    initialQuantity: undefined,
                 },
             });
 
@@ -921,6 +923,10 @@ describe('useFormState', () => {
             expect(document.current.documentCopy).toEqual(inputDocumentState);
             expect(document.current.initialDocument).toEqual(inputDocumentState);
 
+            expect(document.current.document.warehouse).toEqual(warehouse);
+            expect(document.current.document.type).toBe(DOCUMENT_TYPES.INPUT);
+            expect(document.current.document.description).toBe('input document one description');
+
             expect(details.current.rows[1].id).toBeNull();
             expect(details.current.rows[1].lineNumber).toBe(1);
             expect(details.current.rows[1].item).toEqual(detailOne.item);
@@ -941,6 +947,8 @@ describe('useFormState', () => {
 
             expect(details.current.lineCounter).toBe(3);
             expect(details.current.rows.length).toBe(2);
+            expect(details.current.totalAmount).toBe(74);
+            expect(details.current.totalQuantity).toBe(8);
         });
     });
 });
