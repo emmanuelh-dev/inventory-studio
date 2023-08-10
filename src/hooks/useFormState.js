@@ -293,6 +293,20 @@ export const useDetail = ({
         return details;
     };
 
+    const resetDetails = () => {
+        updateRows(initialDetails);
+        setTotalAmount(initialAmount);
+        setLineCounter(initialCounter);
+        setTotalQuantity(initialQuantity);
+    };
+
+    const clearDetails = () => {
+        updateRows([]);
+        setTotalAmount(0);
+        setLineCounter(1);
+        setTotalQuantity(0);
+    };
+
     useEffect(() => {
         const calcTotalAmount = () => {
             return rows.reduce((previousValue, element) => {
@@ -328,6 +342,8 @@ export const useDetail = ({
         lineCounter,
         totalAmount,
         createDetail,
+        resetDetails,
+        clearDetails,
         totalQuantity,
         removeDetails,
         updateDetails,

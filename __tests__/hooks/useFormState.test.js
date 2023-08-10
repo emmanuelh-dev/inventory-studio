@@ -750,6 +750,58 @@ describe('useFormState', () => {
             expect(result.current.totalQuantity).toBe(13);
             expect(rows).toEqual([storedDetailThree, storedDetailTwo, storedDetailOne]);
         });
+
+        it('should reset all values to the initial values', () => {
+            const detailFour = {
+                id: 2,
+                lineNumber: 2,
+                item: {
+                    id: 2,
+                    itemName: 'item two',
+                    description: 'item description two',
+                    valuationType: 'AVERAGE',
+                    used: false,
+                },
+                description: 'detail item two updated',
+                quantity: 10,
+                unitPrice: 10,
+                totalPrice: 100,
+                deleted: false,
+            };
+
+            const { result } = renderHook(useDetail, {
+                initialProps: {
+                    initialCounter: 3,
+                    initialAmount: 114,
+                    initialQuantity: 13,
+                    initialDetails: [
+                        _.cloneDeep(storedDetailThree),
+                        _.cloneDeep(storedDetailTwo),
+                        _.cloneDeep(storedDetailOne),
+                    ],
+                },
+            });
+
+            act(() => {
+                result.current.updateDetails(detailFour);
+            });
+
+            expect(result.current.lineCounter).toBe(3);
+            expect(result.current.totalAmount).toBe(190);
+            expect(result.current.totalQuantity).toBe(20);
+
+            act(() => {
+                result.current.resetDetails();
+            });
+
+            expect(result.current.totalAmount).toBe(114);
+            expect(result.current.totalQuantity).toBe(13);
+            expect(result.current.rows).toEqual([
+                _.cloneDeep(storedDetailThree),
+                _.cloneDeep(storedDetailTwo),
+                _.cloneDeep(storedDetailOne),
+            ]);
+        });
     });
 
     describe('dispatch and reception forms', () => {
