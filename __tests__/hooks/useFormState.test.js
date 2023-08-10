@@ -802,6 +802,39 @@ describe('useFormState', () => {
                 _.cloneDeep(storedDetailOne),
             ]);
         });
+
+        it("should clear all values to empty array and 0's ", () => {
+            const { result } = renderHook(useDetail, {
+                initialProps: {
+                    initialCounter: 3,
+                    initialAmount: 114,
+                    initialQuantity: 13,
+                    initialDetails: [
+                        _.cloneDeep(storedDetailThree),
+                        _.cloneDeep(storedDetailTwo),
+                        _.cloneDeep(storedDetailOne),
+                    ],
+                },
+            });
+
+            expect(result.current.lineCounter).toBe(3);
+            expect(result.current.totalAmount).toBe(114);
+            expect(result.current.totalQuantity).toBe(13);
+            expect(result.current.rows).toEqual([
+                _.cloneDeep(storedDetailThree),
+                _.cloneDeep(storedDetailTwo),
+                _.cloneDeep(storedDetailOne),
+            ]);
+
+            act(() => {
+                result.current.clearDetails();
+            });
+
+            expect(result.current.rows).toEqual([]);
+            expect(result.current.lineCounter).toBe(1);
+            expect(result.current.totalAmount).toBe(0);
+            expect(result.current.totalQuantity).toBe(0);
+        });
     });
 
     describe('dispatch and reception forms', () => {
