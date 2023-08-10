@@ -803,7 +803,7 @@ describe('useFormState', () => {
             ]);
         });
 
-        it("should clear all values to empty array and 0's ", () => {
+        it('should clear all values to empty array and zeros', () => {
             const { result } = renderHook(useDetail, {
                 initialProps: {
                     initialCounter: 3,
