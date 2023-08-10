@@ -113,6 +113,16 @@ describe('Validations', () => {
             const result = validateNotEmptyObjectField(undefined, 'name', () => {});
             expect(result).toBe(false);
         });
+
+        it('returns true if the object is valid', () => {
+            const value = {
+                name: 'Omar',
+                lastName: 'Alvarez',
+                age: 18,
+            };
+            const result = validateNotEmptyObjectField(value, 'name', () => {});
+            expect(result).toBe(true);
+        });
     });
 
     describe('isReleasedOrUsed', () => {
