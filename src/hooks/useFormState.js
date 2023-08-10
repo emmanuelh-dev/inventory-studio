@@ -326,13 +326,14 @@ export const useDetail = ({
             }, 0);
         };
 
+        let resultTotalAmount = 0;
+        let resultTotalQuantity = 0;
         if (rows.length > 0) {
-            setTotalAmount(calcTotalAmount());
-            setTotalQuantity(calcTotalQuantity());
-        } else {
-            setTotalAmount(0);
-            setTotalQuantity(0);
+            resultTotalAmount = calcTotalAmount();
+            resultTotalQuantity = calcTotalQuantity;
         }
+        setTotalAmount(resultTotalAmount);
+        setTotalQuantity(resultTotalQuantity);
     }, [rows]);
 
     return {
