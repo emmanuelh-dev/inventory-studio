@@ -13,7 +13,7 @@ export const validateRepeatedItem = (detail, details, showNotification) => {
     return isRepeated;
 };
 
-export const validateNotEmptyField = (value, fieldLabel, showNotification) => {
+export const validateNotEmptyStringField = (value, fieldLabel, showNotification) => {
     const isBlankOrEmpty = isNullOrUndefinedOrEmptyString(value);
 
     if (isBlankOrEmpty) {
@@ -24,6 +24,20 @@ export const validateNotEmptyField = (value, fieldLabel, showNotification) => {
     return !isBlankOrEmpty;
 };
 
+export const validateNotEmptyObjectField = (value, fieldLabel, showNotification) => {
+    const isEmptyObject = isObjectEmpty(value);
+    if (isEmptyObject) {
+        const message = `El campo ${fieldLabel} esta vacio`;
+        showNotification(MESSAGE_TYPES.ERROR, message);
+    }
+
+    return !isEmptyObject;
+};
+
+export const isReleased = (status) => {
+    return status == 'RELEASED';
+};
+
 export const isReleasedOrUsed = (row) => {
-    return row[fields.USED] || row[fields.STATUS] === 'RELEASED';
+    return row[fields.USED] || isReleased(row[fields.STATUS]);
 };

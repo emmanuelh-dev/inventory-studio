@@ -1,4 +1,9 @@
-import { validateRepeatedItem, validateNotEmptyField, isReleasedOrUsed } from '@utils/validations';
+import {
+    isReleasedOrUsed,
+    validateRepeatedItem,
+    validateNotEmptyObjectField,
+    validateNotEmptyStringField,
+} from '@utils/validations';
 describe('Validations', () => {
     describe('validateRepeatedItem', () => {
         const details = [
@@ -65,30 +70,48 @@ describe('Validations', () => {
         });
     });
 
-    describe('validateNotEmptyField', () => {
+    describe('validateNotEmptyStringField', () => {
         it('returns false if the value is empty', () => {
-            const result = validateNotEmptyField('', 'name', () => {});
+            const result = validateNotEmptyStringField('', 'name', () => {});
             expect(result).toBe(false);
         });
 
         it('returns false if the value is white space', () => {
-            const result = validateNotEmptyField('   ', 'name', () => {});
+            const result = validateNotEmptyStringField('   ', 'name', () => {});
             expect(result).toBe(false);
         });
 
         it('returns false if the value is null', () => {
-            const result = validateNotEmptyField(null, 'name', () => {});
+            const result = validateNotEmptyStringField(null, 'name', () => {});
             expect(result).toBe(false);
         });
 
         it('returns false if the value is undefined', () => {
-            const result = validateNotEmptyField(undefined, 'name', () => {});
+            const result = validateNotEmptyStringField(undefined, 'name', () => {});
             expect(result).toBe(false);
         });
 
         it('returns true if the value has any valid string', () => {
-            const result = validateNotEmptyField('valid string', 'name', () => {});
+            const result = validateNotEmptyStringField('valid string', 'name', () => {});
             expect(result).toBe(true);
+        });
+    });
+
+    describe('validateNotEmptyObjectField', () => {
+        it('should return false if the object is empty', () => {
+            const value = {};
+            const result = validateNotEmptyObjectField(value, 'name', () => {});
+            expect(result).toBe(false);
+        });
+
+        it('returns false if the object is null', () => {
+            const result = validateNotEmptyObjectField(null, 'name', () => {});
+            expect(result).toBe(false);
+        });
+
+        it('returns false if the object is undefined', () => {
+            const result = validateNotEmptyObjectField(undefined, 'name', () => {});
+            expect(result).toBe(false);
         });
     });
 
