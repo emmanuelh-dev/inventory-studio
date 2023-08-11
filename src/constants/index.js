@@ -187,6 +187,17 @@ export const itemSummaryFields = {
     LAST_UPDATED,
 };
 
+export const detailFields = {
+    ID,
+    ITEM,
+    DELETED,
+    QUANTITY,
+    UNIT_PRICE,
+    DESCRIPTION,
+    TOTAL_PRICE,
+    LINE_NUMBER,
+};
+
 const SUMMARY_TYPES = {
     ERROR: 'Error',
     SUCCESS: 'Exitoso',
