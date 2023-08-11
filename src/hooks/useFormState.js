@@ -132,8 +132,8 @@ export const useDocumentForm = ({ initialState, defaultInitialState }) => {
     };
 
     function clearDocument() {
-        updateDocument(initialDocument);
-        updateDocumentCopy(initialDocument);
+        updateDocument(_.cloneDeep(initialDocument));
+        updateDocumentCopy(_.cloneDeep(initialDocument));
     }
 
     const updateDocumentFromService = (response) => {
@@ -210,7 +210,7 @@ export const useDocumentForm = ({ initialState, defaultInitialState }) => {
 
 export const useDetail = ({
     initialAmount = 0,
-    initialCounter = 1,
+    initialCounter = 0,
     initialDetails = [],
     initialQuantity = 0,
 }) => {
@@ -226,7 +226,8 @@ export const useDetail = ({
 
     const createDetail = (detail) => {
         const row = _.cloneDeep(detailState);
-        row[fields.LINE_NUMBER] = lineCounter;
+        const nextCounter = lineCounter + 1;
+        row[fields.LINE_NUMBER] = nextCounter;
         row[fields.ITEM] = _.cloneDeep(detail[fields.ITEM]);
         row[fields.QUANTITY] = detail[fields.QUANTITY];
         row[fields.UNIT_PRICE] = detail[fields.UNIT_PRICE];

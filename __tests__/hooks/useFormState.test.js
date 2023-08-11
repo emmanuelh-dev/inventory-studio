@@ -519,7 +519,7 @@ describe('useFormState', () => {
             });
 
             expect(result.current.rows).toEqual([]);
-            expect(result.current.lineCounter).toBe(1);
+            expect(result.current.lineCounter).toBe(0);
             expect(result.current.totalAmount).toBe(0);
             expect(result.current.totalQuantity).toBe(0);
         });
@@ -540,7 +540,7 @@ describe('useFormState', () => {
                 initialProps: {
                     initialAmount: 0,
                     initialQuantity: 0,
-                    initialCounter: 10,
+                    initialCounter: 3,
                     initialDetails: [
                         _.cloneDeep(detailOne),
                         _.cloneDeep(detailTwo),
@@ -549,7 +549,7 @@ describe('useFormState', () => {
                 },
             });
 
-            expect(result.current.lineCounter).toBe(10);
+            expect(result.current.lineCounter).toBe(3);
             expect(result.current.totalAmount).toBe(114);
             expect(result.current.totalQuantity).toBe(13);
             expect(result.current.rows).toEqual([detailOne, detailTwo, detailThree]);
@@ -569,7 +569,7 @@ describe('useFormState', () => {
                 result.current.incrementLineCounter();
             });
 
-            expect(result.current.lineCounter).toBe(2);
+            expect(result.current.lineCounter).toBe(1);
         });
 
         it('should create a new row start with one', () => {
@@ -589,7 +589,7 @@ describe('useFormState', () => {
             });
 
             expect(row).toEqual(row);
-            expect(result.current.lineCounter).toBe(1);
+            expect(result.current.lineCounter).toBe(0);
         });
 
         it('should add new detail', () => {
@@ -612,8 +612,54 @@ describe('useFormState', () => {
                 result.current.addDetail(detail);
             });
 
-            expect(result.current.lineCounter).toBe(2);
+            expect(result.current.lineCounter).toBe(1);
             expect(result.current.rows).toEqual([detail]);
+        });
+
+        it('should add new details when has initial values', () => {
+            const detailFour = {
+                id: null,
+                lineNumber: 0,
+                item: {
+                    id: 4,
+                    itemName: 'item four',
+                    description: 'item description four',
+                    valuationType: 'AVERAGE',
+                    used: false,
+                },
+                description: 'detail item four',
+                quantity: 1,
+                unitPrice: 10,
+                totalPrice: 10,
+                deleted: false,
+            };
+
+            const { result } = renderHook(useDetail, {
+                initialProps: {
+                    initialCounter: 3,
+                    initialAmount: 114,
+                    initialQuantity: 13,
+                    initialDetails: [
+                        _.cloneDeep(storedDetailThree),
+                        _.cloneDeep(storedDetailTwo),
+                        _.cloneDeep(storedDetailOne),
+                    ],
+                },
+            });
+
+            act(() => {
+                const detail = result.current.createDetail(detailFour);
+                result.current.addDetail(detail);
+            });
+
+            expect(result.current.rows.length).toBe(4);
+            expect(result.current.lineCounter).toBe(4);
+            expect(result.current.totalAmount).toBe(124);
+            expect(result.current.totalQuantity).toBe(14);
+            expect(result.current.rows[0].lineNumber).toBe(4);
+            expect(result.current.rows[1].lineNumber).toBe(3);
+            expect(result.current.rows[2].lineNumber).toBe(2);
+            expect(result.current.rows[3].lineNumber).toBe(1);
         });
 
         it('should update details', () => {
@@ -864,7 +910,7 @@ describe('useFormState', () => {
             });
 
             expect(details.current.rows).toEqual([]);
-            expect(details.current.lineCounter).toBe(1);
+            expect(details.current.lineCounter).toBe(0);
             expect(details.current.totalAmount).toBe(0);
             expect(details.current.totalQuantity).toBe(0);
 
@@ -917,7 +963,7 @@ describe('useFormState', () => {
             expect(document.current.initialDocument).toEqual(inputDocumentState);
 
             expect(details.current.rows).toEqual([]);
-            expect(details.current.lineCounter).toBe(1);
+            expect(details.current.lineCounter).toBe(0);
             expect(details.current.totalAmount).toBe(0);
             expect(details.current.totalQuantity).toBe(0);
         });
@@ -1030,7 +1076,7 @@ describe('useFormState', () => {
             expect(details.current.rows[0].totalPrice).toEqual(detailTwo.totalPrice);
             expect(details.current.rows[0].description).toEqual(detailTwo.description);
 
-            expect(details.current.lineCounter).toBe(3);
+            expect(details.current.lineCounter).toBe(2);
             expect(details.current.rows.length).toBe(2);
             expect(details.current.totalAmount).toBe(74);
             expect(details.current.totalQuantity).toBe(8);
