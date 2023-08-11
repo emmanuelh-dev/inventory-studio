@@ -9,10 +9,6 @@ import { useFormState, useStateStatus } from '@hooks/useFormState';
 
 export const withInventory = (WrappedComponent) => {
     const WithInventory = () => {
-        const endpoint = {
-            suggestions: process.env.NEXT_PUBLIC_WAREHOUSES_SUGGESTIONS,
-        };
-
         const options = {
             searchFields: warehouseSearchFields,
         };
@@ -35,7 +31,6 @@ export const withInventory = (WrappedComponent) => {
                 warehouse={state}
                 options={options}
                 usedIcon={usedIcon}
-                endpoint={endpoint}
                 usedLabel={usedLabel}
                 searchVisible={search}
                 showSearch={showSearch}
