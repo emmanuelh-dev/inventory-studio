@@ -2,9 +2,13 @@ import React, { useEffect, useState } from 'react';
 import services from '@services/api-services';
 //utils
 import { MESSAGES } from '@messages';
-import { MESSAGE_TYPES, receptionFields, inputDocumentState } from '@constants';
 import { isObjectEmpty, isArrayEmpty, dateToString } from '@utils';
-import { validateNotEmptyField, validateRepeatedItem } from '@utils/validations';
+import { MESSAGE_TYPES, receptionFields, inputDocumentState } from '@constants';
+import {
+    validateRepeatedItem,
+    validateNotEmptyStringField,
+    validateNotEmptyObjectField,
+} from '@utils/validations';
 import { toolbar, detailColumns, receptionTypes, documentSearchFields } from '@constants/options';
 //components
 import { Toast } from 'primereact/toast';
@@ -258,12 +262,12 @@ export const Reception = (props) => {
 
     //validations
     const saveValidations = () => {
-        const validateWarehouseField = validateNotEmptyField(
+        const validateWarehouseField = validateNotEmptyObjectField(
             document[fields.WAREHOUSE],
             'Almacen',
             showNotification
         );
-        const validateDescriptionField = validateNotEmptyField(
+        const validateDescriptionField = validateNotEmptyStringField(
             document[fields.DESCRIPTION],
             'Descripcion',
             showNotification

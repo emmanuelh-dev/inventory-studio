@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { MESSAGES } from '@messages';
 import services from '@services/api-services';
 import { isNullOrUndefinedOrEmptyString } from '@utils';
-import { validateNotEmptyField } from '@utils/validations';
+import { validateNotEmptyStringField } from '@utils/validations';
 import { itemState, itemFields, MESSAGE_TYPES } from '@constants';
 import { valuation, toolbar, itemSearchFields } from '@constants/options';
 
@@ -92,13 +92,13 @@ export const withItem = (WrappedComponent) => {
         };
 
         const saveValidations = () => {
-            const validateNameField = validateNotEmptyField(
+            const validateNameField = validateNotEmptyStringField(
                 form[fields.ITEM_NAME],
                 'Nombre',
                 showNotification
             );
 
-            const validateDescriptionField = validateNotEmptyField(
+            const validateDescriptionField = validateNotEmptyStringField(
                 form[fields.DESCRIPTION],
                 'Descripcion',
                 showNotification

@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { MESSAGES } from '@messages';
 import services from '@services/api-services';
 import { isNullOrUndefinedOrEmptyString } from '@utils';
-import { validateNotEmptyField } from '@utils/validations';
+import { validateNotEmptyStringField } from '@utils/validations';
 import { toolbar, warehouseSearchFields } from '@constants/options';
 import { warehouseState, warehouseFields, MESSAGE_TYPES } from '@constants';
 
@@ -91,7 +91,7 @@ export const withWarehouse = (WrappedComponent) => {
         };
 
         const saveValidations = () => {
-            const validateNameField = validateNotEmptyField(
+            const validateNameField = validateNotEmptyStringField(
                 form[fields.WAREHOUSE_NAME],
                 'Nombre',
                 showNotification

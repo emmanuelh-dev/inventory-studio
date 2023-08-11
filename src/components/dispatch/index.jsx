@@ -3,7 +3,11 @@ import services from '@services/api-services';
 //utils
 import { MESSAGES } from '@messages';
 import { MESSAGE_TYPES, dispatchFields, outputDocumentState } from '@constants';
-import { validateNotEmptyField, validateRepeatedItem } from '@utils/validations';
+import {
+    validateRepeatedItem,
+    validateNotEmptyStringField,
+    validateNotEmptyObjectField,
+} from '@utils/validations';
 import { isObjectEmpty, isArrayEmpty, dateToString, ifItemPresent } from '@utils';
 import { toolbar, detailColumns, dispatchTypes, documentSearchFields } from '@constants/options';
 //components
@@ -223,12 +227,12 @@ export const Dispatch = (props) => {
 
     //validations
     const saveValidations = () => {
-        const validateWarehouseField = validateNotEmptyField(
+        const validateWarehouseField = validateNotEmptyObjectField(
             document[fields.WAREHOUSE],
             'Almacen',
             showNotification
         );
-        const validateDescriptionField = validateNotEmptyField(
+        const validateDescriptionField = validateNotEmptyStringField(
             document[fields.DESCRIPTION],
             'Descripcion',
             showNotification
