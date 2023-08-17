@@ -230,9 +230,9 @@ export const useDetail = ({
         const row = _.cloneDeep(detailState);
         const nextCounter = lineCounter + 1;
         row[fields.LINE_NUMBER] = nextCounter;
-        row[fields.ITEM] = _.cloneDeep(detail[fields.ITEM]);
         row[fields.QUANTITY] = detail[fields.QUANTITY];
         row[fields.UNIT_PRICE] = detail[fields.UNIT_PRICE];
+        row[fields.ITEM] = _.cloneDeep(detail[fields.ITEM]);
         row[fields.TOTAL_PRICE] = detail[fields.TOTAL_PRICE];
         row[fields.DESCRIPTION] = detail[fields.DESCRIPTION];
         return row;
