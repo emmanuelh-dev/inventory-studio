@@ -76,8 +76,8 @@ describe('useFormState', () => {
                     },
                 });
 
+                expect(result.current.documentEdited).toBe(true);
                 expect(result.current.addButtonDisabled).toBe(true);
-                expect(result.current.saveButtonDisabled).toBe(true);
                 expect(result.current.deleteButtonDisabled).toBe(true);
                 expect(result.current.releaseButtonDisabled).toBe(true);
                 expect(result.current.document).toEqual(outputDocumentState);
@@ -93,8 +93,8 @@ describe('useFormState', () => {
                     },
                 });
 
+                expect(result.current.documentEdited).toBe(true);
                 expect(result.current.addButtonDisabled).toBe(false);
-                expect(result.current.saveButtonDisabled).toBe(true);
                 expect(result.current.deleteButtonDisabled).toBe(false);
                 expect(result.current.releaseButtonDisabled).toBe(false);
                 expect(result.current.document).toEqual(initialDocument);
@@ -356,7 +356,7 @@ describe('useFormState', () => {
                     result.current.updateDocumentField('description', 'output description changed');
                 });
 
-                expect(result.current.saveButtonDisabled).toBe(false);
+                expect(result.current.documentEdited).toBe(false);
             });
 
             it('should enable delete button', () => {
@@ -953,8 +953,8 @@ describe('useFormState', () => {
                 document.current.updateDocumentField('warehouse', warehouse);
             });
 
+            expect(document.current.documentEdited).toBe(false);
             expect(document.current.addButtonDisabled).toBe(false);
-            expect(document.current.saveButtonDisabled).toBe(false);
             expect(document.current.deleteButtonDisabled).toBe(true);
             expect(document.current.releaseButtonDisabled).toBe(true);
 
@@ -1045,8 +1045,8 @@ describe('useFormState', () => {
                 details.current.addDetail(detail);
             });
 
+            expect(document.current.documentEdited).toBe(false);
             expect(document.current.addButtonDisabled).toBe(false);
-            expect(document.current.saveButtonDisabled).toBe(false);
             expect(document.current.deleteButtonDisabled).toBe(true);
             expect(document.current.releaseButtonDisabled).toBe(true);
 
@@ -1170,9 +1170,9 @@ describe('useFormState', () => {
             });
 
             const saveFormButtonDisabled =
-                document.current.saveButtonDisabled && details.current.saveButtonDisabled;
-            expect(document.current.saveButtonDisabled).toBe(true);
-            expect(details.current.saveButtonDisabled).toBe(false);
+                document.current.documentEdited && details.current.rowsEdited;
+            expect(details.current.rowsEdited).toBe(false);
+            expect(document.current.documentEdited).toBe(true);
             expect(saveFormButtonDisabled).toBe(false);
         });
     });

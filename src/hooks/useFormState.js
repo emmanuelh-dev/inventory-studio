@@ -111,8 +111,8 @@ export const useDocumentForm = ({ initialState, defaultInitialState }) => {
     const [documentCopy, setDocumentCopy] = useState(_.cloneDeep(documentInitialState));
     const [initialDocument, setInitialDocument] = useState(_.cloneDeep(defaultInitialState));
 
+    const [documentEdited, setDocumentEdited] = useState(true);
     const [addButtonDisabled, setAddButtonDisabled] = useState(true);
-    const [saveButtonDisabled, setSaveButtonDisabled] = useState(true);
     const [deleteButtonDisabled, setDeleteButtonDisabled] = useState(true);
     const [releaseButtonDisabled, setReleaseButtonDisabled] = useState(true);
 
@@ -163,8 +163,8 @@ export const useDocumentForm = ({ initialState, defaultInitialState }) => {
             return isNullOrUndefinedOrEmptyString(document.id) || isReleased(document.status);
         };
 
-        const updateSaveButtonStatus = () => {
-            setSaveButtonDisabled(compareDocumentStates());
+        const updateDocumentEditedStatus = () => {
+            setDocumentEdited(compareDocumentStates());
         };
 
         const updateReleaseButtonStatusDisabled = () => {
@@ -177,7 +177,7 @@ export const useDocumentForm = ({ initialState, defaultInitialState }) => {
             setDeleteButtonDisabled(result);
         };
 
-        updateSaveButtonStatus();
+        updateDocumentEditedStatus();
         updateDeleteButtonStatusDisabled();
         updateReleaseButtonStatusDisabled();
     }, [document, documentCopy, initialDocument]);
@@ -196,9 +196,9 @@ export const useDocumentForm = ({ initialState, defaultInitialState }) => {
         documentCopy,
         clearDocument,
         updateDocument,
+        documentEdited,
         initialDocument,
         addButtonDisabled,
-        saveButtonDisabled,
         updateDocumentCopy,
         updateDocumentField,
         deleteButtonDisabled,
@@ -215,10 +215,10 @@ export const useDetail = ({
     initialQuantity = 0,
 }) => {
     const fields = { ...detailFields };
+    const [rowsEdited, setRowsEdited] = useState(true);
     const [rows, setRows] = useState(_.cloneDeep(initialDetails));
     const [totalAmount, setTotalAmount] = useState(initialAmount);
     const [lineCounter, setLineCounter] = useState(initialCounter);
-    const [saveButtonDisabled, setSaveButtonDisabled] = useState(true);
     const [totalQuantity, setTotalQuantity] = useState(initialQuantity);
     const [rowsCopy, setRowsCopy] = useState(_.cloneDeep(initialDetails));
 
@@ -352,13 +352,14 @@ export const useDetail = ({
         setTotalAmount(resultTotalAmount);
         setTotalQuantity(resultTotalQuantity);
 
-        setSaveButtonDisabled(_.isEqual(rows, rowsCopy));
+        setRowsEdited(_.isEqual(rows, rowsCopy));
     }, [rows, rowsCopy]);
 
     return {
         rows,
         sortRow,
         addDetail,
+        rowsEdited,
         lineCounter,
         totalAmount,
         createDetail,
@@ -367,7 +368,6 @@ export const useDetail = ({
         totalQuantity,
         removeDetails,
         updateDetails,
-        saveButtonDisabled,
         incrementLineCounter,
         updateDetailFromService,
     };
