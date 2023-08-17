@@ -1171,9 +1171,9 @@ describe('useFormState', () => {
 
             const saveFormButtonDisabled =
                 document.current.documentEdited && details.current.rowsEdited;
+            expect(saveFormButtonDisabled).toBe(false);
             expect(details.current.rowsEdited).toBe(false);
             expect(document.current.documentEdited).toBe(true);
-            expect(saveFormButtonDisabled).toBe(false);
         });
     });
 });
