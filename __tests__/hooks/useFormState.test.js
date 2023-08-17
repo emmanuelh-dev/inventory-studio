@@ -1081,5 +1081,99 @@ describe('useFormState', () => {
             expect(details.current.totalAmount).toBe(74);
             expect(details.current.totalQuantity).toBe(8);
         });
+
+        it('it should be able to enable save button after modifying details', () => {
+            const detailOne = {
+                id: 1,
+                lineNumber: 1,
+                item: {
+                    id: 1,
+                    itemName: 'item one',
+                    description: 'item description one',
+                    valuationType: 'AVERAGE',
+                    used: false,
+                },
+                description: 'detail item one',
+                quantity: 5,
+                unitPrice: 10,
+                totalPrice: 50,
+                deleted: false,
+            };
+
+            const detailTwo = {
+                id: 2,
+                lineNumber: 2,
+                item: {
+                    id: 2,
+                    itemName: 'item two',
+                    description: 'item description two',
+                    valuationType: 'AVERAGE',
+                    used: false,
+                },
+                description: 'detail item two',
+                quantity: 2,
+                unitPrice: 25,
+                totalPrice: 50,
+                deleted: false,
+            };
+
+            const detailThree = {
+                id: null,
+                lineNumber: 0,
+                item: {
+                    id: 3,
+                    itemName: 'item three',
+                    description: 'item description three',
+                    valuationType: 'AVERAGE',
+                    used: false,
+                },
+                description: 'detail item three',
+                quantity: 4,
+                unitPrice: 4,
+                totalPrice: 16,
+                deleted: false,
+            };
+
+            const initialDocument = {
+                id: 'OU0000000001',
+                type: 'INPUT',
+                date: new Date(),
+                status: 'OPEN',
+                warehouse: warehouse,
+                description: 'input document one',
+                totalQuantity: 10,
+                totalAmount: 100,
+                counter: 2,
+                deleted: false,
+                details: [detailTwo, detailOne],
+            };
+
+            const { result: document } = renderHook(useDocumentForm, {
+                initialProps: {
+                    initialState: _.cloneDeep(initialDocument),
+                    defaultInitialState: _.cloneDeep(initialDocument),
+                },
+            });
+
+            const { result: details } = renderHook(useDetail, {
+                initialProps: {
+                    initialDetails: document.details,
+                    initialCounter: document.counter,
+                    initialAmount: document.totalAmount,
+                    initialQuantity: document.totalQuantity,
+                },
+            });
+
+            act(() => {
+                const detail = details.current.createDetail(detailThree);
+                details.current.addDetail(detail);
+            });
+
+            const saveFormButtonDisabled =
+                document.current.saveButtonDisabled && details.current.saveButtonDisabled;
+            expect(document.current.saveButtonDisabled).toBe(true);
+            expect(details.current.saveButtonDisabled).toBe(false);
+            expect(saveFormButtonDisabled).toBe(false);
+        });
     });
 });

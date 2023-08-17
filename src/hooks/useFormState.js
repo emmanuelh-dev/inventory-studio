@@ -215,10 +215,12 @@ export const useDetail = ({
     initialQuantity = 0,
 }) => {
     const fields = { ...detailFields };
-    const [rows, setRows] = useState(initialDetails);
+    const [rows, setRows] = useState(_.cloneDeep(initialDetails));
     const [totalAmount, setTotalAmount] = useState(initialAmount);
     const [lineCounter, setLineCounter] = useState(initialCounter);
+    const [saveButtonDisabled, setSaveButtonDisabled] = useState(true);
     const [totalQuantity, setTotalQuantity] = useState(initialQuantity);
+    const [rowsCopy, setRowsCopy] = useState(_.cloneDeep(initialDetails));
 
     const incrementLineCounter = () => {
         setLineCounter(lineCounter + 1);
@@ -244,8 +246,13 @@ export const useDetail = ({
     };
 
     const updateRows = (details) => {
-        const result = _.cloneDeep(details);
-        setRows(result);
+        const data = _.cloneDeep(details);
+        setRows(data);
+    };
+
+    const updateRowsCopy = (details) => {
+        const data = _.cloneDeep(details);
+        setRowsCopy(data);
     };
 
     const updateRowByIndex = (index, detail) => {
@@ -301,10 +308,19 @@ export const useDetail = ({
         setTotalQuantity(initialQuantity);
     };
 
+    const updateDetailFromService = (details, counter, totalAmount, totalQuantity) => {
+        updateRows(details);
+        updateRowsCopy(details);
+        setLineCounter(counter);
+        setTotalAmount(totalAmount);
+        setTotalQuantity(totalQuantity);
+    };
+
     const clearDetails = () => {
         updateRows([]);
         setTotalAmount(0);
         setLineCounter(1);
+        updateRowsCopy([]);
         setTotalQuantity(0);
     };
 
@@ -335,7 +351,9 @@ export const useDetail = ({
         }
         setTotalAmount(resultTotalAmount);
         setTotalQuantity(resultTotalQuantity);
-    }, [rows]);
+
+        setSaveButtonDisabled(_.isEqual(rows, rowsCopy));
+    }, [rows, rowsCopy]);
 
     return {
         rows,
@@ -349,11 +367,14 @@ export const useDetail = ({
         totalQuantity,
         removeDetails,
         updateDetails,
+        saveButtonDisabled,
         incrementLineCounter,
+        updateDetailFromService,
     };
 };
 
 export const useRowData = () => {
+    const fields = { ...detailFields };
     const [rowData, setRowData] = useState(detailState);
 
     const updateRowData = (value) => {
