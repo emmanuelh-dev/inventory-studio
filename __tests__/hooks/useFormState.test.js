@@ -1082,7 +1082,7 @@ describe('useFormState', () => {
             expect(details.current.totalQuantity).toBe(8);
         });
 
-        it('it should be able to enable save button after modifying details', () => {
+        it('should be able to enable save button after modifying details', () => {
             const detailOne = {
                 id: 1,
                 lineNumber: 1,
@@ -1174,6 +1174,105 @@ describe('useFormState', () => {
             expect(saveFormButtonDisabled).toBe(false);
             expect(details.current.rowsEdited).toBe(false);
             expect(document.current.documentEdited).toBe(true);
+        });
+
+        it('should be able to update from service', () => {
+            const detailOne = {
+                id: 1,
+                lineNumber: 1,
+                item: {
+                    id: 1,
+                    itemName: 'item one',
+                    description: 'item description one',
+                    valuationType: 'AVERAGE',
+                    used: false,
+                },
+                description: 'detail item one',
+                quantity: 5,
+                unitPrice: 10,
+                totalPrice: 50,
+                deleted: false,
+            };
+
+            const detailTwo = {
+                id: 2,
+                lineNumber: 2,
+                item: {
+                    id: 2,
+                    itemName: 'item two',
+                    description: 'item description two',
+                    valuationType: 'AVERAGE',
+                    used: false,
+                },
+                description: 'detail item two',
+                quantity: 2,
+                unitPrice: 25,
+                totalPrice: 50,
+                deleted: false,
+            };
+
+            const detailThree = {
+                id: 3,
+                lineNumber: 3,
+                item: {
+                    id: 3,
+                    itemName: 'item three',
+                    description: 'item description three',
+                    valuationType: 'AVERAGE',
+                    used: false,
+                },
+                description: 'detail item three',
+                quantity: 4,
+                unitPrice: 4,
+                totalPrice: 16,
+                deleted: false,
+            };
+
+            const initialDocument = {
+                id: 'OU0000000001',
+                type: 'INPUT',
+                date: '03-07-2023 23:41:50.000',
+                status: 'OPEN',
+                warehouse: warehouse,
+                description: 'input document one',
+                totalQuantity: 10,
+                totalAmount: 100,
+                counter: 2,
+                deleted: false,
+                details: [_.cloneDeep(detailThree), _.cloneDeep(detailTwo), _.cloneDeep(detailOne)],
+            };
+
+            const documentResponse = _.cloneDeep(initialDocument);
+            documentResponse.date = new Date(2023, 6, 3, 23, 41, 50, 0);
+
+            const { result: document } = renderHook(useDocumentForm, {
+                initialProps: {
+                    initialState: undefined,
+                    defaultInitialState: _.cloneDeep(inputDocumentState),
+                },
+            });
+
+            const { result: details } = renderHook(useDetail, {
+                initialProps: {
+                    initialAmount: undefined,
+                    initialCounter: undefined,
+                    initialDetails: undefined,
+                    initialQuantity: undefined,
+                },
+            });
+
+            const { details: data, counter, totalAmount, totalQuantity } = { ...initialDocument };
+
+            act(() => {
+                document.current.updateDocumentFromService(initialDocument);
+            });
+
+            act(() => {
+                details.current.updateDetailFromService(data, counter, totalAmount, totalQuantity);
+            });
+
+            expect(details.current.rows).toEqual(data);
+            expect(document.current.document).toEqual(documentResponse);
         });
     });
 });
