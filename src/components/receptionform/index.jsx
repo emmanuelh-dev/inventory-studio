@@ -16,6 +16,8 @@ export const ReceptionForm = (props) => {
         document,
         showSearch,
         isReleased,
+        totalAmount,
+        totalQuantity,
         controlAmountField,
         updateDocumentField,
         controlQuantityField,
@@ -95,7 +97,7 @@ export const ReceptionForm = (props) => {
                 <div className="field col-4">
                     <label>Monto Total</label>
                     <InputNumber
-                        value={document[fields.TOTAL_AMOUNT]}
+                        value={totalAmount}
                         mode="currency"
                         currency="USD"
                         locale="en-US"
@@ -104,7 +106,7 @@ export const ReceptionForm = (props) => {
                 </div>
                 <div className="field col-4">
                     <label>Cantidad Total</label>
-                    <InputNumber value={document[fields.TOTAL_QUANTITY]} readOnly />
+                    <InputNumber value={totalQuantity} readOnly />
                 </div>
                 <div className="field col-12">
                     <label>Descripcion</label>
