@@ -19,5 +19,6 @@ describe('InputQuantityEditor', () => {
         render(<InputQuantityEditor {...inputquantityeditorProps} />);
         const element = screen.getByRole('spinbutton');
         expect(element).toBeVisible();
+        expect(element.value).toBe('0');
     });
 });
