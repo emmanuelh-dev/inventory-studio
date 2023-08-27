@@ -1,4 +1,3 @@
-import '@testing-library/jest-dom';
 import { render, screen } from '@testing-library/react';
 import { InputQuantityEditor } from '@components/inputquantityeditor';
 describe('InputQuantityEditor', () => {
@@ -10,12 +9,13 @@ describe('InputQuantityEditor', () => {
         detail[field] = event.value;
     });
 
+    const inputquantityeditorProps = {
+        row: detail,
+        field: 'quantity',
+        updateField: updateFieldMock,
+    };
+
     it('should be render', () => {
-        const inputquantityeditorProps = {
-            row: detail,
-            field: 'quantity',
-            updateField: updateFieldMock,
-        };
         render(<InputQuantityEditor {...inputquantityeditorProps} />);
         const element = screen.getByRole('spinbutton');
         expect(element).toBeVisible();
