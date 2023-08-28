@@ -1320,5 +1320,34 @@ describe('useFormState', () => {
 
             expect(result.current.rowData).toEqual(detail);
         });
+
+        it('should update just a field of row data', () => {
+            const { result } = renderHook(useRowData);
+
+            const item = {
+                id: 1,
+                itemName: 'item one',
+                description: 'item description one',
+                valuationType: 'AVERAGE',
+                used: false,
+            };
+
+            const detail = {
+                id: null,
+                lineNumber: 0,
+                item: _.cloneDeep(item),
+                description: '',
+                quantity: 0,
+                unitPrice: 0,
+                totalPrice: 0,
+                deleted: false,
+            };
+
+            act(() => {
+                result.current.updateRowDataField('item', item);
+            });
+
+            expect(result.current.rowData).toEqual(detail);
+        });
     });
 });
