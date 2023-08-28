@@ -374,7 +374,6 @@ export const useDetail = ({
 };
 
 export const useRowData = () => {
-    const fields = { ...detailFields };
     const [rowData, setRowData] = useState(_.cloneDeep(detailState));
 
     const updateRowData = (value) => {
