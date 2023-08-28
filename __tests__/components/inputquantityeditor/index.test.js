@@ -6,7 +6,7 @@ describe('InputQuantityEditor', () => {
     };
 
     const updateFieldMock = jest.fn((field, event) => {
-        detail[field] = event.value;
+        detail[field] = event.target.value;
     });
 
     const inputquantityeditorProps = {
@@ -25,7 +25,7 @@ describe('InputQuantityEditor', () => {
     it('should change value', () => {
         render(<InputQuantityEditor {...inputquantityeditorProps} />);
         const element = screen.getByRole('spinbutton');
-        fireEvent.change(element, { target: { value: 5 } });
+        fireEvent.change(element, { target: { value: '5' } });
         expect(element).toBeVisible();
         expect(element.value).toBe('5');
     });
@@ -33,11 +33,18 @@ describe('InputQuantityEditor', () => {
     it('should have format ###,####,###', () => {
         render(<InputQuantityEditor {...inputquantityeditorProps} />);
         const element = screen.getByRole('spinbutton');
-        fireEvent.change(element, { target: { value: 1000000 } });
+        fireEvent.change(element, { target: { value: '1000000' } });
         fireEvent.blur(element);
         expect(element).toBeVisible();
         expect(element).toHaveValue('1,000,000');
     });
 
-    it('should accept only integers values', () => {});
+    it('should be 0 when NaN is present', () => {
+        render(<InputQuantityEditor {...inputquantityeditorProps} updateField={updateFieldMock} />);
+        const element = screen.getByRole('spinbutton');
+        fireEvent.change(element, { target: { value: ' ' } });
+        fireEvent.blur(element);
+        expect(element).toBeVisible();
+        expect(element).toHaveValue('');
+    });
 });
