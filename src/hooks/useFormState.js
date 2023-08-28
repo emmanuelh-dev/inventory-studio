@@ -375,17 +375,17 @@ export const useDetail = ({
 
 export const useRowData = () => {
     const fields = { ...detailFields };
-    const [rowData, setRowData] = useState(detailState);
+    const [rowData, setRowData] = useState(_.cloneDeep(detailState));
 
     const updateRowData = (value) => {
-        setRowData(value);
+        setRowData(_.cloneDeep(value));
     };
 
     const updateRowDataField = (field, fieldValue) => {
-        const state = { ...rowData };
+        const data = _.cloneDeep(rowData);
         const value = getValue(fieldValue);
-        state[field] = value;
-        updateRowData(state);
+        data[field] = value;
+        updateRowData(data);
     };
 
     const updateRowDataTotalPrice = () => {

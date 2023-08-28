@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import { stringToDate } from '@utils';
 import { renderHook, act } from '@testing-library/react';
-import { useDetail, useDocumentForm } from '@hooks/useFormState';
+import { useRowData, useDetail, useDocumentForm } from '@hooks/useFormState';
 import {
     DOCUMENT_TYPES,
     inputDocumentState,
@@ -1273,6 +1273,52 @@ describe('useFormState', () => {
 
             expect(details.current.rows).toEqual(data);
             expect(document.current.document).toEqual(documentResponse);
+        });
+    });
+
+    describe('useRowData', () => {
+        it('should initialize an empty hook', () => {
+            const { result } = renderHook(useRowData);
+
+            const detail = {
+                id: null,
+                lineNumber: 0,
+                item: {},
+                description: '',
+                quantity: 0,
+                unitPrice: 0,
+                totalPrice: 0,
+                deleted: false,
+            };
+
+            expect(result.current.rowData).toEqual(detail);
+        });
+
+        it('should update rowData', () => {
+            const { result } = renderHook(useRowData);
+
+            const detail = {
+                id: null,
+                lineNumber: 0,
+                item: {
+                    id: 1,
+                    itemName: 'item one',
+                    description: 'item description one',
+                    valuationType: 'AVERAGE',
+                    used: false,
+                },
+                description: 'detail item one',
+                quantity: 5,
+                unitPrice: 10,
+                totalPrice: 50,
+                deleted: false,
+            };
+
+            act(() => {
+                result.current.updateRowData(detail);
+            });
+
+            expect(result.current.rowData).toEqual(detail);
         });
     });
 });
