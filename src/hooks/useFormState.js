@@ -383,14 +383,13 @@ export const useRowData = () => {
 
     const updateRowDataField = (field, fieldValue) => {
         const data = _.cloneDeep(rowData);
-        const value = getValue(fieldValue);
+        let value = getValue(fieldValue);
+        if ((field === 'quantity' || field === 'unitPrice') && typeof value !== 'number') {
+            value = 0;
+        }
+
         data[field] = value;
         updateRowData(data);
-    };
-
-    const updateRowDataTotalPrice = () => {
-        const value = rowData[fields.QUANTITY] * rowData[fields.UNIT_PRICE];
-        updateRowDataField(fields.TOTAL_PRICE, { target: { value } });
     };
 
     const clearRowData = () => {
@@ -398,8 +397,12 @@ export const useRowData = () => {
     };
 
     useEffect(() => {
+        const updateRowDataTotalPrice = () => {
+            const value = rowData.quantity * rowData.unitPrice;
+            updateRowDataField('totalPrice', { target: { value } });
+        };
         updateRowDataTotalPrice();
-    }, [rowData[fields.QUANTITY], rowData[fields.UNIT_PRICE]]);
+    }, [rowData.quantity, rowData.unitPrice]);
 
     return { rowData, clearRowData, updateRowData, updateRowDataField };
 };
