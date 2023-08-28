@@ -1321,7 +1321,7 @@ describe('useFormState', () => {
             expect(result.current.rowData).toEqual(detail);
         });
 
-        it('should update just a field of row data', () => {
+        it('should update a field of row data', () => {
             const { result } = renderHook(useRowData);
 
             const item = {
@@ -1345,6 +1345,48 @@ describe('useFormState', () => {
 
             act(() => {
                 result.current.updateRowDataField('item', item);
+            });
+
+            expect(result.current.rowData).toEqual(detail);
+        });
+
+        it('should restore the row data', () => {
+            const { result } = renderHook(useRowData);
+
+            const detail = {
+                id: null,
+                lineNumber: 0,
+                item: {},
+                description: '',
+                quantity: 0,
+                unitPrice: 0,
+                totalPrice: 0,
+                deleted: false,
+            };
+
+            act(() => {
+                const detailOne = {
+                    id: null,
+                    lineNumber: 0,
+                    item: {
+                        id: 1,
+                        itemName: 'item one',
+                        description: 'item description one',
+                        valuationType: 'AVERAGE',
+                        used: false,
+                    },
+                    description: 'detail item one',
+                    quantity: 5,
+                    unitPrice: 10,
+                    totalPrice: 50,
+                    deleted: false,
+                };
+
+                result.current.updateRowData(detailOne);
+            });
+
+            act(() => {
+                result.current.clearRowData();
             });
 
             expect(result.current.rowData).toEqual(detail);
