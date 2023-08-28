@@ -1477,7 +1477,7 @@ describe('useFormState', () => {
                 },
                 description: '',
                 quantity: 0,
-                unitPrice: 0,
+                unitPrice: 3,
                 totalPrice: 0,
                 deleted: false,
             };
@@ -1492,6 +1492,44 @@ describe('useFormState', () => {
 
             const { totalPrice, quantity, unitPrice } = { ...result.current.rowData };
             expect(quantity).toBe(0);
+            expect(unitPrice).toBe(3);
+            expect(totalPrice).toBe(0);
+        });
+
+        it('should be able to handle when unitPrice value is empty', () => {
+            const { result } = renderHook(useRowData);
+
+            const detail = {
+                id: null,
+                lineNumber: 0,
+                item: {
+                    id: 1,
+                    itemName: 'item one',
+                    description: 'item description one',
+                    valuationType: 'AVERAGE',
+                    used: false,
+                },
+                description: '',
+                quantity: 0,
+                unitPrice: 0,
+                totalPrice: 0,
+                deleted: false,
+            };
+
+            act(() => {
+                result.current.updateRowData(detail);
+            });
+
+            act(() => {
+                result.current.updateRowDataField('quantity', 5);
+            });
+
+            act(() => {
+                result.current.updateRowDataField('unitPrice', ' ');
+            });
+
+            const { totalPrice, quantity, unitPrice } = { ...result.current.rowData };
+            expect(quantity).toBe(5);
             expect(unitPrice).toBe(0);
             expect(totalPrice).toBe(0);
         });
