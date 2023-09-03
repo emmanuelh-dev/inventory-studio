@@ -1,12 +1,15 @@
 import { getSession } from 'next-auth/react';
-import services from '@services/api-services';
 import '@testing-library/jest-dom/extend-expect';
+import itemServices from '@services/item-api-services';
+
 jest.mock('next-auth/react', () => ({
     useSession: jest.fn(),
     getSession: jest.fn(),
 }));
 
-jest.mock('@services/api-services');
+//jest.mock('@services/api-services');
+jest.mock('@services/item-api-services');
+
 const items = [
     {
         id: 1,
@@ -33,7 +36,8 @@ const items = [
         deleted: false,
     },
 ];
-services.findAllItemsAsOption.mockReturnValueOnce(items);
+
+itemServices.findAllItemsAsOptionForDistpatchDocument.mockReturnValueOnce(items);
 
 const session = {
     user: {
