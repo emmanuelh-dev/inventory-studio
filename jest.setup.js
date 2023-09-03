@@ -7,7 +7,6 @@ jest.mock('next-auth/react', () => ({
     getSession: jest.fn(),
 }));
 
-//jest.mock('@services/api-services');
 jest.mock('@services/item-api-services');
 
 const items = [
