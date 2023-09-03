@@ -7,9 +7,7 @@ describe('ItemDropdown', () => {
         item: {},
     };
 
-    const updateFieldMock = jest.fn((field, event) => {
-        detail[field] = event.target.value;
-    });
+    const updateFieldMock = jest.fn();
 
     const itemDropDownProps = {
         row: detail,
