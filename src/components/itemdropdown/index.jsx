@@ -22,6 +22,7 @@ export const ItemDropdown = (props) => {
             options={options}
             value={row[field]}
             optionLabel="itemName"
+            data-testid="item-dropdown"
             placeholder="Seleccionar Articulos"
             onChange={(event) => updateField(field, event)}
         />
