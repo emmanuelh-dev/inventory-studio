@@ -10,12 +10,13 @@ const createJestConfig = nextJest({
 const config = {
     // Add more setup options before each test is run
     // setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
-    setupFilesAfterEnv: ['@testing-library/jest-dom/extend-expect'],
+    setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
     testEnvironment: 'jest-environment-jsdom',
     moduleNameMapper: {
         '^@hooks(.*)$': '<rootDir>/src/hooks$1',
         '^@utils(.*)$': '<rootDir>/src/utils$1',
         '^@messages(.*)$': '<rootDir>/src/messages$1',
+        '^@services(.*)$': '<rootDir>/src/services$1',
         '^@constants(.*)$': '<rootDir>/src/constants$1',
         '^@components(.*)$': '<rootDir>/src/components$1',
     },
