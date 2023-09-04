@@ -35,8 +35,8 @@ const items = [
         deleted: false,
     },
 ];
-
-itemServices.findAllItemsAsOptionForDistpatchDocument.mockReturnValueOnce(items);
+//itemServices.findAllItemsAsOptionForDistpatchDocument.mockReturnValueOnce(items);
+itemServices.findAllItemsAsOptionForReceptionDocument.mockReturnValue(items);
 
 const session = {
     user: {
