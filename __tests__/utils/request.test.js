@@ -21,7 +21,6 @@ describe('Request', () => {
                 mode: 'cors',
                 cache: 'default',
                 headers: {
-                    Accept: 'application/json',
                     'Content-Type': 'application/json',
                     Authorization: `Bearer ${session.user.accessToken}`,
                     'Access-Control-Expose-Headers': 'Location',
@@ -40,7 +39,6 @@ describe('Request', () => {
                 mode: 'cors',
                 cache: 'default',
                 headers: {
-                    Accept: 'application/json',
                     'Content-Type': 'application/json',
                     Authorization: `Bearer ${session.user.accessToken}`,
                     'Access-Control-Expose-Headers': 'Location',
@@ -59,7 +57,6 @@ describe('Request', () => {
                 mode: 'cors',
                 cache: 'default',
                 headers: {
-                    Accept: 'application/json',
                     'Content-Type': 'application/json',
                     Authorization: `Bearer ${session.user.accessToken}`,
                 },
@@ -76,7 +73,6 @@ describe('Request', () => {
                 mode: 'cors',
                 cache: 'default',
                 headers: {
-                    Accept: 'application/json',
                     'Content-Type': 'application/json',
                     Authorization: `Bearer ${session.user.accessToken}`,
                 },

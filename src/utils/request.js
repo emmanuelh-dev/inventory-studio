@@ -5,7 +5,6 @@ export const buildFetchOptions = (method, session, data) => {
         mode: 'cors',
         cache: 'default',
         headers: {
-            Accept: 'application/json',
             'Content-Type': 'application/json',
             Authorization: `Bearer ${session.user.accessToken}`,
         },
