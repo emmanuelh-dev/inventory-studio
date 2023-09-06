@@ -22,6 +22,7 @@ describe('Request', () => {
                 cache: 'default',
                 headers: {
                     'Content-Type': 'application/json',
+                    Accept: 'application/json, application/pdf',
                     Authorization: `Bearer ${session.user.accessToken}`,
                     'Access-Control-Expose-Headers': 'Location',
                 },
@@ -40,6 +41,7 @@ describe('Request', () => {
                 cache: 'default',
                 headers: {
                     'Content-Type': 'application/json',
+                    Accept: 'application/json, application/pdf',
                     Authorization: `Bearer ${session.user.accessToken}`,
                     'Access-Control-Expose-Headers': 'Location',
                 },
@@ -58,6 +60,7 @@ describe('Request', () => {
                 cache: 'default',
                 headers: {
                     'Content-Type': 'application/json',
+                    Accept: 'application/json, application/pdf',
                     Authorization: `Bearer ${session.user.accessToken}`,
                 },
             };
@@ -74,6 +77,7 @@ describe('Request', () => {
                 cache: 'default',
                 headers: {
                     'Content-Type': 'application/json',
+                    Accept: 'application/json, application/pdf',
                     Authorization: `Bearer ${session.user.accessToken}`,
                 },
             };

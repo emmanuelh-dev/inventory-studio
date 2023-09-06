@@ -6,6 +6,7 @@ export const buildFetchOptions = (method, session, data) => {
         cache: 'default',
         headers: {
             'Content-Type': 'application/json',
+            Accept: 'application/json, application/pdf',
             Authorization: `Bearer ${session.user.accessToken}`,
         },
     };
