@@ -53,12 +53,12 @@ const apiDelete = async (url) => {
 };
 
 const UnauthorizedHandleResponse = async (response, body) => {
-    if (response.status != 401) {
-        throw new Error(body.message);
+    if (response.status == 401 || body.error == 'invalid_token') {
+        await signOut({ callbackUrl: '/login' });
     }
 
-    if (body.error == 'invalid_token') {
-        await signOut({ callbackUrl: '/login' });
+    if (response.status != 401) {
+        throw new Error(body.message);
     }
 };
 
