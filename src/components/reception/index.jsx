@@ -393,7 +393,7 @@ export const Reception = (props) => {
 
     useEffect(() => {
         updateInitialDocument(document.type);
-        resetDetails();
+        clearDetails();
     }, [document.type]);
 
     return (
