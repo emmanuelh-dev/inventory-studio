@@ -76,7 +76,7 @@ describe('useFormState', () => {
                     },
                 });
 
-                expect(result.current.documentEdited).toBe(true);
+                expect(result.current.documentEdited).toBe(false);
                 expect(result.current.addButtonDisabled).toBe(true);
                 expect(result.current.deleteButtonDisabled).toBe(true);
                 expect(result.current.releaseButtonDisabled).toBe(true);
@@ -93,7 +93,7 @@ describe('useFormState', () => {
                     },
                 });
 
-                expect(result.current.documentEdited).toBe(true);
+                expect(result.current.documentEdited).toBe(false);
                 expect(result.current.addButtonDisabled).toBe(false);
                 expect(result.current.deleteButtonDisabled).toBe(false);
                 expect(result.current.releaseButtonDisabled).toBe(false);
@@ -356,7 +356,7 @@ describe('useFormState', () => {
                     result.current.updateDocumentField('description', 'output description changed');
                 });
 
-                expect(result.current.documentEdited).toBe(false);
+                expect(result.current.documentEdited).toBe(true);
             });
 
             it('should enable delete button', () => {
@@ -847,6 +847,7 @@ describe('useFormState', () => {
                 _.cloneDeep(storedDetailTwo),
                 _.cloneDeep(storedDetailOne),
             ]);
+            expect(result.current.rowsEdited).toBe(false);
         });
 
         it('should clear all values to empty array and zeros', () => {
@@ -953,7 +954,7 @@ describe('useFormState', () => {
                 document.current.updateDocumentField('warehouse', warehouse);
             });
 
-            expect(document.current.documentEdited).toBe(false);
+            expect(document.current.documentEdited).toBe(true);
             expect(document.current.addButtonDisabled).toBe(false);
             expect(document.current.deleteButtonDisabled).toBe(true);
             expect(document.current.releaseButtonDisabled).toBe(true);
@@ -1045,7 +1046,7 @@ describe('useFormState', () => {
                 details.current.addDetail(detail);
             });
 
-            expect(document.current.documentEdited).toBe(false);
+            expect(document.current.documentEdited).toBe(true);
             expect(document.current.addButtonDisabled).toBe(false);
             expect(document.current.deleteButtonDisabled).toBe(true);
             expect(document.current.releaseButtonDisabled).toBe(true);
@@ -1169,11 +1170,12 @@ describe('useFormState', () => {
                 details.current.addDetail(detail);
             });
 
-            const saveFormButtonDisabled =
-                document.current.documentEdited && details.current.rowsEdited;
+            const saveFormButtonDisabled = !(
+                document.current.documentEdited || details.current.rowsEdited
+            );
             expect(saveFormButtonDisabled).toBe(false);
-            expect(details.current.rowsEdited).toBe(false);
-            expect(document.current.documentEdited).toBe(true);
+            expect(details.current.rowsEdited).toBe(true);
+            expect(document.current.documentEdited).toBe(false);
         });
 
         it('should be able to update from service', () => {

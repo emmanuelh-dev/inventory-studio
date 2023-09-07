@@ -111,7 +111,7 @@ export const useDocumentForm = ({ initialState, defaultInitialState }) => {
     const [documentCopy, setDocumentCopy] = useState(_.cloneDeep(documentInitialState));
     const [initialDocument, setInitialDocument] = useState(_.cloneDeep(defaultInitialState));
 
-    const [documentEdited, setDocumentEdited] = useState(true);
+    const [documentEdited, setDocumentEdited] = useState(false);
     const [addButtonDisabled, setAddButtonDisabled] = useState(true);
     const [deleteButtonDisabled, setDeleteButtonDisabled] = useState(true);
     const [releaseButtonDisabled, setReleaseButtonDisabled] = useState(true);
@@ -152,10 +152,8 @@ export const useDocumentForm = ({ initialState, defaultInitialState }) => {
 
     useEffect(() => {
         const compareDocumentStates = () => {
-            const original = JSON.stringify(document);
-            const copy = JSON.stringify(documentCopy);
-            const defaultState = JSON.stringify(initialDocument);
-            const result = original === copy || original === defaultState;
+            const result =
+                _.isEqual(document, documentCopy) || _.isEqual(document, initialDocument);
             return result;
         };
 
@@ -164,7 +162,7 @@ export const useDocumentForm = ({ initialState, defaultInitialState }) => {
         };
 
         const updateDocumentEditedStatus = () => {
-            setDocumentEdited(compareDocumentStates());
+            setDocumentEdited(!compareDocumentStates());
         };
 
         const updateReleaseButtonStatusDisabled = () => {
@@ -215,7 +213,7 @@ export const useDetail = ({
     initialQuantity = 0,
 }) => {
     const fields = { ...detailFields };
-    const [rowsEdited, setRowsEdited] = useState(true);
+    const [rowsEdited, setRowsEdited] = useState(false);
     const [rows, setRows] = useState(_.cloneDeep(initialDetails));
     const [totalAmount, setTotalAmount] = useState(initialAmount);
     const [lineCounter, setLineCounter] = useState(initialCounter);
@@ -304,6 +302,7 @@ export const useDetail = ({
     const resetDetails = () => {
         updateRows(initialDetails);
         setTotalAmount(initialAmount);
+        updateRowsCopy(initialDetails);
         setLineCounter(initialCounter);
         setTotalQuantity(initialQuantity);
     };
@@ -351,8 +350,7 @@ export const useDetail = ({
         }
         setTotalAmount(resultTotalAmount);
         setTotalQuantity(resultTotalQuantity);
-
-        setRowsEdited(_.isEqual(rows, rowsCopy));
+        setRowsEdited(!_.isEqual(rows, rowsCopy));
     }, [rows, rowsCopy]);
 
     return {
