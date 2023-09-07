@@ -11,7 +11,7 @@ const findAllReceptionSalesReturnDocumentAsPage = async () => {
 const findAllReceptionSalesReturnDocumentByPage = async (page) => {
     const endpoint = process.env.NEXT_PUBLIC_RECEPTIONS_SALES_RETURN_SUGGESTIONS_BY_PAGE;
     const url = replaceParams(endpoint, { page });
-    const response = await urequest.apiGeteGet(url);
+    const response = await request.apiGet(url);
 
     return response;
 };
