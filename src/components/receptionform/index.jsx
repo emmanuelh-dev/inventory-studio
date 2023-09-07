@@ -102,11 +102,12 @@ export const ReceptionForm = (props) => {
                         currency="USD"
                         locale="en-US"
                         readOnly
+                        disabled={isReleased}
                     />
                 </div>
                 <div className="field col-4">
                     <label>Cantidad Total</label>
-                    <InputNumber value={totalQuantity} readOnly />
+                    <InputNumber value={totalQuantity} disabled={isReleased} readOnly />
                 </div>
                 <div className="field col-12">
                     <label>Descripcion</label>
