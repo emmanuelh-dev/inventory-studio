@@ -318,7 +318,7 @@ export const useDetail = ({
     const clearDetails = () => {
         updateRows([]);
         setTotalAmount(0);
-        setLineCounter(1);
+        setLineCounter(0);
         updateRowsCopy([]);
         setTotalQuantity(0);
     };

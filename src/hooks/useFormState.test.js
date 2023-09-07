@@ -878,7 +878,7 @@ describe('useFormState', () => {
             });
 
             expect(result.current.rows).toEqual([]);
-            expect(result.current.lineCounter).toBe(1);
+            expect(result.current.lineCounter).toBe(0);
             expect(result.current.totalAmount).toBe(0);
             expect(result.current.totalQuantity).toBe(0);
         });
