@@ -979,6 +979,46 @@ describe('useFormState', () => {
             expect(result.current.rows[1]).toEqual(storedDetailFour);
             expect(result.current.rows[2]).toEqual(storedDetailOne);
         });
+
+        it('should add new detail whe it is read from barcode with non previus details', () => {
+            const { result } = renderHook(useDetail, {
+                initialProps: {
+                    initialCounter: 0,
+                    initialAmount: 0,
+                    initialQuantity: 0,
+                    initialDetails: [],
+                },
+            });
+
+            const detailFour = {
+                id: null,
+                lineNumber: 1,
+                item: {
+                    id: 1,
+                    itemName: 'item one',
+                    description: 'item description one',
+                    valuationType: 'AVERAGE',
+                    used: false,
+                },
+                description: 'detail item one',
+                quantity: 2,
+                unitPrice: 0,
+                totalPrice: 0,
+                deleted: false,
+            };
+
+            act(() => {
+                result.current.readDetailFromBarcode(_.cloneDeep(storedDetailOne));
+            });
+
+            act(() => {
+                result.current.readDetailFromBarcode(_.cloneDeep(storedDetailOne));
+            });
+
+            expect(result.current.lineCounter).toBe(1);
+            expect(result.current.rows).toHaveLength(1);
+            expect(result.current.rows[0]).toEqual(detailFour);
+        });
     });
 
     describe('dispatch and reception forms', () => {

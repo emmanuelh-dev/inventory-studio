@@ -7,6 +7,7 @@ import {
     isObjectEmpty,
     ifItemPresent,
     isInputDocument,
+    findItemOrEmpty,
     isOutputDocument,
     findObjectByProp,
     isDispatchDocument,
@@ -245,12 +246,14 @@ export const useDetail = ({
     };
 
     const createDetailFromBarcode = (detail) => {
-        const row = _.cloneDeep(detail);
+        const row = _.cloneDeep(detailState);
         const nextCounter = lineCounter + 1;
-        row.lineNumber = nextCounter;
-        row.quantity = 1;
-        row.unitPrice = 0;
-        row.totalPrice = 0;
+        row[fields.LINE_NUMBER] = nextCounter;
+        row[fields.QUANTITY] = 1;
+        row[fields.UNIT_PRICE] = 0;
+        row[fields.TOTAL_PRICE] = 0;
+        row[fields.ITEM] = _.cloneDeep(detail.item);
+        row[fields.DESCRIPTION] = detail.description;
 
         return row;
     };
@@ -265,7 +268,7 @@ export const useDetail = ({
     };
 
     const readDetailFromBarcode = (detail) => {
-        const result = ifItemPresent(fields, _.cloneDeep(rows), detail);
+        const result = findItemOrEmpty(_.cloneDeep(rows), detail);
         if (isObjectEmpty(result)) {
             const row = createDetailFromBarcode(detail);
             addDetail(row);
