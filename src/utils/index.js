@@ -180,3 +180,12 @@ export const ifItemPresent = (fields, details, detail) => {
 
     return isObjectEmpty(result) ? {} : result;
 };
+
+export const findItemOrEmpty = (details, detail) => {
+    const result = details.find((element) => {
+        const isEqualItemId = element.item.id == detail.item.id;
+        return isEqualItemId && !element.deleted;
+    });
+
+    return isObjectEmpty(result) ? {} : result;
+};

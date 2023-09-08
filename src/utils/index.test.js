@@ -9,6 +9,7 @@ import {
     isObjectEmpty,
     itemEvaluator,
     transformFilter,
+    findItemOrEmpty,
     isInputDocument,
     isOutputDocument,
     findObjectByProp,
@@ -578,6 +579,46 @@ describe('Utils', () => {
             };
 
             const result = ifItemPresent(fields, details, element);
+            expect(result).toEqual({});
+        });
+    });
+
+    describe('findItemOrEmpty', () => {
+        const details = [
+            {
+                id: 10,
+                lineNumber: 3,
+                item: { id: 200 },
+                deleted: true,
+            },
+            {
+                id: 11,
+                lineNumber: 1,
+                item: { id: 100 },
+                deleted: false,
+            },
+            {
+                id: 12,
+                lineNumber: 2,
+                item: { id: 300 },
+                deleted: false,
+            },
+        ];
+
+        const detail = {
+            id: null,
+            lineNumber: 0,
+            item: { id: 200 },
+            deleted: false,
+        };
+
+        it('shoud be able to return empty object when the detail is not in the array', () => {
+            const result = findItemOrEmpty([], detail);
+            expect(result).toEqual({});
+        });
+
+        it('should be able to return empty object when the previous details is marked as deleted', () => {
+            const result = findItemOrEmpty([], detail);
             expect(result).toEqual({});
         });
     });
