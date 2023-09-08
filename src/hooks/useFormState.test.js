@@ -931,6 +931,54 @@ describe('useFormState', () => {
             expect(result.current.rows[2]).toEqual(storedDetailTwo);
             expect(result.current.rows[3]).toEqual(storedDetailOne);
         });
+
+        it('should be able to update detail when it is read by barcode', () => {
+            const { result } = renderHook(useDetail, {
+                initialProps: {
+                    initialCounter: 3,
+                    initialAmount: 114,
+                    initialQuantity: 13,
+                    initialDetails: [
+                        _.cloneDeep(storedDetailThree),
+                        _.cloneDeep(storedDetailTwo),
+                        _.cloneDeep(storedDetailOne),
+                    ],
+                },
+            });
+
+            const detailFour = {
+                id: null,
+                lineNumber: 0,
+                item: {
+                    id: 2,
+                    itemName: 'item two',
+                    description: 'item description two',
+                    valuationType: 'AVERAGE',
+                    used: false,
+                },
+                description: 'detail item two',
+                quantity: 3,
+                unitPrice: 8,
+                totalPrice: 24,
+                deleted: false,
+            };
+
+            const storedDetailFour = _.cloneDeep(detailFour);
+            storedDetailFour.id = 2;
+            storedDetailFour.lineNumber = 2;
+            storedDetailFour.quantity = 4;
+            storedDetailFour.totalPrice = 32;
+
+            act(() => {
+                result.current.readDetailFromBarcode(detailFour);
+            });
+
+            expect(result.current.rows).toHaveLength(3);
+            expect(result.current.lineCounter).toBe(3);
+            expect(result.current.rows[0]).toEqual(storedDetailThree);
+            expect(result.current.rows[1]).toEqual(storedDetailFour);
+            expect(result.current.rows[2]).toEqual(storedDetailOne);
+        });
     });
 
     describe('dispatch and reception forms', () => {

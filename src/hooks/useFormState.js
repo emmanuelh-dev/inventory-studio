@@ -257,7 +257,7 @@ export const useDetail = ({
 
     const updateDetailFromBarcode = (detail) => {
         const row = _.cloneDeep(detail);
-        row.quantity = result.quantity + 1;
+        row.quantity = row.quantity + 1;
         const totalPrice = row.quantity * row.unitPrice;
         row.totalPrice = totalPrice;
 
