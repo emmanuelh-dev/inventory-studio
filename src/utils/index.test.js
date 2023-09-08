@@ -605,21 +605,33 @@ describe('Utils', () => {
             },
         ];
 
-        const detail = {
-            id: null,
-            lineNumber: 0,
+        const detailOne = {
+            id: 30,
+            lineNumber: 4,
             item: { id: 200 },
             deleted: false,
         };
 
+        const detailTwo = {
+            id: 31,
+            lineNumber: 5,
+            item: { id: 100 },
+            deleted: false,
+        };
+
         it('shoud be able to return empty object when the detail is not in the array', () => {
-            const result = findItemOrEmpty([], detail);
+            const result = findItemOrEmpty([], detailOne);
             expect(result).toEqual({});
         });
 
         it('should be able to return empty object when the previous details is marked as deleted', () => {
-            const result = findItemOrEmpty(details, detail);
+            const result = findItemOrEmpty(details, detailOne);
             expect(result).toEqual({});
+        });
+
+        it('should return the object in array that match with item id', () => {
+            const result = findItemOrEmpty(details, detailTwo);
+            expect(result).toEqual(details[1]);
         });
     });
 });
