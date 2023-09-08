@@ -618,7 +618,7 @@ describe('Utils', () => {
         });
 
         it('should be able to return empty object when the previous details is marked as deleted', () => {
-            const result = findItemOrEmpty([], detail);
+            const result = findItemOrEmpty(details, detail);
             expect(result).toEqual({});
         });
     });
