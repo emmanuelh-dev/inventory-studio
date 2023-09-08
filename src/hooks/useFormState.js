@@ -5,6 +5,7 @@ import {
     getValue,
     stringToDate,
     isObjectEmpty,
+    ifItemPresent,
     isInputDocument,
     isOutputDocument,
     findObjectByProp,
@@ -243,6 +244,38 @@ export const useDetail = ({
         incrementLineCounter();
     };
 
+    const createDetailFromBarcode = (detail) => {
+        const row = _.cloneDeep(detail);
+        const nextCounter = lineCounter + 1;
+        row.lineNumber = nextCounter;
+        row.quantity = 1;
+        row.unitPrice = 0;
+        row.totalPrice = 0;
+
+        return row;
+    };
+
+    const updateDetailFromBarcode = (detail) => {
+        const row = _.cloneDeep(detail);
+        row.quantity = result.quantity + 1;
+        const totalPrice = row.quantity * row.unitPrice;
+        row.totalPrice = totalPrice;
+
+        return row;
+    };
+
+    const readDetailFromBarcode = (detail) => {
+        const result = ifItemPresent(fields, _.cloneDeep(rows), detail);
+        if (isObjectEmpty(result)) {
+            const row = createDetailFromBarcode(detail);
+            addDetail(row);
+            return;
+        }
+
+        const row = updateDetailFromBarcode(result);
+        updateDetails(row);
+    };
+
     const updateRows = (details) => {
         const data = _.cloneDeep(details);
         setRows(data);
@@ -367,6 +400,7 @@ export const useDetail = ({
         removeDetails,
         updateDetails,
         incrementLineCounter,
+        readDetailFromBarcode,
         updateDetailFromService,
     };
 };

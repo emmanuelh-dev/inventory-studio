@@ -882,6 +882,55 @@ describe('useFormState', () => {
             expect(result.current.totalAmount).toBe(0);
             expect(result.current.totalQuantity).toBe(0);
         });
+
+        it('should be able to add new detail from barcode reader', () => {
+            const { result } = renderHook(useDetail, {
+                initialProps: {
+                    initialCounter: 3,
+                    initialAmount: 114,
+                    initialQuantity: 13,
+                    initialDetails: [
+                        _.cloneDeep(storedDetailThree),
+                        _.cloneDeep(storedDetailTwo),
+                        _.cloneDeep(storedDetailOne),
+                    ],
+                },
+            });
+
+            const detailFour = {
+                id: null,
+                lineNumber: 0,
+                item: {
+                    id: 4,
+                    itemName: 'item four',
+                    description: 'item description four',
+                    valuationType: 'AVERAGE',
+                    used: false,
+                },
+                description: 'detail item four',
+                quantity: 3,
+                unitPrice: 5,
+                totalPrice: 15,
+                deleted: false,
+            };
+
+            const storedDetailFour = _.cloneDeep(detailFour);
+            storedDetailFour.lineNumber = 4;
+            storedDetailFour.quantity = 1;
+            storedDetailFour.unitPrice = 0;
+            storedDetailFour.totalPrice = 0;
+
+            act(() => {
+                result.current.readDetailFromBarcode(detailFour);
+            });
+
+            expect(result.current.rows).toHaveLength(4);
+            expect(result.current.lineCounter).toBe(4);
+            expect(result.current.rows[0]).toEqual(storedDetailFour);
+            expect(result.current.rows[1]).toEqual(storedDetailThree);
+            expect(result.current.rows[2]).toEqual(storedDetailTwo);
+            expect(result.current.rows[3]).toEqual(storedDetailOne);
+        });
     });
 
     describe('dispatch and reception forms', () => {
