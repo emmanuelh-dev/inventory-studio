@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import services from '@services/api-services';
 //utils
 import { MESSAGES } from '@messages';
-import { isObjectEmpty, isArrayEmpty, dateToString, isNullOrUndefinedOrEmptyString } from '@utils';
+import { dateToString, isNullOrUndefinedOrEmptyString } from '@utils';
 import { MESSAGE_TYPES, receptionFields, inputDocumentState } from '@constants';
 import {
     isReleased,
@@ -28,7 +28,6 @@ import { useSearch } from '@hooks/useSearch';
 import { useSelection } from '@hooks/useSelection';
 import { useNotification } from '@hooks/useNotification';
 import { useControlField } from '@hooks/useControlField';
-import { useSumarizeField } from '@hooks/useSumarizeField';
 import { useDocumentForm, useDetail } from '@hooks/useFormState';
 
 const createDocumentToolbar = (onNew, onSave, onCancel, onDelete, actions) => {
@@ -58,7 +57,6 @@ export const Reception = (props) => {
         clearDocument,
         updateDocument,
         documentEdited,
-        initialDocument,
         addButtonDisabled,
         updateDocumentCopy,
         updateDocumentField,
