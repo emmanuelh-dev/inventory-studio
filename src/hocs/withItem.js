@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { MESSAGES } from '@messages';
 import services from '@services/api-services';
-import { isNullOrUndefinedOrEmptyString } from '@utils';
+import { isNullOrUndefined } from '@utils';
 import { validateNotEmptyStringField } from '@utils/validations';
 import { itemState, itemFields, MESSAGE_TYPES } from '@constants';
 import { valuation, toolbar, itemSearchFields } from '@constants/options';
@@ -43,7 +43,7 @@ export const withItem = (WrappedComponent) => {
                 const validation = saveValidations();
                 if (validation) {
                     try {
-                        const isNew = isNullOrUndefinedOrEmptyString(form[fields.ID]);
+                        const isNew = isNullOrUndefined(form[fields.ID]);
                         const response = isNew
                             ? await services.postItem(form)
                             : await services.putItem(form);
@@ -68,7 +68,7 @@ export const withItem = (WrappedComponent) => {
 
         const onCancel = () => {
             const onCancelItem = async () => {
-                if (!isNullOrUndefinedOrEmptyString(form[fields.ID])) {
+                if (!isNullOrUndefined(form[fields.ID])) {
                     const response = await services.findItemById(form[fields.ID]);
                     updateFormFromService(response);
                 } else {
@@ -87,7 +87,7 @@ export const withItem = (WrappedComponent) => {
 
             return {
                 command: onDeleteItem,
-                disabled: form[fields.USED] || isNullOrUndefinedOrEmptyString(form[fields.ID]),
+                disabled: form[fields.USED] || isNullOrUndefined(form[fields.ID]),
             };
         };
 
