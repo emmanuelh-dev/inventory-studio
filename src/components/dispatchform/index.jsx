@@ -10,19 +10,6 @@ import { InputTextarea } from 'primereact/inputtextarea';
 import { WarehouseDropdown } from '@components/warehousedropdown';
 
 export const DispatchForm = (props) => {
-    // const {
-    //     fields,
-    //     options,
-    //     document,
-    //     showSearch,
-    //     isReleased,
-    //     controlAmountField,
-    //     updateDocumentField,
-    //     controlQuantityField,
-    //     updateControlAmountField,
-    //     updateControlQuantityField,
-    // } = { ...props };
-
     const {
         fields,
         options,
