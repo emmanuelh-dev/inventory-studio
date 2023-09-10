@@ -42,7 +42,7 @@ export const withWarehouse = (WrappedComponent) => {
                 const validation = saveValidations();
                 if (validation) {
                     try {
-                        const isNew = isNullOrUndefinedOrEmptyString(form[fields.ID]);
+                        const isNew = isNullOrUndefined(form[fields.ID]);
                         const response = isNew
                             ? await services.postWarehouse(form)
                             : await services.putWarehouse(form);
