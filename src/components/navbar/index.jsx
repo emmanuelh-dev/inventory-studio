@@ -80,6 +80,17 @@ export const Navbar = (props) => {
                 },
             ],
         },
+        {
+            label: 'Reporte',
+            items: [
+                {
+                    label: 'Inventario',
+                    command: () => {
+                        router.push('/inventory');
+                    },
+                },
+            ],
+        },
     ];
 
     return <Menu model={nav} className="navbar" />;
