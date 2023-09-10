@@ -441,6 +441,11 @@ describe('Utils', () => {
             const result = isNullOrUndefined(undefined);
             expect(result).toBe(true);
         });
+
+        it('returns true if it is not null or undefined', () => {
+            const result = isNullOrUndefined(60);
+            expect(result).toBe(false);
+        });
     });
 
     describe('isNullOrUndefinedOrEmptyString', () => {

@@ -164,8 +164,12 @@ export const isDispatchDocument = (type) => {
     return type === 'OUTPUT' || type === 'PURCHASE_RETURN';
 };
 
+export const isNullOrUndefined = (value) => {
+    return value === null || value === undefined;
+};
+
 export const isNullOrUndefinedOrEmptyString = (value) => {
-    return value === null || value === undefined || value.trim() == '';
+    return isNullOrUndefined(value) || value.trim() == '';
 };
 
 export const itemEvaluator = (fields, element, detail) => {
