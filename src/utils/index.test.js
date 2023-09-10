@@ -13,6 +13,7 @@ import {
     isInputDocument,
     isOutputDocument,
     findObjectByProp,
+    isNullOrUndefined,
     isDispatchDocument,
     isNullOrUndefinedOrEmptyString,
 } from '@utils';
@@ -427,6 +428,18 @@ describe('Utils', () => {
         it('returns false if it is a sales return document', () => {
             const result = isDispatchDocument('SALES_RETURN');
             expect(result).toBe(false);
+        });
+    });
+
+    describe('isNullOrUndefined', () => {
+        it('returns true if it is null', () => {
+            const result = isNullOrUndefined(null);
+            expect(result).toBe(true);
+        });
+
+        it('returns true if it is undefined', () => {
+            const result = isNullOrUndefined(undefined);
+            expect(result).toBe(true);
         });
     });
 

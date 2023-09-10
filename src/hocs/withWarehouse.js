@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { MESSAGES } from '@messages';
+import { isNullOrUndefined } from '@utils';
 import services from '@services/api-services';
-import { isNullOrUndefinedOrEmptyString } from '@utils';
 import { validateNotEmptyStringField } from '@utils/validations';
 import { toolbar, warehouseSearchFields } from '@constants/options';
 import { warehouseState, warehouseFields, MESSAGE_TYPES } from '@constants';
@@ -67,7 +67,7 @@ export const withWarehouse = (WrappedComponent) => {
 
         const onCancel = () => {
             const onCancelWarehouse = async () => {
-                if (!isNullOrUndefinedOrEmptyString(form[fields.ID])) {
+                if (!isNullOrUndefined(form[fields.ID])) {
                     const response = await services.findWarehouseById(form[fields.ID]);
                     updateFormFromService(response);
                 } else {
@@ -83,10 +83,9 @@ export const withWarehouse = (WrappedComponent) => {
 
         const onDelete = () => {
             const onDeleteWarehouse = async () => {};
-
             return {
                 command: onDeleteWarehouse,
-                disabled: form[fields.USED] || isNullOrUndefinedOrEmptyString(form[fields.ID]),
+                disabled: form[fields.USED] || isNullOrUndefined(form[fields.ID]),
             };
         };
 
