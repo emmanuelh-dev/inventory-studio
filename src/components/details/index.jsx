@@ -28,8 +28,8 @@ export const Details = (props) => {
         warehouse,
         selection,
         removeDetail,
-        updateDetails,
         updateSelection,
+        updateDetailTable,
     } = {
         ...props,
     };
@@ -39,7 +39,7 @@ export const Details = (props) => {
     };
 
     const addDetail = () => {
-        updateDetails({ ...rowData });
+        updateDetailTable({ ...rowData });
         hideDialog();
     };
 
