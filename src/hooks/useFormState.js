@@ -145,11 +145,12 @@ export const useDocumentForm = ({ initialState, defaultInitialState }) => {
     };
 
     const updateInitialDocument = (type) => {
-        if (type === initialDocument.type) return;
+        if (type === initialDocument.type) return false;
         const value = _.cloneDeep(getDocumentState(type));
         setInitialDocument(value);
         updateDocument(value);
         updateDocumentCopy(value);
+        return true;
     };
 
     useEffect(() => {

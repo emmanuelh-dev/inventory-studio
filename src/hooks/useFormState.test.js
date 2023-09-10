@@ -317,14 +317,41 @@ describe('useFormState', () => {
                     },
                 });
 
+                let changedType;
+
                 act(() => {
-                    result.current.updateInitialDocument(DOCUMENT_TYPES.PURCHASE_RETURN);
+                    changedType = result.current.updateInitialDocument(
+                        DOCUMENT_TYPES.PURCHASE_RETURN
+                    );
                 });
 
                 const expected = _.cloneDeep(purchaseReturnDocumentState);
 
+                expect(changedType).toBe(true);
                 expect(result.current.document).toEqual(expected);
                 expect(result.current.documentCopy).toEqual(expected);
+                expect(result.current.initialDocument).toEqual(expected);
+            });
+
+            it('should be able to keep the previous state when the new type is the same than previous than', () => {
+                const { result } = renderHook(useDocumentForm, {
+                    initialProps: {
+                        initialState: _.cloneDeep(initialDocument),
+                        defaultInitialState: outputDocumentState,
+                    },
+                });
+
+                let changedType;
+
+                act(() => {
+                    changedType = result.current.updateInitialDocument(DOCUMENT_TYPES.OUTPUT);
+                });
+
+                const expected = _.cloneDeep(outputDocumentState);
+
+                expect(changedType).toBe(false);
+                expect(result.current.document).toEqual(_.cloneDeep(initialDocument));
+                expect(result.current.documentCopy).toEqual(_.cloneDeep(initialDocument));
                 expect(result.current.initialDocument).toEqual(expected);
             });
 
