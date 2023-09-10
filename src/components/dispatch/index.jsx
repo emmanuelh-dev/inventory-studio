@@ -76,7 +76,7 @@ export const Dispatch = (props) => {
         readDetailFromBarcode,
         updateDetailFromService,
     } = useDetail({
-        initialDetails: document.detail,
+        initialDetails: document.details,
         initialCounter: document.counter,
         initialAmount: document.totalAmount,
         initialQuantity: document.totalQuantity,
@@ -356,8 +356,9 @@ export const Dispatch = (props) => {
     };
 
     useEffect(() => {
-        updateInitialDocument(document.type);
-        clearDetails();
+        if (updateInitialDocument(document.type)) {
+            clearDetails();
+        }
     }, [document.type]);
 
     return (

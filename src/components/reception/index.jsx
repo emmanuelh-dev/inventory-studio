@@ -50,7 +50,6 @@ export const Reception = (props) => {
     const [showSheet, setShowSheet] = useState(false);
     const [customSheet, setCustomSheet] = useState([]);
     const [showViewer, setShowViewer] = useState(false);
-
     //states
     const {
         document,
@@ -74,13 +73,12 @@ export const Reception = (props) => {
         totalAmount,
         createDetail,
         clearDetails,
-        resetDetails,
         totalQuantity,
         removeDetails,
         updateDetails,
         updateDetailFromService,
     } = useDetail({
-        initialDetails: document.detail,
+        initialDetails: document.details,
         initialCounter: document.counter,
         initialAmount: document.totalAmount,
         initialQuantity: document.totalQuantity,
@@ -390,8 +388,9 @@ export const Reception = (props) => {
     };
 
     useEffect(() => {
-        updateInitialDocument(document.type);
-        clearDetails();
+        if (updateInitialDocument(document.type)) {
+            clearDetails();
+        }
     }, [document.type]);
 
     return (
