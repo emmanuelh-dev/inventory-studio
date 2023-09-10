@@ -8,6 +8,7 @@ import { InputText } from 'primereact/inputtext';
 
 //Custom Components
 import { Search } from '@components/search';
+import { Dashboard } from '@components/dashboard';
 import { ItemSummary } from '@components/itemsummary';
 
 export const Inventory = (props) => {
@@ -43,24 +44,30 @@ export const Inventory = (props) => {
     };
 
     return (
-        <Panel>
-            <div className="p-fluid formgrid grid">
-                <div className="field col-6">
-                    <label>Nombre del Almacen</label>
-                    <div className="p-inputgroup">
-                        <InputText value={warehouse[fields.WAREHOUSE_NAME]} disabled />
-                        <Button icon="pi pi-search" onClick={showSearch} />
+        <Dashboard>
+            <Panel>
+                <div className="p-fluid formgrid grid">
+                    <div className="field col-6">
+                        <label>Nombre del Almacen</label>
+                        <div className="p-inputgroup">
+                            <InputText value={warehouse[fields.WAREHOUSE_NAME]} disabled />
+                            <Button icon="pi pi-search" onClick={showSearch} />
+                        </div>
+                    </div>
+                    <div className="field col-6">
+                        <label>Estado</label>
+                        <div className="flex justify-content-center flex-wrap">
+                            <Chip
+                                label={usedLabel}
+                                icon={usedIcon}
+                                className="mr-2 mb-2 custom-chip"
+                            />
+                        </div>
                     </div>
                 </div>
-                <div className="field col-6">
-                    <label>Estado</label>
-                    <div className="flex justify-content-center flex-wrap">
-                        <Chip label={usedLabel} icon={usedIcon} className="mr-2 mb-2 custom-chip" />
-                    </div>
-                </div>
-            </div>
-            <ItemSummary warehouseId={warehouse[fields.ID]} />
-            <Search {...searchProps} />
-        </Panel>
+                <ItemSummary warehouseId={warehouse[fields.ID]} />
+                <Search {...searchProps} />
+            </Panel>
+        </Dashboard>
     );
 };
