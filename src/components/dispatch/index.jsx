@@ -1,15 +1,17 @@
+import _ from 'lodash';
 import React, { useEffect } from 'react';
 import services from '@services/api-services';
 //utils
 import { MESSAGES } from '@messages';
 import { MESSAGE_TYPES, dispatchFields, outputDocumentState } from '@constants';
 import {
+    isReleased,
     validateRepeatedItem,
     validateNotEmptyStringField,
     validateNotEmptyObjectField,
 } from '@utils/validations';
-import { isObjectEmpty, isArrayEmpty, dateToString, ifItemPresent } from '@utils';
 import { toolbar, detailColumns, dispatchTypes, documentSearchFields } from '@constants/options';
+import { isObjectEmpty, dateToString, isNullOrUndefinedOrEmptyString } from '@utils';
 //components
 import { Toast } from 'primereact/toast';
 import { Panel } from 'primereact/panel';
@@ -26,55 +28,87 @@ import { useSearch } from '@hooks/useSearch';
 import { useSelection } from '@hooks/useSelection';
 import { useNotification } from '@hooks/useNotification';
 import { useControlField } from '@hooks/useControlField';
-import { useSumarizeField } from '@hooks/useSumarizeField';
 import { useDocumentForm, useDetail } from '@hooks/useFormState';
+
+const createDocumentToolbar = (onNew, onSave, onCancel, onDelete, actions) => {
+    const documentToolbar = [...toolbar];
+    documentToolbar[0].command = onNew;
+    documentToolbar[1].command = onSave.command;
+    documentToolbar[1].disabled = onSave.state;
+    documentToolbar[2].command = onCancel.command;
+    documentToolbar[2].disabled = onCancel.state;
+    documentToolbar[3].command = onDelete.command;
+    documentToolbar[3].disabled = onDelete.state;
+    documentToolbar[4].items = actions;
+
+    return documentToolbar;
+};
 
 export const Dispatch = (props) => {
     const fields = { ...dispatchFields };
     const { initialState } = { ...props };
+    //states
     const {
         document,
-        isReleased,
         clearDocument,
         updateDocument,
+        documentEdited,
+        addButtonDisabled,
         updateDocumentCopy,
-        saveButtonDisabled,
         updateDocumentField,
+        deleteButtonDisabled,
+        releaseButtonDisabled,
         updateInitialDocument,
-        updateSaveButtonStatus,
-        addButtonStatusDisabled,
         updateDocumentFromService,
-        deleteButtonStatusDisabled,
-        releaseButtonStatusDisabled,
-    } = useDocumentForm(initialState, outputDocumentState);
+    } = useDocumentForm({ initialState, defaultInitialState: outputDocumentState });
 
-    const { createRow, removeRows, updateRows } = useDetail();
-    const { selection, clearSelection, updateSelection } = useSelection();
+    const {
+        rows,
+        addDetail,
+        rowsEdited,
+        lineCounter,
+        totalAmount,
+        createDetail,
+        clearDetails,
+        totalQuantity,
+        removeDetails,
+        updateDetails,
+        readDetailFromBarcode,
+        updateDetailFromService,
+    } = useDetail({
+        initialDetails: document.detail,
+        initialCounter: document.counter,
+        initialAmount: document.totalAmount,
+        initialQuantity: document.totalQuantity,
+    });
 
-    //actions
-    useSumarizeField(document, updateDocument, fields);
     const { notification, showNotification } = useNotification();
-    const { search, showSearch, hideSearch, selectOption } = useSearch(
-        updateDocument,
-        updateDocumentCopy
-    );
+    const { selection, clearSelection, updateSelection } = useSelection();
+    const { search, showSearch, hideSearch, selectOption } = useSearch((data) => {
+        updateDocument(data);
+        const { details, counter, totalAmount, totalQuantity } = { ...data };
+        updateDetailFromService(details, counter, totalAmount, totalQuantity);
+        clearControlAmountField();
+        clearControlQuantityField();
+    }, updateDocumentCopy);
 
     const {
         controlField: controlQuantityField,
         validate: validateControlQuantityField,
         clearControlField: clearControlQuantityField,
         updateControlField: updateControlQuantityField,
-    } = useControlField(document[fields.TOTAL_QUANTITY], showNotification, 0);
+    } = useControlField(document.totalQuantity, showNotification);
 
     const {
         controlField: controlAmountField,
         validate: validateControlAmountField,
         clearControlField: clearControlAmountField,
         updateControlField: updateControlAmountField,
-    } = useControlField(document[fields.TOTAL_AMOUNT], showNotification, 0);
+    } = useControlField(document.totalAmount, showNotification);
 
     const onNewDocument = () => {
         clearDocument();
+        clearDetails();
         clearSelection();
         clearControlAmountField();
         clearControlQuantityField();
@@ -86,48 +120,52 @@ export const Dispatch = (props) => {
 
             if (validation) {
                 const body = dateToString(document);
-                if (isObjectEmpty(document[fields.ID])) {
-                    try {
-                        const response = await services.postDispatchDocument(body);
-                        updateDocumentFromService(response);
-                        showNotification(MESSAGE_TYPES.SUCCESS);
-                    } catch (error) {
-                        showNotification(MESSAGE_TYPES.ERROR, error.message);
-                    }
-                } else {
-                    try {
-                        const response = await services.putDispatchDocument(body);
-                        updateDocumentFromService(response);
-                        showNotification(MESSAGE_TYPES.SUCCESS, MESSAGES.SUCCESS_UPDATED);
-                    } catch (error) {
-                        showNotification(MESSAGE_TYPES.ERROR, error.message);
-                    }
+                body.details = rows;
+                body.counter = lineCounter;
+                body.totalAmount = totalAmount;
+                body.totalQuantity = totalQuantity;
+                try {
+                    const isNewDocument = isNullOrUndefinedOrEmptyString(document.id);
+                    const response = isNewDocument
+                        ? await services.postDispatchDocument(body)
+                        : await services.putDispatchDocument(body);
+
+                    updateDocumentFromService(response);
+                    const { details, counter, totalAmount, totalQuantity } = { ...response };
+                    updateDetailFromService(details, counter, totalAmount, totalQuantity);
+                    isNewDocument
+                        ? showNotification(MESSAGE_TYPES.SUCCESS)
+                        : showNotification(MESSAGE_TYPES.SUCCESS, MESSAGES.SUCCESS_RECORD_UPDATED);
+                } catch (error) {
+                    showNotification(MESSAGE_TYPES.ERROR, error.message);
                 }
             }
         };
 
         return {
-            state: saveButtonDisabled,
             command: onSaveDocument,
+            state: !(documentEdited || rowsEdited),
         };
     };
 
     const onCancel = () => {
         const onCancelDocument = async () => {
-            if (!isObjectEmpty(document[fields.ID])) {
+            if (!isNullOrUndefinedOrEmptyString(document.id)) {
                 const response = await services.findDispatchDocumentById(
-                    document[fields.TYPE],
-                    document[fields.ID]
+                    document.type,
+                    document.id
                 );
                 updateDocumentFromService(response);
+                const { details, counter, totalAmount, totalQuantity } = { ...response };
+                updateDetailFromService(details, counter, totalAmount, totalQuantity);
             } else {
                 onNewDocument();
             }
         };
 
         return {
-            state: saveButtonDisabled,
             command: onCancelDocument,
+            state: !(documentEdited || rowsEdited),
         };
     };
 
@@ -154,7 +192,7 @@ export const Dispatch = (props) => {
         };
 
         return {
-            state: deleteButtonStatusDisabled(),
+            state: deleteButtonDisabled,
             command: onConfirm,
         };
     };
@@ -195,37 +233,12 @@ export const Dispatch = (props) => {
         const release = {
             label: 'Liberar',
             command: onRelease().command,
-            disabled: releaseButtonStatusDisabled(),
+            disabled: releaseButtonDisabled || rowsEdited,
         };
 
         return [release];
     };
 
-    const updateDetails = (detail) => {
-        const details = [...document[fields.DETAILS]];
-        if (validateRepeatedItem(detail, details, showNotification)) return;
-        if (detail[fields.LINE_NUMBER] == 0) {
-            addDetail(details, detail);
-        } else {
-            const rows = updateRows(details, detail);
-            !isArrayEmpty(rows) && updateDocumentField(fields.DETAILS, rows);
-        }
-    };
-
-    const addDetail = (details, detail) => {
-        const nextCounter = document[fields.COUNTER] + 1;
-        const row = createRow(detail, nextCounter);
-        details.unshift(row);
-        updateDocumentField(fields.COUNTER, nextCounter);
-        updateDocumentField(fields.DETAILS, details);
-    };
-
-    const removeDetail = () => {
-        const details = removeRows([...document[fields.DETAILS]], selection);
-        updateDocumentField(fields.DETAILS, details);
-    };
-
-    //validations
     const saveValidations = () => {
         const validateWarehouseField = validateNotEmptyObjectField(
             document[fields.WAREHOUSE],
@@ -243,7 +256,7 @@ export const Dispatch = (props) => {
 
     const releaseValidations = () => {
         const validateSaveFields = saveValidations();
-        const validateIdField = !releaseButtonStatusDisabled();
+        const validateIdField = !releaseButtonDisabled;
         const validateAmountField = validateControlAmountField(MESSAGES.CONTROL_TOTAL_AMOUNT);
         const validateQuantityField = validateControlQuantityField(MESSAGES.CONTROL_TOTAL_QUANTITY);
         return (
@@ -251,50 +264,65 @@ export const Dispatch = (props) => {
         );
     };
 
+    const updateDetailTable = (detail) => {
+        if (validateRepeatedItem(detail, rows, showNotification)) return;
+        if (detail.lineNumber == 0) {
+            const newDetail = createDetail(detail);
+            addDetail(newDetail);
+        } else {
+            updateDetails(detail);
+        }
+    };
+
+    const removeDetail = () => {
+        removeDetails(selection);
+    };
+
     const getDataByPage = async (page) => {
-        const response = await services.findAllDispatchDocumentByPage(document[fields.TYPE], page);
+        const response = await services.findAllDispatchDocumentByPage(document.type, page);
 
         return response;
     };
 
     const getDataAsPage = async () => {
-        const response = await services.findAllDispatchDocumentAsPage(document[fields.TYPE]);
+        const response = await services.findAllDispatchDocumentAsPage(document.type);
 
         return response;
     };
 
     const onBarcodeReading = async (barcode) => {
         try {
-            const warehouseId = document[fields.WAREHOUSE][fields.ID];
+            const warehouseId = document.warehouse.id;
             const response = await services.findDispatchDetailReadingBarcode(warehouseId, barcode);
-            let detail = createRow(response, 0);
-            const result = ifItemPresent(fields, [...document[fields.DETAILS]], detail);
-            if (isObjectEmpty(result)) {
-                detail[fields.QUANTITY] = 1;
-                detail[fields.UNIT_PRICE] = 0;
-            } else {
-                result[fields.QUANTITY] = result[fields.QUANTITY] + 1;
-                detail = result;
-            }
-            const totalPrice = detail[fields.QUANTITY] * detail[fields.UNIT_PRICE];
-            detail[fields.TOTAL_PRICE] = totalPrice;
-            updateDetails(detail);
+            readDetailFromBarcode(response);
         } catch (error) {
             showNotification(MESSAGE_TYPES.ERROR, error.message);
         }
     };
 
-    //props
+    const dispatchToolbar = () => {
+        const documentToolbar = createDocumentToolbar(
+            onNewDocument,
+            onSave(),
+            onCancel(),
+            onDelete(),
+            actions()
+        );
+        return <Menubar model={documentToolbar} />;
+    };
+
     const dispatchProps = {
         fields,
         document,
         showSearch,
+        totalAmount,
+        totalQuantity,
         controlAmountField,
         updateDocumentField,
         controlQuantityField,
-        isReleased: isReleased(),
         updateControlAmountField,
         updateControlQuantityField,
+        isReleased: isReleased(document.status),
         options: {
             documentTypes: dispatchTypes,
         },
@@ -303,14 +331,14 @@ export const Dispatch = (props) => {
     const detailProps = {
         fields,
         selection,
+        data: rows,
         removeDetail,
-        updateDetails,
         updateSelection,
+        updateDetailTable,
+        type: document.type,
         columns: detailColumns,
-        type: document[fields.TYPE],
-        data: document[fields.DETAILS],
-        editable: addButtonStatusDisabled(),
-        warehouse: document[fields.WAREHOUSE],
+        editable: addButtonDisabled,
+        warehouse: document.warehouse,
     };
 
     const searchProps = {
@@ -324,58 +352,24 @@ export const Dispatch = (props) => {
 
     const barcodeProps = {
         processBarcode: onBarcodeReading,
-        disabled: isObjectEmpty(document[fields.WAREHOUSE]),
+        disabled: isObjectEmpty(document.warehouse) || isReleased(document.status),
     };
 
-    //hooks
     useEffect(() => {
-        updateInitialDocument(document[fields.TYPE]);
-    }, [document[fields.TYPE]]);
-
-    useEffect(() => {
-        updateSaveButtonStatus();
-    }, [document]);
-
-    useEffect(() => {
-        clearControlAmountField();
-        clearControlQuantityField();
-    }, [document[fields.ID]]);
-
-    const documentToolbar = () => {
-        const _documentToolbar = createDocumentToolbar(
-            onNewDocument,
-            onSave(),
-            onCancel(),
-            onDelete(),
-            actions()
-        );
-        return <Menubar model={_documentToolbar} />;
-    };
+        updateInitialDocument(document.type);
+        clearDetails();
+    }, [document.type]);
 
     return (
         <Dashboard>
-            <Panel header={documentToolbar}>
+            <Panel header={dispatchToolbar}>
                 <DispatchForm {...dispatchProps} />
                 <InputBarcodeReader {...barcodeProps} />
                 <Details {...detailProps} />
                 {search ? <Search {...searchProps} /> : <></>}
-                <Toast ref={notification} />
                 <ConfirmDialog />
+                <Toast ref={notification} />
             </Panel>
         </Dashboard>
     );
-};
-
-const createDocumentToolbar = (onNew, onSave, onCancel, onDelete, actions) => {
-    const documentToolbar = [...toolbar];
-    documentToolbar[0].command = onNew;
-    documentToolbar[1].command = onSave.command;
-    documentToolbar[1].disabled = onSave.state;
-    documentToolbar[2].command = onCancel.command;
-    documentToolbar[2].disabled = onCancel.state;
-    documentToolbar[3].command = onDelete.command;
-    documentToolbar[3].disabled = onDelete.state;
-    documentToolbar[4].items = actions;
-
-    return documentToolbar;
 };
