@@ -69,28 +69,59 @@ const Homepage = () => {
                     </p>
                 </Card>
             </div>
-            <div class="card m-5">
-                <div class="flex flex-column card-container bg-gray-800 border-round">
-                    <div class="flex align-items-center justify-content-center h-4rem">
+            <div className="card m-3">
+                <div
+                    className="flex flex-column card-container border-round"
+                    style={{ backgroundColor: '#1e1e1e' }}
+                >
+                    <div className="flex align-items-center justify-content-center h-4rem">
                         <h2> Datos de Acceso</h2>
                     </div>
-                    <div class="flex align-items-center justify-content-center h-4rem">
+                    <div className="flex align-items-center justify-content-center h-4rem">
                         <p>
-                            <p>
-                                <strong>Usuario: </strong> beta@republicofdevs.com
-                            </p>
-                            <p>
-                                <strong>Password: </strong> superpasword
-                            </p>
+                            <strong>Usuario: </strong> beta@republicofdevs.com
+                            <br />
+                            <strong>Password: </strong> superpasword
                         </p>
                     </div>
-                    <div class="flex align-items-center justify-content-center h-4rem m-3">
+                    <div className="flex align-items-center justify-content-center h-4rem m-3">
                         <Button
                             label="Ingresar"
                             className="p-button-info col-4"
                             onClick={toLogin}
                         />
                     </div>
+                </div>
+            </div>
+
+            <div className="card m-3 ">
+                <div
+                    className="flex flex-column card-container border-round p-3"
+                    style={{ backgroundColor: '#1e1e1e' }}
+                >
+                    <h2>Notas Importantes</h2>
+                    <p>
+                        <ul>
+                            <li>Todos los datos seran eliminados cada dos semanas</li>
+                            <li>Las siguientes funcionalidades no estan completas</li>
+                            <ul>
+                                <li>
+                                    Las etiquetas no estan bien alineadas, habra errores en la
+                                    impresion
+                                </li>
+                                <li>
+                                    La accion de eliminar articulos, almacenes o documentos desde
+                                    las tablas no funcionan.
+                                </li>
+                                <li>La sesion dura 24 hrs, falta mejorar la vida util del token</li>
+
+                                <li>
+                                    Es posible que la funcionalidad de cerrar sesion no funncione
+                                    correctamente
+                                </li>
+                            </ul>
+                        </ul>
+                    </p>
                 </div>
             </div>
         </div>
