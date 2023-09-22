@@ -100,28 +100,29 @@ const Homepage = () => {
                     style={{ backgroundColor: '#1e1e1e' }}
                 >
                     <h2>Notas Importantes</h2>
-                    <p>
+                    <ul>
+                        <li>Todos los datos seran eliminados cada dos semanas</li>
+                        <li>Las siguientes funcionalidades no estan completas</li>
                         <ul>
-                            <li>Todos los datos seran eliminados cada dos semanas</li>
-                            <li>Las siguientes funcionalidades no estan completas</li>
-                            <ul>
-                                <li>
-                                    Las etiquetas no estan bien alineadas, habra errores en la
-                                    impresion
-                                </li>
-                                <li>
-                                    La accion de eliminar articulos, almacenes o documentos desde
-                                    las tablas no funcionan.
-                                </li>
-                                <li>La sesion dura 24 hrs, falta mejorar la vida util del token</li>
+                            <li>
+                                Las etiquetas no estan bien alineadas, habra errores en la impresion
+                            </li>
+                            <li>
+                                La accion de eliminar articulos, almacenes o documentos desde las
+                                tablas no funcionan.
+                            </li>
+                            <li>La sesion dura 24 hrs, falta mejorar la vida util del token</li>
 
-                                <li>
-                                    Es posible que la funcionalidad de cerrar sesion no funncione
-                                    correctamente
-                                </li>
-                            </ul>
+                            <li>
+                                Es posible que la funcionalidad de cerrar sesion no funncione
+                                correctamente
+                            </li>
                         </ul>
-                    </p>
+                    </ul>
+                    <h3>
+                        Cualquier error o pregunta favor de enviar un correo a
+                        soporte@republicofdevs.com
+                    </h3>
                 </div>
             </div>
         </div>
