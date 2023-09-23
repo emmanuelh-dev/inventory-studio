@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { MESSAGE_TYPES } from '@constants';
-export const useControlField = (fieldValue, showNotification, initialValue) => {
+export const useControlField = (fieldValue, showNotification, initialValue = 0) => {
     const [controlField, setcontrolField] = useState(initialValue);
 
     const validate = (fieldName) => {
