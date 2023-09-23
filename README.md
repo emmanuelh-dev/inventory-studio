@@ -40,21 +40,32 @@ Todo el codigo debe estar en ingles, no usar palabras en español. Solo los mens
 
 Ejemplo aceptados:
 
+```
 <loginbutton label="Iniciar sesion" >
+```
 
+```
 const showMessage ()=>{
 const message = "Este mensaje se mostrara en la pantallas";
 console.log(message);
 }
 
-Ejmplos no aceptados  
-<BotonInicioSession label="Iniciar sesion">  
+```
+
+Ejemplos no aceptados
+
+```
+<BotonInicioSession label="Iniciar sesion">
+```
+
+```
 const mostrarMensaje = ()=>{
 
     const mensaje = "Este mensaje se mostrara en la pantallas";
     console.log(mensaje);
 
 }
+```
 
 No usar function en lugar de ellos usar una funcion anoninma y asignartla a una constante.  
 No usar var, usar const o let.
