@@ -13,8 +13,10 @@ Node 16
 ## Reglas basicas branching y pull request
 
 la rama debe tomarse de master y llevar la siguiente nomenclatura
-feature/issue-numero-del-issue-nombre-del-issue por ejemplo
+feature/issue-numero-del-issue-nombre-del-issue
+Ejemplo
 feature/issue-01-cambia-color-del-boton-del-login
+feature/issue-01-new-color-login-button
 
 Todos los commits deben llevar un mensaje/comentario descriptivo.
 Evitar los commit de tipo
