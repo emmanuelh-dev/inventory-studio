@@ -14,19 +14,28 @@ Node 16
 
 la rama debe tomarse de master y llevar la siguiente nomenclatura  
 feature/issue-numero-del-issue-nombre-del-issue  
-Ejemplo  
-feature/issue-01-cambia-color-del-boton-del-login  
+Ejemplo
+
+```
+feature/issue-01-cambia-color-del-boton-del-login
 feature/issue-01-new-color-login-button
+```
 
 Todos los commits deben llevar un mensaje/comentario descriptivo.  
-Evitar los commit de tipo  
-git commit -m "actualizacion"  
-git commit -m "update"  
-git commit -m "actualizacion de la pagina de login"
+Evitar los commit de tipo
 
-Tratar que los commits sean de este estilo  
-git commit -m "Cambia el color del boton del login de verde a rojo"  
+```
+git commit -m "actualizacion"
+git commit -m "update"
+git commit -m "actualizacion de la pagina de login"
+```
+
+Tratar que los commits sean de este estilo
+
+```
+git commit -m "Cambia el color del boton del login de verde a rojo"
 git commit -m "it changes the color of login button from green to red"
+```
 
 ## Reglas basicas de Testing
 
