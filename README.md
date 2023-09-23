@@ -41,7 +41,9 @@ git commit -m "it changes the color of login button from green to red"
 
 Agregar tantos test como sean posibles  
 Tratar de agrupar los test por functionalidad en los describe y los casos de prueba en los it.  
-No usar test
+No usar test  
+Agrega los test file en la misma carpeta que el archivo que esta probando.  
+No los agregues a la carpeta **test**. Estoy en el proceso de moverlos
 
 ## Reglas basicas de codigo.
 
