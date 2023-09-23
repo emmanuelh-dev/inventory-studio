@@ -76,3 +76,4 @@ El archivo env.development.local es un template modificalo de acuerdo a tu local
 ## Sugerencias
 
 Agregar el mensaje de tu commit en ingles.
+Agregar el nombre de tu branch en ingles.
