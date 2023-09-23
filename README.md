@@ -10,7 +10,11 @@ Next Auth 4
 React 18  
 Node 16
 
+Editor: VS code.
+
 ## Reglas basicas branching y pull request
+
+Todo cambio debe estar en su propia rama, nunca se debe hacer cambios sobre master.
 
 la rama debe tomarse de master y llevar la siguiente nomenclatura  
 feature/issue-numero-del-issue-nombre-del-issue  
@@ -99,3 +103,4 @@ El archivo env.development.local es un template modificalo de acuerdo a tu local
 
 Agregar el mensaje de tu commit en ingles.  
 Agregar el nombre de tu branch en ingles.
+Hay que intentar usar todos vs code para evitar agregar archivos propiios de cada editor, por ejemplo los iml, o los .settings.
