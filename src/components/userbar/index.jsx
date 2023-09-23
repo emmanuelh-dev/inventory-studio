@@ -10,7 +10,7 @@ export const Userbar = (props) => {
         event.preventDefault();
         const response = await request.apiAuthDelete(process.env.NEXT_PUBLIC_SIGNOUT, session);
         if (response.ok) {
-            signOut({ callbackUrl: process.env.NEXT_PUBLIC_LOGIN });
+            signOut({ callbackUrl: '/login' });
         }
     };
     const RightElement = () => (
