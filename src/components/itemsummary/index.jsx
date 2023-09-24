@@ -78,7 +78,7 @@ export const ItemSummary = (props) => {
                 field={TOTAL_PRICE}
                 header="Precio Total"
                 body={(row) => {
-                    return amountTemplate(row, UNIT_PRICE);
+                    return amountTemplate(row, TOTAL_PRICE);
                 }}
             />
             <Column field={LAST_UPDATED} header="Fecha de Actualizacion" />
