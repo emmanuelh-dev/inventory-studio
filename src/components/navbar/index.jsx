@@ -8,7 +8,7 @@ export const Navbar = (props) => {
         {
             label: 'Home',
             command: () => {
-                router.push('/');
+                router.push('/dashboard');
             },
             icon: 'pi pi-fw pi-home',
         },
