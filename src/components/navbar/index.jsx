@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import { Menu } from 'primereact/menu';
 import { Menubar } from 'primereact/menubar';
 import { useMediaQuery } from '@hooks/useMediaQuery';
+import { LogOutButton } from '@components/logoutbutton';
 export const Navbar = (props) => {
     const router = useRouter();
     const small = useMediaQuery('(max-width: 768px)');
@@ -95,5 +96,9 @@ export const Navbar = (props) => {
         },
     ];
 
-    return small ? <Menubar model={nav} /> : <Menu model={nav} className="col-12" />;
+    return small ? (
+        <Menubar model={nav} end={<LogOutButton />} />
+    ) : (
+        <Menu model={nav} className="col-12" />
+    );
 };
