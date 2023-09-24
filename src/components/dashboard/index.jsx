@@ -23,13 +23,13 @@ export const Dashboard = ({ children }) => {
 
     return (
         <div className="grid">
-            <div className="col-12">
+            <div className="col-12 md:col-12 lg:col-12 ">
                 <Userbar />
             </div>
-            <div className="col-2">
+            <div className="col-12 md:col-3 lg:col-2">
                 <Navbar />
             </div>
-            <div className="col-10">{children}</div>
+            <div className="col-12 md:col-9 lg:col-10">{children}</div>
         </div>
     );
 };
