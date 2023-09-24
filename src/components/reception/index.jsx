@@ -395,7 +395,7 @@ export const Reception = (props) => {
 
     return (
         <Dashboard>
-            <Panel header={receptionToolbar}>
+            <Panel headerTemplate={receptionToolbar}>
                 <ReceptionForm {...receptionProps} />
                 <Details {...detailProps} />
                 {search && <Search {...searchProps} />}
