@@ -4,7 +4,9 @@ import { useSession } from 'next-auth/react';
 import { Navbar } from '@components/navbar';
 import { Userbar } from '@components/userbar';
 //components
+import { Card } from 'primereact/card';
 import { ProgressSpinner } from 'primereact/progressspinner';
+
 export const Dashboard = ({ children }) => {
     const router = useRouter();
     const { status, data: session } = useSession();
@@ -22,14 +24,11 @@ export const Dashboard = ({ children }) => {
     }
 
     return (
-        <div className="grid">
-            <div className="col-12 md:col-12 lg:col-12 ">
-                <Userbar />
-            </div>
-            <div className="col-12 md:col-3 lg:col-2">
+        <div className="">
+            <Card>
                 <Navbar />
-            </div>
-            <div className="col-12 md:col-9 lg:col-10">{children}</div>
+            </Card>
+            <Card className="col-12">{children}</Card>
         </div>
     );
 };
