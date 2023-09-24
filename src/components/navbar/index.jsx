@@ -1,9 +1,11 @@
 import React from 'react';
 import { useRouter } from 'next/router';
-//components
 import { Menu } from 'primereact/menu';
+import { Menubar } from 'primereact/menubar';
+import { useMediaQuery } from '@hooks/useMediaQuery';
 export const Navbar = (props) => {
     const router = useRouter();
+    const small = useMediaQuery('(max-width: 768px)');
     const nav = [
         {
             label: 'Home',
@@ -93,5 +95,5 @@ export const Navbar = (props) => {
         },
     ];
 
-    return <Menu model={nav} className="col-12" />;
+    return small ? <Menubar model={nav} /> : <Menu model={nav} className="col-12" />;
 };
