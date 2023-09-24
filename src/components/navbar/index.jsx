@@ -93,5 +93,5 @@ export const Navbar = (props) => {
         },
     ];
 
-    return <Menu model={nav} className="navbar" />;
+    return <Menu model={nav} className="col-12" />;
 };
