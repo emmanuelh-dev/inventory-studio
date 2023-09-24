@@ -100,7 +100,7 @@ export const Details = (props) => {
     };
 
     return (
-        <Panel header={toolbar()}>
+        <Panel headerTemplate={toolbar()}>
             <DataTable
                 rows={10}
                 paginator
