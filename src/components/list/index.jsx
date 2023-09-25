@@ -15,7 +15,7 @@ export const List = (props) => {
     const [loading, setLoading] = useState(true);
 
     const router = useRouter();
-    const { filters, fields, redirect, getDataByPage, getDataAsPage, getDataByFilter } = {
+    const { toolbar, filters, fields, redirect, getDataByPage, getDataAsPage, getDataByFilter } = {
         ...props,
     };
 
@@ -81,6 +81,7 @@ export const List = (props) => {
 
     return (
         <Dashboard>
+            {toolbar}
             <DataTable
                 lazy
                 paginator

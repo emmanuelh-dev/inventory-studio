@@ -1,4 +1,5 @@
 import services from '@services/api-services';
+import { ListToolbar } from '@components/listtoolbar';
 import { itemSearchFields, itemFilters } from '@constants/options';
 
 export const withItemList = (WrappedComponent) => {
@@ -18,7 +19,10 @@ export const withItemList = (WrappedComponent) => {
             return result;
         };
 
+        const toolbar = <ListToolbar creationPath="item" />;
+
         const listProps = {
+            toolbar,
             redirect: 'item/',
             filters: itemFilters,
             fields: itemSearchFields,
