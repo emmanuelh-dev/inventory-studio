@@ -2,13 +2,10 @@ import { Card } from 'primereact/card';
 import { Button } from 'primereact/button';
 import { Messages } from 'primereact/messages';
 import { InputText } from 'primereact/inputtext';
-import { useState } from 'react';
-
 import { Password } from 'primereact/password';
 
 export const LoginForm = (props) => {
     const { message, userAccount, handleInputChange, handleFormSubmit } = { ...props };
-    const [showpassword, setShowPassword] = useState(false);
     return (
         <div className="flex align-content-center justify-content-center flex-wrap login-container">
             <Card className="login-card">
