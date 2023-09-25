@@ -1,4 +1,5 @@
 import services from '@services/api-services';
+import { ListToolbar } from '@components/listtoolbar';
 import { warehouseSearchFields, warehouseFilters } from '@constants/options';
 
 export const withWarehouseList = (WrappedComponent) => {
@@ -18,7 +19,10 @@ export const withWarehouseList = (WrappedComponent) => {
             return result;
         };
 
+        const toolbar = <ListToolbar creationPath="warehouse" />;
+
         const listProps = {
+            toolbar,
             redirect: 'warehouse/',
             filters: warehouseFilters,
             fields: warehouseSearchFields,
