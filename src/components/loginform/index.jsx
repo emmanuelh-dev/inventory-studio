@@ -2,6 +2,7 @@ import { Card } from 'primereact/card';
 import { Button } from 'primereact/button';
 import { Messages } from 'primereact/messages';
 import { InputText } from 'primereact/inputtext';
+import { Password } from 'primereact/password';
 
 export const LoginForm = (props) => {
     const { message, userAccount, handleInputChange, handleFormSubmit } = { ...props };
@@ -20,14 +21,16 @@ export const LoginForm = (props) => {
                             onChange={handleInputChange}
                         />
                     </div>
+
                     <div className="field col-12">
                         <label>Contraseña</label>
-                        <InputText
-                            type="password"
-                            name="password"
+                        <Password
                             className="p-inputtext-lg"
+                            name="password"
+                            feedback={false}
                             value={userAccount.password}
                             onChange={handleInputChange}
+                            toggleMask
                         />
                     </div>
                     <div className="field col-12">
