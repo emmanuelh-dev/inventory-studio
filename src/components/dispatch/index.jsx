@@ -363,7 +363,7 @@ export const Dispatch = (props) => {
 
     return (
         <Dashboard>
-            <Panel header={dispatchToolbar}>
+            <Panel headerTemplate={dispatchToolbar}>
                 <DispatchForm {...dispatchProps} />
                 <InputBarcodeReader {...barcodeProps} />
                 <Details {...detailProps} />
