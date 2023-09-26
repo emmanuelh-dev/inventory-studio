@@ -7,6 +7,7 @@ import {
     detailColumns,
     documentTypes,
     receptionTypes,
+    documentStatus,
     detailsToolbar,
     documentFilters,
     itemSearchFields,
@@ -333,6 +334,16 @@ describe('Options', () => {
             const result = documentSearchFields[5];
             expect(result.field).toBe('totalAmount');
             expect(result.header).toBe('Monto total');
+        });
+    });
+
+    describe('documentStatus', () => {
+        it('should have released value and its label should be liberado', () => {
+            expect(documentStatus.RELEASED).toBe('Liberado');
+        });
+
+        it('should have open value and its label should be abierto', () => {
+            expect(documentStatus.OPEN).toBe('Abierto');
         });
     });
 });
