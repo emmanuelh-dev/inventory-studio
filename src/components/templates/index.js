@@ -1,4 +1,4 @@
-import { valuation } from '@constants/options';
+import { valuation, documentStatus } from '@constants/options';
 import { findObjectByProp, findKey } from '@utils';
 
 //components
@@ -36,4 +36,10 @@ export const objectTemplate = (row, field) => {
     const key = findKey(row[field], 'Name');
 
     return row[field][key];
+};
+
+export const StatusChip = ({ value }) => {
+    const label = documentStatus[value.status];
+
+    return <Chip label={label} className="mr-2 mb-2 custom-chip" />;
 };
