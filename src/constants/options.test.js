@@ -315,7 +315,9 @@ describe('Options', () => {
 
         it('should have the right object for filter document by warehouse', () => {
             const row = {
-                warehouseName: 'WarehouseOne',
+                warehouse: {
+                    warehouseName: 'WarehouseOne',
+                },
             };
             const result = documentSearchFields[3];
             expect(result.field).toBe('warehouse');
