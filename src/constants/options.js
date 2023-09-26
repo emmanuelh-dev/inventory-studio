@@ -1,6 +1,7 @@
 import { FilterMatchMode } from 'primereact/api';
 import {
     UsedChip,
+    StatusChip,
     ValuationType,
     objectTemplate,
     amountTemplate,
@@ -24,6 +25,11 @@ export const documentTypes = {
     OUTPUT: 'Salida',
     SALE_RETURN: 'Devolucion por venta',
     PURCHASE_RETURN: 'Devolucion por compra',
+};
+
+export const documentStatus = {
+    OPEN: 'Abierto',
+    RELEASED: 'Liberado',
 };
 
 export const toolbar = [
@@ -162,6 +168,7 @@ export const documentSearchFields = [
         field: 'status',
         header: 'Estado',
         filter: true,
+        template: (row) => <StatusChip value={row} />,
     },
     {
         field: 'warehouse',
