@@ -21,5 +21,5 @@ const NewButton = (props) => {
         router.push(`/${props.redirection}`);
     };
 
-    return <Button label="Nuevo" icon="pi pi-plus" className="" onClick={handleNewClick} />;
+    return <Button label="Nuevo" icon="pi pi-plus" onClick={handleNewClick} />;
 };
