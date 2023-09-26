@@ -174,7 +174,7 @@ export const documentSearchFields = [
         field: 'warehouse',
         header: 'Almacen',
         filter: true,
-        template: (row) => row['warehouseName'],
+        template: (row) => row['warehouse']['warehouseName'],
     },
     {
         field: 'totalQuantity',
