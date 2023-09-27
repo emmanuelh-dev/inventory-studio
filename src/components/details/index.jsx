@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 //constants
 import { isArrayEmpty } from '@utils';
-import { detailState } from '@constants';
 import { detailsToolbar } from '@constants/options';
 import { useRowData } from '@hooks/useFormState';
 //components
@@ -17,7 +16,8 @@ import { DetailDialog } from '@components/detaildialog';
 export const Details = (props) => {
     const [visible, setVisible] = useState(false);
 
-    const { rowData, clearRowData, updateRowData, updateRowDataField } = useRowData();
+    const { rowData, clearRowData, updateRowData, addButtonDisabled, updateRowDataField } =
+        useRowData();
 
     const {
         data,
@@ -96,6 +96,7 @@ export const Details = (props) => {
         addDetail,
         warehouse,
         hideDialog,
+        addButtonDisabled,
         updateRowDataField,
     };
 

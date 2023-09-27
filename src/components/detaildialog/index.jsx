@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import { isObjectEmpty } from '@utils';
 import { Button } from 'primereact/button';
 import { Dialog } from 'primereact/dialog';
@@ -9,14 +8,22 @@ import { InputAmountEditor } from '@components/inputamounteditor';
 import { InputQuantityEditor } from '@components/inputquantityeditor';
 
 export const DetailDialog = (props) => {
-    const { type, fields, visible, rowData, addDetail, warehouse, hideDialog, updateRowDataField } =
-        {
-            ...props,
-        };
+    const {
+        type,
+        fields,
+        visible,
+        rowData,
+        addDetail,
+        warehouse,
+        hideDialog,
+        addButtonDisabled,
+        updateRowDataField,
+    } = {
+        ...props,
+    };
 
     const footer = () => {
-        const disabled = isObjectEmpty(rowData[fields.ITEM]);
-        return <Footer onYes={addDetail} onCancel={hideDialog} disabled={disabled} />;
+        return <Footer onYes={addDetail} onCancel={hideDialog} disabled={addButtonDisabled} />;
     };
 
     return (
