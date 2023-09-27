@@ -5,7 +5,6 @@ import {
     getValue,
     stringToDate,
     isObjectEmpty,
-    ifItemPresent,
     isInputDocument,
     findItemOrEmpty,
     isOutputDocument,
