@@ -1,4 +1,5 @@
 export const MESSAGES = {
+    DOCUMENT_DELETE_CONFIRMATION: 'Documento',
     CONTROL_TOTAL_AMOUNT: 'Control Monto Total',
     CONTROL_TOTAL_QUANTITY: 'Control Cantidad Total',
     ERROR_RECORD_CREATED: 'El registro no fue guardado',
