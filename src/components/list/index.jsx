@@ -104,9 +104,9 @@ export const List = (props) => {
             accept,
             reject: () => {},
             acceptLabel: 'Si',
+            header: `${header} ${row.id}`,
             icon: 'pi pi-exclamation-triangle',
             acceptClassName: 'p-button-danger',
-            header: `${header} ${row.id}`,
             message: `¿Esta seguro que desea borrar este registro?`,
         });
     };
