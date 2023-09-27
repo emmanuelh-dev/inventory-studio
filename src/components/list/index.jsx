@@ -3,10 +3,13 @@ import React, { useEffect, useState } from 'react';
 import { isReleasedOrUsed } from '@utils/validations';
 import { isObjectEmpty, transformFilter } from '@utils';
 
+import { Dashboard } from '@components/dashboard';
+
+import { Toast } from 'primereact/toast';
 import { Column } from 'primereact/column';
 import { Button } from 'primereact/button';
 import { DataTable } from 'primereact/datatable';
-import { Dashboard } from '@components/dashboard';
+import { ConfirmDialog, confirmDialog } from 'primereact/confirmdialog';
 
 export const List = (props) => {
     const [row, setRow] = useState();
@@ -15,7 +18,18 @@ export const List = (props) => {
     const [loading, setLoading] = useState(true);
 
     const router = useRouter();
-    const { toolbar, filters, fields, redirect, getDataByPage, getDataAsPage, getDataByFilter } = {
+    const {
+        header,
+        remove,
+        fields,
+        filters,
+        toolbar,
+        redirect,
+        notification,
+        getDataByPage,
+        getDataAsPage,
+        getDataByFilter,
+    } = {
         ...props,
     };
 
@@ -71,12 +85,30 @@ export const List = (props) => {
                 />
                 <Button
                     icon="pi pi-trash"
-                    onClick={() => {}}
+                    onClick={() => {
+                        onConfirmRemoval(row);
+                    }}
                     disabled={isReleasedOrUsed(row)}
                     className="p-button-rounded p-button-warning"
                 />
             </React.Fragment>
         );
+    };
+
+    const onConfirmRemoval = (row) => {
+        const accept = () => {
+            remove(row);
+        };
+
+        confirmDialog({
+            accept,
+            reject: () => {},
+            acceptLabel: 'Si',
+            icon: 'pi pi-exclamation-triangle',
+            acceptClassName: 'p-button-danger',
+            header: `${header} ${row.id}`,
+            message: `¿Esta seguro que desea borrar este registro?`,
+        });
     };
 
     return (
@@ -121,6 +153,8 @@ export const List = (props) => {
                 })}
                 <Column body={actionTemplate} />
             </DataTable>
+            <ConfirmDialog />
+            <Toast ref={notification} />
         </Dashboard>
     );
 };
