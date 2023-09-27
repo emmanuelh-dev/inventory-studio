@@ -411,6 +411,7 @@ export const useDetail = ({
 
 export const useRowData = () => {
     const [rowData, setRowData] = useState(_.cloneDeep(detailState));
+    const [addButtonDisabled, setAddButtonDisabled] = useState(true);
 
     const updateRowData = (value) => {
         setRowData(_.cloneDeep(value));
@@ -434,12 +435,14 @@ export const useRowData = () => {
     useEffect(() => {
         const updateRowDataTotalPrice = () => {
             const value = rowData.quantity * rowData.unitPrice;
+            const disabled = value <= 0 || isObjectEmpty(rowData.item);
+            setAddButtonDisabled(disabled);
             updateRowDataField('totalPrice', { target: { value } });
         };
         updateRowDataTotalPrice();
     }, [rowData.quantity, rowData.unitPrice]);
 
-    return { rowData, clearRowData, updateRowData, updateRowDataField };
+    return { rowData, clearRowData, updateRowData, addButtonDisabled, updateRowDataField };
 };
 
 export const useStateStatus = (state, field) => {

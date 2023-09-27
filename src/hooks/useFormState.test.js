@@ -1699,5 +1699,129 @@ describe('useFormState', () => {
             expect(unitPrice).toBe(0);
             expect(totalPrice).toBe(0);
         });
+
+        it('should be able to disable add button when total price is 0 or item is empty by default', () => {
+            const { result } = renderHook(useRowData);
+
+            const detail = {
+                id: null,
+                lineNumber: 0,
+                item: {},
+                description: '',
+                quantity: 0,
+                unitPrice: 0,
+                totalPrice: 0,
+                deleted: false,
+            };
+
+            expect(result.current.rowData).toEqual(detail);
+            expect(result.current.addButtonDisabled).toBe(true);
+        });
+
+        it('should disable add button when quantity is zero and makes total price zero', () => {
+            const { result } = renderHook(useRowData);
+
+            const detail = {
+                id: null,
+                lineNumber: 0,
+                item: {
+                    id: 1,
+                    itemName: 'item one',
+                    description: 'item description one',
+                    valuationType: 'AVERAGE',
+                    used: false,
+                },
+                description: 'detail item one',
+                quantity: 5,
+                unitPrice: 10,
+                totalPrice: 50,
+                deleted: false,
+            };
+
+            act(() => {
+                result.current.updateRowData(detail);
+            });
+
+            expect(result.current.rowData.quantity).toBe(5);
+            expect(result.current.addButtonDisabled).toBe(false);
+
+            act(() => {
+                result.current.updateRowDataField('quantity', 0);
+            });
+
+            expect(result.current.rowData.quantity).toBe(0);
+            expect(result.current.addButtonDisabled).toBe(true);
+        });
+
+        it('should disable add button when unit price is zero and makes total price zero', () => {
+            const { result } = renderHook(useRowData);
+
+            const detail = {
+                id: null,
+                lineNumber: 0,
+                item: {
+                    id: 1,
+                    itemName: 'item one',
+                    description: 'item description one',
+                    valuationType: 'AVERAGE',
+                    used: false,
+                },
+                description: 'detail item one',
+                quantity: 5,
+                unitPrice: 10,
+                totalPrice: 50,
+                deleted: false,
+            };
+
+            act(() => {
+                result.current.updateRowData(detail);
+            });
+
+            expect(result.current.rowData.unitPrice).toBe(10);
+            expect(result.current.addButtonDisabled).toBe(false);
+
+            act(() => {
+                result.current.updateRowDataField('unitPrice', 0);
+            });
+
+            expect(result.current.rowData.unitPrice).toBe(0);
+            expect(result.current.addButtonDisabled).toBe(true);
+        });
+
+        it('should enable add button when total price is greater than zero', () => {
+            const { result } = renderHook(useRowData);
+
+            const detail = {
+                id: null,
+                lineNumber: 0,
+                item: {
+                    id: 1,
+                    itemName: 'item one',
+                    description: 'item description one',
+                    valuationType: 'AVERAGE',
+                    used: false,
+                },
+                description: '',
+                quantity: 0,
+                unitPrice: 0,
+                totalPrice: 0,
+                deleted: false,
+            };
+
+            act(() => {
+                result.current.updateRowData(detail);
+            });
+
+            act(() => {
+                result.current.updateRowDataField('quantity', 3);
+            });
+
+            act(() => {
+                result.current.updateRowDataField('unitPrice', 5);
+            });
+
+            expect(result.current.rowData.totalPrice).toBe(15);
+            expect(result.current.addButtonDisabled).toBe(false);
+        });
     });
 });
