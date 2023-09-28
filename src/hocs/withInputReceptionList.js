@@ -39,6 +39,7 @@ export const withInputReceptionList = (WrappedComponent) => {
 
         const listProps = {
             notification,
+            headerValue: 'id',
             remove: removeDocument,
             filters: documentFilters,
             fields: documentSearchFields,

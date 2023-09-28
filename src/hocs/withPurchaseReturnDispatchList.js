@@ -41,6 +41,7 @@ export const withPurchaseReturnDispatchList = (WrappedComponent) => {
 
         const listProps = {
             notification,
+            headerValue: 'id',
             remove: removeDocument,
             filters: documentFilters,
             fields: documentSearchFields,
