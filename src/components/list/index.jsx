@@ -96,8 +96,8 @@ export const List = (props) => {
     };
 
     const onConfirmRemoval = (row) => {
-        const accept = () => {
-            remove(row);
+        const accept = async () => {
+            await remove(row);
             fetchDataAsPage();
         };
 
