@@ -186,10 +186,10 @@ export const Reception = (props) => {
             confirmDialog({
                 reject: () => {},
                 accept: onDeleteDocument,
-                header: 'Eliminar Documento',
                 acceptClassName: 'p-button-danger',
                 icon: 'pi pi-exclamation-triangle',
                 message: `¿Esta seguro que desea borrar el documento?`,
+                header: `${MESSAGES.DOCUMENT_DELETE_CONFIRMATION} ${document.id}`,
             });
         };
 
