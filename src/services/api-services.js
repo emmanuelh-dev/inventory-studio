@@ -180,6 +180,7 @@ const services = {
     findAllReceptionDocumentByPage,
     postItem: itemServices.postItem,
     findDispatchDetailReadingBarcode,
+    deleteItem: itemServices.deleteItem,
     findItemById: itemServices.findItemById,
     putWarehouse: warehouseServices.putWarehouse,
     postWarehouse: warehouseServices.postWarehouse,

@@ -59,9 +59,17 @@ const putItem = async (item) => {
     return response;
 };
 
+const deleteItem = async (id) => {
+    const endpoint = process.env.NEXT_PUBLIC_ITEMS_BY_ID;
+    const url = replaceParams(endpoint, { id });
+    const response = await request.apiDelete(url);
+    return response;
+};
+
 const itemServices = {
     putItem,
     postItem,
+    deleteItem,
     findItemById,
     findItemsByFilter,
     findAllItemsAsPage,
