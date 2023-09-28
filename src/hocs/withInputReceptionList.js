@@ -32,7 +32,6 @@ export const withInputReceptionList = (WrappedComponent) => {
             try {
                 await services.deleteReceptionDocument(document);
                 showNotification(MESSAGE_TYPES.SUCCESS, MESSAGES.SUCESS_RECORD_DELETED);
-                window.location.reload(false);
             } catch (error) {
                 showNotification(MESSAGE_TYPES.ERROR, error.message);
             }
