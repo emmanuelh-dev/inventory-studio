@@ -250,9 +250,9 @@ describe('Options', () => {
             expect(result.filter).toBe(true);
         });
 
-        it('should have correct object for warehouse used field filter', () => {
+        it('should have correct object for warehouse locked field filter', () => {
             const result = warehouseSearchFields[1];
-            expect(result.field).toBe('used');
+            expect(result.field).toBe('locked');
             expect(result.header).toBe('Estado');
         });
     });

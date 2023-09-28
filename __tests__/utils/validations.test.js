@@ -1,5 +1,5 @@
 import {
-    isReleasedOrUsed,
+    isReleasedOrLocked,
     validateRepeatedItem,
     validateNotEmptyObjectField,
     validateNotEmptyStringField,
@@ -125,31 +125,31 @@ describe('Validations', () => {
         });
     });
 
-    describe('isReleasedOrUsed', () => {
+    describe('isReleasedOrLocked', () => {
         it('returns true if row status is released', () => {
             const row = {
                 status: 'RELEASED',
             };
 
-            const result = isReleasedOrUsed(row);
+            const result = isReleasedOrLocked(row);
             expect(result).toBe(true);
         });
 
-        it('returns true if row used is true', () => {
+        it('returns true if row locked is true', () => {
             const row = {
-                used: true,
+                locked: true,
             };
 
-            const result = isReleasedOrUsed(row);
+            const result = isReleasedOrLocked(row);
             expect(result).toBe(true);
         });
 
-        it('returns false if row is not used', () => {
+        it('returns false if row is not locked', () => {
             const row = {
-                used: false,
+                locked: false,
             };
 
-            const result = isReleasedOrUsed(row);
+            const result = isReleasedOrLocked(row);
             expect(result).toBe(false);
         });
 
@@ -158,7 +158,7 @@ describe('Validations', () => {
                 status: 'OPEN',
             };
 
-            const result = isReleasedOrUsed(row);
+            const result = isReleasedOrLocked(row);
             expect(result).toBe(false);
         });
     });

@@ -19,7 +19,7 @@ export const withInventory = (WrappedComponent) => {
         const { search, showSearch, hideSearch, selectOption } = useSearch(updateState, updateCopy);
         const { usedIcon, usedLabel, updateStateStatus } = useStateStatus(
             state,
-            warehouseFields.USED
+            warehouseFields.LOCKED
         );
 
         useEffect(() => {

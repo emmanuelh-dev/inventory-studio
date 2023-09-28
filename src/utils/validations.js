@@ -38,6 +38,6 @@ export const isReleased = (status) => {
     return status == 'RELEASED';
 };
 
-export const isReleasedOrUsed = (row) => {
-    return row[fields.USED] || isReleased(row[fields.STATUS]);
+export const isReleasedOrLocked = (row) => {
+    return row[fields.LOCKED] || isReleased(row[fields.STATUS]);
 };

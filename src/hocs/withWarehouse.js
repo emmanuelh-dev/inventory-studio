@@ -25,7 +25,7 @@ export const withWarehouse = (WrappedComponent) => {
             updateSaveButtonStatus,
         } = useForm(initialState, warehouseState);
         const { notification, showNotification } = useNotification();
-        const { usedIcon, usedLabel, updateStateStatus } = useStateStatus(form, fields.USED);
+        const { usedIcon, usedLabel, updateStateStatus } = useStateStatus(form, fields.LOCKED);
         const { search, showSearch, hideSearch, selectOption } = useSearch(
             updateForm,
             updateFormCopy
@@ -85,7 +85,7 @@ export const withWarehouse = (WrappedComponent) => {
             const onDeleteWarehouse = async () => {};
             return {
                 command: onDeleteWarehouse,
-                disabled: form[fields.USED] || isNullOrUndefined(form[fields.ID]),
+                disabled: form[fields.LOCKED] || isNullOrUndefined(form[fields.ID]),
             };
         };
 

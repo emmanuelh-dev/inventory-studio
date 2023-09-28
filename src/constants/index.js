@@ -5,7 +5,7 @@ const KEY = 'key';
 const TYPE = 'type';
 const DATE = 'date';
 const ITEM = 'item';
-const USED = 'used';
+const LOCKED = 'locked';
 const STATUS = 'status';
 const COUNTER = 'counter';
 const DETAILS = 'details';
@@ -34,14 +34,14 @@ export const DOCUMENT_TYPES = {
 export const itemState = {
     id: null,
     itemName: '',
+    locked: false,
     description: '',
     valuationType: 'AVERAGE',
-    used: false,
 };
 
 export const itemFields = {
     ID,
-    USED,
+    LOCKED,
     ITEM_NAME,
     DESCRIPTION,
     VALUATION_TYPE,
@@ -51,13 +51,13 @@ export const warehouseState = {
     id: null,
     warehouseName: '',
     itemSummary: [],
-    used: false,
+    locked: false,
     deleted: false,
 };
 
 export const warehouseFields = {
     ID,
-    USED,
+    LOCKED,
     DELETED,
     ITEM_SUMMARY,
     WAREHOUSE_NAME,
@@ -94,8 +94,8 @@ export const salesReturnDocumentState = {
 export const validationFields = {
     ID,
     ITEM,
-    USED,
     STATUS,
+    LOCKED,
     DELETED,
     ITEM_NAME,
     LINE_NUMBER,

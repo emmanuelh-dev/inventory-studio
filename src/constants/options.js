@@ -133,9 +133,9 @@ export const warehouseSearchFields = [
         filter: true,
     },
     {
-        field: 'used',
+        field: 'locked',
         header: 'Estado',
-        template: (row) => <UsedChip value={row['used']} />,
+        template: (row) => <UsedChip value={row['locked']} />,
     },
 ];
 

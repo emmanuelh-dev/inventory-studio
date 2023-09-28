@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
-import { isReleasedOrUsed } from '@utils/validations';
+import { isReleasedOrLocked } from '@utils/validations';
 import { isObjectEmpty, transformFilter } from '@utils';
 
 import { Dashboard } from '@components/dashboard';
@@ -89,7 +89,7 @@ export const List = (props) => {
                     onClick={() => {
                         onConfirmRemoval(row);
                     }}
-                    disabled={isReleasedOrUsed(row)}
+                    disabled={isReleasedOrLocked(row)}
                     className="p-button-rounded p-button-warning"
                 />
             </React.Fragment>

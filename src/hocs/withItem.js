@@ -26,7 +26,7 @@ export const withItem = (WrappedComponent) => {
         } = useForm(initialState, itemState);
 
         const { notification, showNotification } = useNotification();
-        const { usedIcon, usedLabel, updateStateStatus } = useStateStatus(form, fields.USED);
+        const { usedIcon, usedLabel, updateStateStatus } = useStateStatus(form, fields.LOCKED);
         const { search, showSearch, hideSearch, selectOption } = useSearch(
             updateForm,
             updateFormCopy
@@ -87,7 +87,7 @@ export const withItem = (WrappedComponent) => {
 
             return {
                 command: onDeleteItem,
-                disabled: form[fields.USED] || isNullOrUndefined(form[fields.ID]),
+                disabled: form[fields.LOCKED] || isNullOrUndefined(form[fields.ID]),
             };
         };
 
