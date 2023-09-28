@@ -11,6 +11,7 @@ import { Dropdown } from 'primereact/dropdown';
 import { InputText } from 'primereact/inputtext';
 import { Dashboard } from '@components/dashboard';
 import { InputTextarea } from 'primereact/inputtextarea';
+import { ConfirmDialog } from 'primereact/confirmdialog';
 
 //Custom Components
 import { Search } from '@components/search';
@@ -109,6 +110,7 @@ export const Item = (props) => {
                     getDataByPage={getDataByPage}
                 />
             </Panel>
+            <ConfirmDialog />
         </Dashboard>
     );
 };

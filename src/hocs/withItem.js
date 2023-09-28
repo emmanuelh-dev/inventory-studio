@@ -1,13 +1,14 @@
 import React, { useEffect } from 'react';
 import { MESSAGES } from '@messages';
-import services from '@services/api-services';
 import { isNullOrUndefined } from '@utils';
+import services from '@services/api-services';
 import { validateNotEmptyStringField } from '@utils/validations';
 import { itemState, itemFields, MESSAGE_TYPES } from '@constants';
 import { valuation, toolbar, itemSearchFields } from '@constants/options';
 
 //hooks
 import { useSearch } from '@hooks/useSearch';
+import { confirmDialog } from 'primereact/confirmdialog';
 import { useNotification } from '@hooks/useNotification';
 import { useForm, useStateStatus } from '@hooks/useFormState';
 
@@ -83,10 +84,34 @@ export const withItem = (WrappedComponent) => {
         };
 
         const onDelete = () => {
-            const onDeleteItem = async () => {};
+            const onDeleteItem = async () => {
+                try {
+                    await services.deleteItem(form[fields.ID]);
+                    showNotification(MESSAGE_TYPES.SUCCESS, MESSAGES.SUCESS_RECORD_DELETED);
+                } catch (error) {
+                    showNotification(MESSAGE_TYPES.ERROR, error.message);
+                }
+            };
+
+            const onConfirmRemoval = () => {
+                const accept = async () => {
+                    await onDeleteItem();
+                    onNew().command();
+                };
+
+                confirmDialog({
+                    accept,
+                    reject: () => {},
+                    acceptLabel: 'Si',
+                    icon: 'pi pi-exclamation-triangle',
+                    acceptClassName: 'p-button-danger',
+                    message: `¿Esta seguro que desea borrar este registro?`,
+                    header: `${MESSAGES.ITEM_DELETE_CONFIRMATION} ${form[fields.ITEM_NAME]}`,
+                });
+            };
 
             return {
-                command: onDeleteItem,
+                command: onConfirmRemoval,
                 disabled: form[fields.LOCKED] || isNullOrUndefined(form[fields.ID]),
             };
         };
