@@ -98,6 +98,7 @@ export const List = (props) => {
     const onConfirmRemoval = (row) => {
         const accept = () => {
             remove(row);
+            fetchDataAsPage();
         };
 
         confirmDialog({
