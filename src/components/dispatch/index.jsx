@@ -367,7 +367,7 @@ export const Dispatch = (props) => {
                 <DispatchForm {...dispatchProps} />
                 <InputBarcodeReader {...barcodeProps} />
                 <Details {...detailProps} />
-                {search ? <Search {...searchProps} /> : null}
+                {search && <Search {...searchProps} />}
                 <ConfirmDialog />
                 <Toast ref={notification} />
             </Panel>
