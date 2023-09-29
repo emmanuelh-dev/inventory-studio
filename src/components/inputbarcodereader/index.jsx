@@ -23,12 +23,15 @@ export const InputBarcodeReader = (props) => {
     };
 
     return (
-        <InputText
-            value={barcode}
-            onChange={onChange}
-            disabled={disabled}
-            onKeyDown={onKeyDown}
-            className="p-inputtext-lg block"
-        />
+        <div className="field">
+        <label>Codigo de barras</label>
+            <InputText
+                value={barcode}
+                onChange={onChange}
+                disabled={disabled}
+                onKeyDown={onKeyDown}
+                className="p-inputtext-lg block"
+            />
+        </div>
     );
 };
