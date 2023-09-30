@@ -185,6 +185,7 @@ const services = {
     putWarehouse: warehouseServices.putWarehouse,
     postWarehouse: warehouseServices.postWarehouse,
     findItemsByFilter: itemServices.findItemsByFilter,
+    deleteWarehouse: warehouseServices.deleteWarehouse,
     postBarcodeReport: reportServices.postBarcodeReport,
     findAllItemsByPage: itemServices.findAllItemsByPage,
     findAllItemsAsPage: itemServices.findAllItemsAsPage,

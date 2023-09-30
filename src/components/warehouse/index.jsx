@@ -8,6 +8,7 @@ import { Panel } from 'primereact/panel';
 import { Button } from 'primereact/button';
 import { Menubar } from 'primereact/menubar';
 import { InputText } from 'primereact/inputtext';
+import { ConfirmDialog } from 'primereact/confirmdialog';
 
 //Custom Components
 import { Search } from '@components/search';
@@ -85,6 +86,7 @@ export const Warehouse = (props) => {
                     getDataByPage={getDataByPage}
                 />
             </Panel>
+            <ConfirmDialog />
         </Dashboard>
     );
 };

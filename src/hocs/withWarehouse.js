@@ -8,6 +8,7 @@ import { warehouseState, warehouseFields, MESSAGE_TYPES } from '@constants';
 
 //hooks
 import { useSearch } from '@hooks/useSearch';
+import { confirmDialog } from 'primereact/confirmdialog';
 import { useNotification } from '@hooks/useNotification';
 import { useForm, useStateStatus } from '@hooks/useFormState';
 
@@ -82,9 +83,36 @@ export const withWarehouse = (WrappedComponent) => {
         };
 
         const onDelete = () => {
-            const onDeleteWarehouse = async () => {};
+            const onDeleteWarehouse = async () => {
+                try {
+                    await services.deleteWarehouse(form[fields.ID]);
+                    showNotification(MESSAGE_TYPES.SUCCESS, MESSAGES.SUCESS_RECORD_DELETED);
+                } catch (error) {
+                    showNotification(MESSAGE_TYPES.ERROR, error.message);
+                }
+            };
+
+            const onConfirmRemoval = () => {
+                const accept = async () => {
+                    await onDeleteWarehouse();
+                    onNew().command();
+                };
+
+                confirmDialog({
+                    accept,
+                    reject: () => {},
+                    acceptLabel: 'Si',
+                    icon: 'pi pi-exclamation-triangle',
+                    acceptClassName: 'p-button-danger',
+                    message: `¿Esta seguro que desea borrar este registro?`,
+                    header: `${MESSAGES.WAREHOUSE_DELETE_CONFIRMATION} ${
+                        form[fields.WAREHOUSE_NAME]
+                    }`,
+                });
+            };
+
             return {
-                command: onDeleteWarehouse,
+                command: onConfirmRemoval,
                 disabled: form[fields.LOCKED] || isNullOrUndefined(form[fields.ID]),
             };
         };

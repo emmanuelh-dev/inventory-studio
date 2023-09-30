@@ -69,9 +69,17 @@ const findAllItemSummaryByIdByPage = async (id, page) => {
     return response;
 };
 
+const deleteWarehouse = async (id) => {
+    const endpoint = process.env.NEXT_PUBLIC_WAREHOUSES_BY_ID;
+    const url = replaceParams(endpoint, { id });
+    const response = await request.apiDelete(url);
+    return response;
+};
+
 const warehouseServices = {
     putWarehouse,
     postWarehouse,
+    deleteWarehouse,
     findWarehouseById,
     findWarehousesByFilter,
     findAllWarehousesAsPage,
