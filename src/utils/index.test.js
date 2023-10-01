@@ -1,4 +1,5 @@
 import {
+    isZero,
     findKey,
     getValue,
     isArrayEmpty,
@@ -650,6 +651,38 @@ describe('Utils', () => {
         it('should return the object in array that match with item id', () => {
             const result = findItemOrEmpty(details, detailTwo);
             expect(result).toEqual(details[1]);
+        });
+    });
+
+    describe('isZero', () => {
+        it('should return true when value is zero as number', () => {
+            const result = isZero(0);
+            expect(result).toBe(true);
+        });
+
+        it('should return true when value is zero as string', () => {
+            const result = isZero('0');
+            expect(result).toBe(true);
+        });
+
+        it('should return true when value is null', () => {
+            const result = isZero(null);
+            expect(result).toBe(true);
+        });
+
+        it('should return true when value is undefined', () => {
+            const result = isZero(undefined);
+            expect(result).toBe(true);
+        });
+
+        it('should return false when value is non zero as number', () => {
+            const result = isZero(3);
+            expect(result).toBe(false);
+        });
+
+        it('should return false when value is non zero as string', () => {
+            const result = isZero('3');
+            expect(result).toBe(false);
         });
     });
 });

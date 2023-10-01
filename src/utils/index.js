@@ -193,3 +193,7 @@ export const findItemOrEmpty = (details, detail) => {
 
     return isObjectEmpty(result) ? {} : result;
 };
+
+export const isZero = (value) => {
+    return isNullOrUndefined(value) || value == 0;
+};
