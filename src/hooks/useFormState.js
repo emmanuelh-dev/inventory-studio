@@ -2,6 +2,7 @@ import _ from 'lodash';
 import { useState, useEffect } from 'react';
 import { isReleased } from '@utils/validations';
 import {
+    isZero,
     getValue,
     stringToDate,
     isObjectEmpty,
@@ -168,8 +169,9 @@ export const useDocumentForm = ({ initialState, defaultInitialState }) => {
         };
 
         const updateReleaseButtonStatusDisabled = () => {
-            const result = !compareDocumentStates() || isReleasedOrEmpty();
-            setReleaseButtonDisabled(result);
+            const totalZero = isZero(document.totalQuantity) || isZero(document.totalAmount);
+            const disabled = !compareDocumentStates() || isReleasedOrEmpty() || totalZero;
+            setReleaseButtonDisabled(disabled);
         };
 
         const updateDeleteButtonStatusDisabled = () => {

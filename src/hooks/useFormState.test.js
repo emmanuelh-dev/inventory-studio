@@ -467,6 +467,36 @@ describe('useFormState', () => {
 
                 expect(result.current.releaseButtonDisabled).toBe(true);
             });
+
+            it('should disable release button whe document has zero on totalAmount', () => {
+                const document = _.cloneDeep(initialDocument);
+                document.totalAmount = 0;
+                const { result } = renderHook(useDocumentForm, {
+                    initialProps: {
+                        initialState: _.cloneDeep(document),
+                        defaultInitialState: outputDocumentState,
+                    },
+                });
+
+                expect(result.current.document.totalAmount).toBe(0);
+                expect(result.current.document.totalQuantity).toBe(10);
+                expect(result.current.releaseButtonDisabled).toBe(true);
+            });
+
+            it('should disable release button whe document has zero on totalQuantity', () => {
+                const document = _.cloneDeep(initialDocument);
+                document.totalQuantity = 0;
+                const { result } = renderHook(useDocumentForm, {
+                    initialProps: {
+                        initialState: _.cloneDeep(document),
+                        defaultInitialState: outputDocumentState,
+                    },
+                });
+
+                expect(result.current.document.totalAmount).toBe(100);
+                expect(result.current.document.totalQuantity).toBe(0);
+                expect(result.current.releaseButtonDisabled).toBe(true);
+            });
         });
     });
 
