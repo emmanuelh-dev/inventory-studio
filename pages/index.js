@@ -59,7 +59,10 @@ const Homepage = () => {
 
     return (
         <>
-            <div className="grid grid-nogutter surface-0 text-800" style={{ maxWidth: '100rem', margin: 'auto', padding: '200px 0 0 0 '}}>
+            <div
+                className="grid grid-nogutter surface-0 text-800"
+                style={{ maxWidth: '100rem', margin: 'auto', padding: '200px 0 0 0 ' }}
+            >
                 <div className="col-12 md:col-6 p-6 text-center md:text-left flex align-items-center ">
                     <section>
                         <span className="block text-6xl font-bold mb-1">Inventory Studio</span>
@@ -95,7 +98,10 @@ const Homepage = () => {
                 </div>
             </div>
 
-            <div className="surface-0 text-center " style={{ maxWidth: '100rem', margin: 'auto', padding: '200px 0 0 0 '}}>
+            <div
+                className="surface-0 text-center "
+                style={{ maxWidth: '100rem', margin: 'auto', padding: '200px 0 0 0 ' }}
+            >
                 <div className="mb-3 font-bold text-3xl">
                     <span className="text-900">One Product, </span>
                     <span className="text-blue-600">Many Solutions</span>
@@ -119,55 +125,69 @@ const Homepage = () => {
                 </div>
             </div>
 
-            <header className="flex justify-content-center m-5" >
+            <header className="flex justify-content-center m-5">
                 <div className="p-fluid">
                     <h1 className="text-center col-12 m-0 p-0">Inventory Studio</h1>
                     <h3 className="text-center col-12 font-light m-0">Alfa Version</h3>
                 </div>
             </header>
 
+            <Card className="m-3">
+                <div className="flex flex-column card-container border-round">
+                    <div className="flex align-items-center justify-content-center h-4rem">
+                        <h2>Datos de Acceso</h2>
+                    </div>
+                    <div className="flex align-items-center justify-content-center h-4rem">
+                        <p>
+                            <strong>Usuario: </strong> beta@republicofdevs.com
+                            <br />
+                            <strong>Password: </strong> superpassword
+                        </p>
+                    </div>
+                    <div className="flex align-items-center justify-content-center h-4rem m-3">
+                        <Button
+                            label="Ingresar"
+                            className="p-button-info col-4"
+                            onClick={toLogin}
+                        />
+                    </div>
+                </div>
+            </Card>
 
-<Card className="m-3" >
-    <div className="flex flex-column card-container border-round">
-        <div className="flex align-items-center justify-content-center h-4rem">
-            <h2>Datos de Acceso</h2>
-        </div>
-        <div className="flex align-items-center justify-content-center h-4rem">
-            <p>
-                <strong>Usuario: </strong> beta@republicofdevs.com
-                <br />
-                <strong>Password: </strong> superpassword
-            </p>
-        </div>
-        <div className="flex align-items-center justify-content-center h-4rem m-3">
-            <Button label="Ingresar" className="p-button-info col-4" onClick={toLogin} />
-        </div>
-    </div>
-</Card>
-
-<Card className="m-3">
-    <div className="flex flex-column card-container border-round p-3">
-        <h2>Notas Importantes</h2>
-        <Accordion multiple>
-            <AccordionTab header="Datos Importantes">
-                <ul>
-                    <li>Todos los datos serán eliminados cada dos semanas</li>
-                    <li>Las siguientes funcionalidades no están completas</li>
-                    <ul>
-                        <li>Las etiquetas no están bien alineadas, habrá errores en la impresión</li>
-                        <li>La acción de eliminar artículos, almacenes o documentos desde las tablas no funciona</li>
-                        <li>La sesión dura 24 hrs, falta mejorar la vida útil del token</li>
-                        <li>Es posible que la funcionalidad de cerrar sesión no funcione correctamente</li>
-                    </ul>
-                </ul>
-            </AccordionTab>
-        </Accordion>
-        <h3>
-            Cualquier error o pregunta favor de enviar un correo a soporte@republicofdevs.com
-        </h3>
-    </div>
-</Card>
-
+            <Card className="m-3">
+                <div className="flex flex-column card-container border-round p-3">
+                    <h2>Notas Importantes</h2>
+                    <Accordion multiple>
+                        <AccordionTab header="Datos Importantes">
+                            <ul>
+                                <li>Todos los datos serán eliminados cada dos semanas</li>
+                                <li>Las siguientes funcionalidades no están completas</li>
+                                <ul>
+                                    <li>
+                                        Las etiquetas no están bien alineadas, habrá errores en la
+                                        impresión
+                                    </li>
+                                    <li>
+                                        La acción de eliminar artículos, almacenes o documentos
+                                        desde las tablas no funciona
+                                    </li>
+                                    <li>
+                                        La sesión dura 24 hrs, falta mejorar la vida útil del token
+                                    </li>
+                                    <li>
+                                        Es posible que la funcionalidad de cerrar sesión no funcione
+                                        correctamente
+                                    </li>
+                                </ul>
+                            </ul>
+                        </AccordionTab>
+                    </Accordion>
+                    <h3>
+                        Cualquier error o pregunta favor de enviar un correo a
+                        soporte@republicofdevs.com
+                    </h3>
+                </div>
+            </Card>
         </>
     );
 };
