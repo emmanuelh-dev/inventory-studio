@@ -183,5 +183,6 @@ export const documentSearchFields = [
     {
         field: 'totalAmount',
         header: 'Monto total',
+        template: (row) => amountTemplate(row, 'totalAmount'),
     },
 ];
